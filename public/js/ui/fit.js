@@ -3,6 +3,34 @@
 // Rechnung für SF Pro auf dem iPad genauso wie für Ersatzschriften.
 
 /**
+ * Mehrzeiligen Text (mit Umbruch) so groß wie möglich in eine Box setzen.
+ * Binäre Suche über die Schriftgröße, bis Breite und Höhe passen.
+ */
+export function fitBlock(el, box, { min = 14, max = 600 } = {}) {
+  const w = box.clientWidth;
+  const h = box.clientHeight;
+  if (!w || !h) return null;
+  const key = `${el.innerHTML.length}|${el.innerHTML.slice(0, 200)}|${el.className}|${w}|${h}`;
+  // Zwischengespeichert – aber nur, solange der Text wirklich noch passt
+  // (z. B. ändert eine nachgeladene fette Schrift die Breite und damit den Umbruch).
+  if (el.dataset.fitKey === key && el.scrollHeight <= h + 1 && el.scrollWidth <= w + 1) return Number(el.dataset.fitSize);
+  let lo = min;
+  let hi = Math.min(max, h);
+  for (let i = 0; i < 14; i++) {
+    const mid = (lo + hi) / 2;
+    el.style.fontSize = `${mid}px`;
+    if (el.scrollHeight <= h && el.scrollWidth <= w) lo = mid;
+    else hi = mid;
+  }
+  // Abrunden mit etwas Luft: genau an der Umbruchgrenze kippt sonst eine Zeile.
+  const size = Math.max(min, Math.floor(lo * 0.97 * 10) / 10);
+  el.style.fontSize = `${size}px`;
+  el.dataset.fitKey = key;
+  el.dataset.fitSize = String(size);
+  return size;
+}
+
+/**
  * @param {HTMLElement} el      Textelement
  * @param {HTMLElement} box     Box, deren Größe zählt
  * @param {string} sample       Mustertext (z. B. "00:00" für tabellarische Ziffern)

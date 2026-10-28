@@ -1,5 +1,5 @@
 // Service Worker: App-Hülle offline verfügbar, API und WebSocket nie aus dem Cache.
-const VERSION = 'al-1.1.0';
+const VERSION = 'al-1.2.0';
 const SHELL = [
   '/',
   '/index.html',
@@ -16,6 +16,8 @@ const SHELL = [
   '/js/ui/hold.js',
   '/js/ui/fit.js',
   '/js/ui/wakelock.js',
+  '/js/ui/wheel.js',
+  '/js/ui/richtext.js',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/apple-touch-icon.png',

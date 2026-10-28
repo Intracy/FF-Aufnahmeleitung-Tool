@@ -61,6 +61,7 @@ export class Relay extends EventEmitter {
       selections: {},
       manual: { active: false, since: null },
       pausedAt: null,
+      message: null,
     };
   }
 
@@ -335,6 +336,30 @@ export class Relay extends EventEmitter {
         this.addLog('scenario', { group: g.id, option: opt?.id ?? null, label: opt ? `${g.short} ${opt.label}` : `${g.short} offen`, before });
         break;
       }
+      case 'message': {
+        // Custom-Text fürs Schild. Das HTML wird beim Anzeigen auf dem Gerät bereinigt;
+        // hier nur Größe und GIF-Herkunft begrenzen.
+        if (msg.clear) {
+          if (this.st.message) this.addLog('message', { on: false });
+          this.st.message = null;
+          break;
+        }
+        const html = String(msg.html || '').slice(0, 16000);
+        const text = String(msg.text || '').slice(0, 500);
+        let gif = null;
+        try {
+          const u = new URL(msg.gif?.url || '');
+          if (u.protocol === 'https:' && /(^|\.)giphy\.com$/i.test(u.hostname)) {
+            gif = { url: u.href, width: Number(msg.gif.width) || 0, height: Number(msg.gif.height) || 0 };
+          }
+        } catch {
+          /* kein GIF */
+        }
+        if (!text.trim() && !gif) return;
+        this.st.message = { html, text, gif, upper: !!msg.upper, at: this.now() };
+        this.addLog('message', { on: true, label: text || 'GIF' });
+        break;
+      }
       case 'manual':
         this.manual(msg.cmd);
         break;
@@ -486,6 +511,7 @@ export class Relay extends EventEmitter {
       next: next ? publicCue(next) : null,
       nextReason,
       signals: this.st.signals,
+      message: this.st.message,
       groups: this.groupsView(cue),
       jumpHints: this.jumpHints(cue),
       balance: rd ? this.balance(now, cue, elapsed) : { moderationMs: 0, gameMs: 0 },

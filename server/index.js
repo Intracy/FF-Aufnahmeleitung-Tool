@@ -61,7 +61,7 @@ const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'no-referrer',
   'Content-Security-Policy':
-    "default-src 'self'; connect-src 'self' ws: wss:; img-src 'self' data:; style-src 'self'; script-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'",
+    "default-src 'self'; connect-src 'self' ws: wss:; img-src 'self' data: https://*.giphy.com; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'",
 };
 
 function send(res, status, body, type = 'application/json; charset=utf-8', extra = {}) {
@@ -135,6 +135,7 @@ async function handleApi(req, res, url) {
       full: full ? { rundown: full.rundown, currentItemId: full.currentItemId, isRunning: full.isRunning, elementCount: full.elements?.length } : null,
     });
   }
+  if (p === '/api/giphy') return giphy(res, url);
   if (p === '/api/replay' && req.method === 'POST') {
     if (cfg.mode !== 'replay') return send(res, 400, { error: 'nur im Replay-Modus' });
     const body = await readBody(req);
@@ -142,6 +143,40 @@ async function handleApi(req, res, url) {
     return send(res, 200, { ok: true });
   }
   return send(res, 404, { error: 'not found' });
+}
+
+/** GIF-Suche über den Relay: der Giphy-Schlüssel bleibt auf dem Server. */
+async function giphy(res, url) {
+  if (!cfg.giphyApiKey) return send(res, 501, { error: 'GIPHY_API_KEY fehlt', results: [] });
+  const q = (url.searchParams.get('q') || '').slice(0, 80).trim();
+  const offset = Math.max(0, Math.min(500, Number(url.searchParams.get('offset')) || 0));
+  const kind = q ? 'search' : 'trending';
+  const api = new URL(`https://api.giphy.com/v1/gifs/${kind}`);
+  api.searchParams.set('api_key', cfg.giphyApiKey);
+  api.searchParams.set('limit', '24');
+  api.searchParams.set('offset', String(offset));
+  api.searchParams.set('rating', 'pg-13');
+  if (q) {
+    api.searchParams.set('q', q);
+    api.searchParams.set('lang', 'de');
+  }
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 6000);
+  try {
+    const r = await fetch(api, { signal: ctrl.signal });
+    if (!r.ok) return send(res, 502, { error: `Giphy antwortet mit HTTP ${r.status}`, results: [] });
+    const j = await r.json();
+    const results = (j.data || []).map((g) => {
+      const big = g.images?.downsized_medium || g.images?.original || {};
+      const small = g.images?.fixed_width_small || g.images?.fixed_width || big;
+      return { id: g.id, title: g.title || '', preview: small.url, url: big.url, width: Number(big.width) || 0, height: Number(big.height) || 0 };
+    });
+    return send(res, 200, { results, next: offset + results.length });
+  } catch (err) {
+    return send(res, 502, { error: err.name === 'AbortError' ? 'Giphy antwortet nicht' : 'Giphy nicht erreichbar', results: [] });
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 async function handler(req, res) {
@@ -181,7 +216,7 @@ wss.on('connection', (ws, role) => {
   ws.role = role;
   ws.alive = true;
   ws.on('pong', () => (ws.alive = true));
-  sendWs(ws, { type: 'hello', role, mode: cfg.mode, version: pkg.version, speed: source.speed || 1 });
+  sendWs(ws, { type: 'hello', role, mode: cfg.mode, version: pkg.version, speed: source.speed || 1, giphy: !!cfg.giphyApiKey });
   sendWs(ws, relay.rundownMessage());
   sendWs(ws, relay.snapshot());
   ws.on('message', (data) => {

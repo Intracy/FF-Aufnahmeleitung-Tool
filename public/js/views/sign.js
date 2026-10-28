@@ -2,7 +2,8 @@
 // Jeder Zustand ist dreifach codiert: Farbe, Form (Rahmen/Fläche/Symbol), Wort.
 
 import { formatSignDigits, formatTimeOfDay, formatClock } from '../shared/timing.js';
-import { fitText } from '../ui/fit.js';
+import { fitText, fitBlock } from '../ui/fit.js';
+import { sanitize, safeGifUrl, plainText } from '../ui/richtext.js';
 
 const ICONS = { wrap: '#i-wrap', cut: '#i-cut', stretch: '#i-stretch' };
 
@@ -17,20 +18,56 @@ export class SignView {
     this.digits = root.querySelector('#sign-digits');
     this.bar = root.querySelector('#sign-bar');
     this.status = root.querySelector('#sign-status');
+    this.msg = root.querySelector('#sign-msg');
+    this.msgGif = root.querySelector('#sign-msg-gif');
+    this.msgBox = root.querySelector('#sign-msg-textbox');
+    this.msgText = root.querySelector('#sign-msg-text');
+    this.msgKey = null;
     this.lastStage = null;
     this.pulseTimer = null;
     const ro = new ResizeObserver(() => {
       delete this.digits.dataset.fitKey;
       delete this.word.dataset.fitKey;
+      delete this.msgText.dataset.fitKey;
     });
     ro.observe(this.box);
     ro.observe(this.top);
+    ro.observe(this.msgBox);
+    this.msgGif.addEventListener('load', () => delete this.msgText.dataset.fitKey);
+  }
+
+  /** Custom Text: nur bereinigtes HTML (fett/kursiv/unterstrichen/Farbe) und GIFs von Giphy. */
+  renderMessage(m) {
+    const key = m ? `${m.at}` : null;
+    if (key === this.msgKey) return;
+    this.msgKey = key;
+    this.root.classList.toggle('has-msg', !!m);
+    this.msg.hidden = !m;
+    delete this.digits.dataset.fitKey;
+    if (!m) {
+      this.msgText.replaceChildren();
+      this.msgGif.removeAttribute('src');
+      return;
+    }
+    const gif = safeGifUrl(m.gif?.url);
+    this.msgGif.hidden = !gif;
+    if (gif) this.msgGif.src = gif;
+    else this.msgGif.removeAttribute('src');
+    const html = sanitize(m.html);
+    this.msgText.innerHTML = html;
+    this.msgText.classList.toggle('upper', !!m.upper);
+    this.msgBox.hidden = !html;
+    this.msg.classList.toggle('gif-only', !!gif && !html);
+    this.msg.setAttribute('aria-label', plainText(html) || 'GIF');
+    delete this.msgText.dataset.fitKey;
   }
 
   render(vm, meta) {
     const ev = vm.ev;
     const state = ev.state;
     if (this.root.dataset.state !== state) this.root.dataset.state = state;
+    this.renderMessage(vm.state?.message || null);
+    if (vm.state?.message && !this.msgBox.hidden) fitBlock(this.msgText, this.msgBox);
 
     // Warnstufe neu erreicht: Rahmen pulst dreimal (1 Hz), dann ruhig.
     const stage = state === 'step' ? ev.stage : null;

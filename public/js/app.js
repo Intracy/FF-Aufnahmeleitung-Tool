@@ -9,11 +9,14 @@ import { LocalFallback } from './local.js';
 import { initWakeLock } from './ui/wakelock.js';
 import { bindHold, bindTap } from './ui/hold.js';
 import { formatTimeOfDay, formatSigned } from './shared/timing.js';
+import { createWheel } from './ui/wheel.js';
+import { sanitize, plainText, safeGifUrl, gifFromGiphyLink } from './ui/richtext.js';
 
 const ROUTES = { '/': 'home', '/al': 'al', '/schild': 'schild', '/regie': 'regie' };
 const path = location.pathname.replace(/\/+$/, '') || '/';
 const role = ROUTES[path] || 'home';
 const $ = (s) => document.querySelector(s);
+const dlg = $('#settings'); // früh anlegen: frame() liest es schon beim Start
 
 // ---------- Zugangsschlüssel (optional) ----------
 const qs = new URLSearchParams(location.search);
@@ -179,6 +182,7 @@ if (role === 'home') {
     onSign: () => showSign(true),
     onSettings: openSettings,
     onStretch: openStretch,
+    onText: openText,
     onManual,
     undo,
     readonly: role === 'regie',
@@ -211,9 +215,26 @@ function openStretch() {
   $('#stretch-info').textContent = parts.join(' · ');
   stretchDlg.returnValue = '';
   stretchDlg.showModal();
+  requestAnimationFrame(() => {
+    wheelMin.sync();
+    wheelSec.sync();
+  });
 }
+// Eigene Zeit: zwei Scrollräder MM:SS, je 00–99
+const customTime = { m: 0, s: 0 };
+const pad2 = (n) => String(n).padStart(2, '0');
+const customBtn = $('#stretch-custom-btn');
+const customMs = () => (customTime.m * 60 + customTime.s) * 1000;
+function updateCustom() {
+  customBtn.disabled = customMs() <= 0;
+  customBtn.textContent = `+${pad2(customTime.m)}:${pad2(customTime.s)} übernehmen`;
+}
+const wheelMin = createWheel($('#wheel-min'), { label: 'Minuten', onChange: (v) => ((customTime.m = v), updateCustom()) });
+const wheelSec = createWheel($('#wheel-sec'), { label: 'Sekunden', onChange: (v) => ((customTime.s = v), updateCustom()) });
+updateCustom();
 stretchDlg.addEventListener('close', () => {
-  const ms = Number(stretchDlg.returnValue);
+  const rv = stretchDlg.returnValue;
+  const ms = rv === 'custom' ? customMs() : Number(rv);
   if (ms > 0) act({ type: 'stretch', ms });
 });
 // Tippen neben das Sheet schließt es (wie in iPadOS)
@@ -221,8 +242,150 @@ stretchDlg.addEventListener('click', (e) => {
   if (e.target === stretchDlg) stretchDlg.close('cancel');
 });
 
+// ---------- Custom Text fürs Schild ----------
+const textDlg = $('#text-sheet');
+const editor = $('#text-editor');
+const draft = { gif: null, upper: false };
+let giphyEnabled = false;
+conn.addEventListener('hello', (e) => (giphyEnabled = !!e.detail.giphy));
+
+function currentState() {
+  return local.active ? local.state() : data.state;
+}
+function syncTextUi() {
+  editor.classList.toggle('upper', draft.upper);
+  $('#fmt-upper').setAttribute('aria-pressed', String(draft.upper));
+  const sel = $('#gif-selected');
+  sel.hidden = !draft.gif;
+  if (draft.gif) $('#gif-selected-img').src = draft.gif.url;
+  else $('#gif-selected-img').removeAttribute('src');
+  $('#text-show').disabled = !plainText(sanitize(editor.innerHTML)) && !draft.gif;
+}
+function openText() {
+  const m = currentState()?.message;
+  if (m) {
+    editor.innerHTML = sanitize(m.html);
+    draft.gif = m.gif && safeGifUrl(m.gif.url) ? m.gif : null;
+    draft.upper = !!m.upper;
+  }
+  $('#text-hide').hidden = !m;
+  $('#text-show').textContent = m ? 'Aktualisieren' : 'Anzeigen';
+  syncTextUi();
+  textDlg.returnValue = '';
+  textDlg.showModal();
+  if (giphyEnabled && !$('#gif-grid').children.length && !$('#gif-query').value) searchGifs('');
+  if (!giphyEnabled) $('#gif-hint').textContent = 'Für die GIF-Suche fehlt auf dem Server ein Giphy-Schlüssel. Einen Giphy-Link einfügen funktioniert trotzdem.';
+}
+
+// Formatierung: Knöpfe nehmen dem Editor den Fokus nicht weg, damit die Auswahl bleibt.
+document.querySelectorAll('#text-sheet .fmt-bar button').forEach((b) => {
+  b.addEventListener('pointerdown', (e) => e.preventDefault());
+  b.addEventListener('click', () => {
+    if (b.id === 'fmt-upper') {
+      draft.upper = !draft.upper;
+      syncTextUi();
+      return;
+    }
+    editor.focus();
+    document.execCommand('styleWithCSS', false, false);
+    if (b.dataset.color) document.execCommand('foreColor', false, b.dataset.color);
+    else if (b.dataset.cmd) document.execCommand(b.dataset.cmd, false, null);
+    syncTextUi();
+  });
+});
+editor.addEventListener('input', syncTextUi);
+editor.addEventListener('paste', (e) => {
+  // Nur reinen Text einfügen, keine fremde Formatierung
+  e.preventDefault();
+  const t = e.clipboardData?.getData('text/plain') || '';
+  document.execCommand('insertText', false, t);
+});
+$('#quick-texts').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  editor.textContent = b.textContent;
+  syncTextUi();
+});
+
+// GIFs: Suche über das Relay (Schlüssel bleibt auf dem Server) oder Giphy-Link einfügen
+let gifTimer;
+let gifSeq = 0;
+async function searchGifs(q) {
+  const seq = ++gifSeq;
+  const hint = $('#gif-hint');
+  const grid = $('#gif-grid');
+  const link = gifFromGiphyLink(q);
+  if (link) {
+    draft.gif = { url: link, width: 0, height: 0 };
+    hint.textContent = 'GIF aus dem Link übernommen.';
+    syncTextUi();
+    return;
+  }
+  if (!giphyEnabled) return;
+  hint.textContent = 'Suche …';
+  try {
+    const r = await fetch(withKey(`/api/giphy?q=${encodeURIComponent(q)}`), { cache: 'no-store' });
+    const j = await r.json();
+    if (seq !== gifSeq) return;
+    if (!r.ok) {
+      hint.textContent = j.error || 'GIF-Suche nicht verfügbar.';
+      return;
+    }
+    hint.textContent = j.results.length ? '' : 'Keine GIFs gefunden.';
+    grid.replaceChildren(
+      ...j.results
+        .filter((g) => safeGifUrl(g.url) && safeGifUrl(g.preview))
+        .map((g) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', g.title || 'GIF');
+          const img = document.createElement('img');
+          img.loading = 'lazy';
+          img.alt = '';
+          img.src = g.preview;
+          b.append(img);
+          b.addEventListener('click', () => {
+            draft.gif = { url: g.url, width: g.width, height: g.height };
+            syncTextUi();
+            $('#gif-selected').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          });
+          return b;
+        }),
+    );
+  } catch {
+    if (seq === gifSeq) hint.textContent = 'Keine Verbindung zur GIF-Suche.';
+  }
+}
+$('#gif-query').addEventListener('input', (e) => {
+  clearTimeout(gifTimer);
+  gifTimer = setTimeout(() => searchGifs(e.target.value.trim()), 400);
+});
+$('#gif-query').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault(); // sonst schickt Enter das Formular ab und schließt den Dialog
+  clearTimeout(gifTimer);
+  searchGifs(e.target.value.trim());
+  e.target.blur();
+});
+bindTap($('#gif-remove'), () => {
+  draft.gif = null;
+  syncTextUi();
+});
+textDlg.addEventListener('close', () => {
+  const rv = textDlg.returnValue;
+  if (rv === 'hide') {
+    act({ type: 'message', clear: true });
+    return;
+  }
+  if (rv !== 'show') return;
+  const html = sanitize(editor.innerHTML);
+  const text = plainText(html);
+  if (!text && !draft.gif) return;
+  act({ type: 'message', html, text, gif: draft.gif, upper: draft.upper });
+  toast('Text auf dem Schild');
+});
+
 // ---------- Einstellungen ----------
-const dlg = $('#settings');
 function syncSegmented(id, value) {
   document.querySelectorAll(`#${id} [data-value]`).forEach((b) => b.setAttribute('aria-checked', String(b.dataset.value === value)));
 }

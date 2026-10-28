@@ -48,11 +48,13 @@ function eventLabel(e) {
     case 'marker':
       return 'Marker';
     case 'signal':
-      return { wrap: 'ABRUNDEN', cut: 'SCHLUSS', standby: 'GLEICH DU' }[e.signal] + (e.on ? '' : ' aufgehoben');
+      return { wrap: 'FERTIG WERDEN', cut: 'SCHLUSS', standby: 'GLEICH DU' }[e.signal] + (e.on ? '' : ' aufgehoben');
     case 'stretch':
       return 'STRECKEN';
     case 'scenario':
       return 'Szenario';
+    case 'message':
+      return e.on ? 'Custom Text' : 'Custom Text ausgeblendet';
     case 'manual':
       return e.on ? 'Manuell-Modus an' : 'Manuell-Modus aus';
     case 'pause':
@@ -69,7 +71,7 @@ function eventLabel(e) {
 }
 
 function eventDetail(e) {
-  if (e.type === 'marker') return e.label || '';
+  if (e.type === 'marker' || e.type === 'message') return e.label || '';
   if (e.type === 'stretch') return `${formatSigned(e.ms)} (gesamt ${formatDuration(e.totalMs)})`;
   if (e.type === 'scenario') return e.label;
   if (e.type === 'resume') return `Pause ${formatDuration(e.pausedMs)}`;
@@ -96,7 +98,7 @@ export function markersEdl(relay, { fps = 25, start = '', mode = 'rec' } = {}) {
   const tz = relay.cfg.timeZone;
   const rd = relay.rundown;
   const events = relay.log
-    .filter((e) => ['cue', 'marker', 'signal', 'stretch', 'scenario'].includes(e.type) && (e.type !== 'signal' || e.on))
+    .filter((e) => ['cue', 'marker', 'signal', 'stretch', 'scenario', 'message'].includes(e.type) && (!['signal', 'message'].includes(e.type) || e.on))
     .sort((a, b) => a.at - b.at);
   let ref = null;
   if (mode !== 'tod') {
@@ -114,11 +116,12 @@ export function markersEdl(relay, { fps = 25, start = '', mode = 'rec' } = {}) {
     return 3600 * fps + ((at - ref) / 1000) * fps;
   };
   const color = (e) =>
-    e.type === 'cue' ? 'ResolveColorBlue' : e.type === 'marker' ? 'ResolveColorYellow' : e.type === 'scenario' ? 'ResolveColorPurple' : e.type === 'stretch' ? 'ResolveColorCyan' : 'ResolveColorRed';
+    e.type === 'cue' ? 'ResolveColorBlue' : e.type === 'marker' ? 'ResolveColorYellow' : e.type === 'message' ? 'ResolveColorPink' : e.type === 'scenario' ? 'ResolveColorPurple' : e.type === 'stretch' ? 'ResolveColorCyan' : 'ResolveColorRed';
   const name = (e) => {
     const cue = e.cueNumber != null ? `Cue ${e.cueNumber} ${e.cueTitle}` : '';
     if (e.type === 'cue') return cue;
     if (e.type === 'marker') return `Marker${e.label ? ' ' + e.label : ''} · ${cue}`;
+    if (e.type === 'message') return `Text: ${e.label || ''} · ${cue}`;
     return `${eventLabel(e)}${e.type === 'scenario' ? ' ' + e.label : ''} · ${cue}`;
   };
   const out = [`TITLE: ${(rd?.title || 'Aufnahmeleitung').replace(/[\r\n]/g, ' ')}`, 'FCM: NON-DROP FRAME', ''];

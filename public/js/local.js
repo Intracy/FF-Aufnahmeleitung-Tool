@@ -23,6 +23,7 @@ export class LocalFallback {
     this.startedAt = cur?.startedAt ?? now;
     this.stretch = cur?.stretchMs || 0;
     this.signals = { ...emptySignals(), ...(state?.signals || {}) };
+    this.message = state?.message || null;
   }
 
   exit() {
@@ -73,6 +74,9 @@ export class LocalFallback {
       case 'scenario':
         this.selections[msg.group] = msg.option;
         break;
+      case 'message':
+        this.message = msg.clear ? null : { html: msg.html, text: msg.text, gif: msg.gif || null, upper: !!msg.upper, at: now };
+        break;
       default:
         break;
     }
@@ -95,6 +99,7 @@ export class LocalFallback {
       next,
       nextReason: ni >= 0 && ni !== this.idx + 1 ? 'jump' : 'sequence',
       signals: this.signals,
+      message: this.message,
       show: { ...(this.base.show || {}), pausedAt: null, isPaused: false },
       backtime: { ends: [], anchors: [] },
       jumpHints: [],

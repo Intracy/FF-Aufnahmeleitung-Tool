@@ -79,15 +79,49 @@ for (const [offset, tag] of [
   });
 }
 
-// ABRUNDEN (≤ 10 s) und Bedienung per Button
+// FERTIG WERDEN (letzte 10 s eines Cues)
+await withServer({ REPLAY_START_CUE: '119', REPLAY_START_OFFSET: '293' }, async (base) => {
+  const pg = await page(browser, PORTRAIT, portraitOp);
+  await pg.goto(`${base}/al`);
+  await shot(pg, 'bedienung-hoch-fertig-werden');
+  const sg = await page(browser, LANDSCAPE);
+  await sg.goto(`${base}/schild`);
+  await shot(sg, 'schild-quer-fertig-werden');
+});
+
+// STRECKEN-Auswahl mit Drehrad, CUSTOM TEXT und Bedienung per Button
 await withServer({ REPLAY_START_CUE: '119', REPLAY_START_OFFSET: '40' }, async (base) => {
   const pg = await page(browser, PORTRAIT, portraitOp);
   await pg.goto(`${base}/al`);
   await pg.waitForTimeout(600);
-  await pg.click('#b-wrap');
-  await shot(pg, 'bedienung-hoch-abrunden');
+  await pg.click('#b-stretch');
+  await pg.waitForTimeout(400);
+  await pg.evaluate(() => {
+    document.getElementById('wheel-min').scrollTop = 3 * 44;
+    document.getElementById('wheel-sec').scrollTop = 45 * 44;
+  });
+  await shot(pg, 'bedienung-hoch-strecken');
+  await pg.keyboard.press('Escape');
+  await pg.waitForTimeout(300);
+  await pg.click('#b-text');
+  await pg.waitForTimeout(400);
+  await pg.click('#text-editor');
+  await pg.keyboard.type('Bitte ');
+  await pg.click('#text-sheet [data-cmd="bold"]');
+  await pg.keyboard.type('jetzt');
+  await pg.click('#text-sheet [data-cmd="bold"]');
+  await pg.click('#text-sheet [data-color="#ffd600"]');
+  await pg.keyboard.type(' Gast vorstellen');
+  await shot(pg, 'bedienung-hoch-custom-text');
+  await pg.click('#text-show');
+  await shot(pg, 'bedienung-hoch-text-aktiv');
+  const sm = await page(browser, LANDSCAPE);
+  await sm.goto(`${base}/schild`);
+  await shot(sm, 'schild-quer-custom-text');
+  await pg.getByRole('button', { name: 'AUSBLENDEN' }).click();
+  await pg.waitForTimeout(300);
   await pg.click('#b-sign');
-  await shot(pg, 'schild-hoch-abrunden-button');
+  await shot(pg, 'schild-hoch-button');
   // Schild per 1 s Halten verlassen, dann SCHLUSS halten
   const box = await pg.locator('#sign').boundingBox();
   await pg.mouse.move(box.width / 2, box.height / 2);

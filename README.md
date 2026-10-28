@@ -3,7 +3,7 @@
 Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die AL steht neben der Kamera, liest den aktuellen Cue aus dem Rundown und zeigt dem Moderator auf einem großen Schild, wie viel Zeit er noch hat.
 
 - **Hochkant:** Bedienansicht. Oben stehen aktueller Cue, Restzeit, nächster Cue, Salden und Back-Time, unten die Buttons in der Daumenzone.
-- **Quer:** Schild für den Moderator. Die Restzeit ist so groß wie möglich: grün, gelb mit Rahmen bei den Warnstufen, orange bei ABRUNDEN und rot pulsierend beim Überziehen.
+- **Quer:** Schild für den Moderator. Die Restzeit ist so groß wie möglich: grün, gelb mit Rahmen bei den Warnstufen, orange mit FERTIG WERDEN in den letzten 10 s und rot pulsierend beim Überziehen. Auf Knopfdruck zeigt es zusätzlich einen eigenen Text, auf Wunsch mit GIF.
 - **Relay-Server:** pollt die Rundown-API, hält eine gemeinsame Uhr und verteilt den Zustand per WebSocket an alle Geräte.
 
 | Bedienung (hoch) | Schild (quer) |
@@ -11,7 +11,7 @@ Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die A
 | ![Bedienung](docs/screenshots/bedienung-hoch-laeuft.png) | ![Schild läuft](docs/screenshots/schild-quer-laeuft.png) |
 | ![Überzug](docs/screenshots/bedienung-hoch-ueber.png) | ![Schild Überzug](docs/screenshots/schild-quer-ueber.png) |
 
-Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): NOCH 2, ABRUNDEN, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
+Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): NOCH 2, FERTIG WERDEN, STRECKEN-Drehrad, CUSTOM TEXT, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
 
 ---
 
@@ -72,8 +72,8 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | Button | Wirkung | Auslösen |
 | --- | --- | --- |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
-| ABRUNDEN | Schild orange mit Kreispfeil; erneut tippen hebt auf | Tippen |
-| STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min und verlängert den laufenden Cue. Zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
+| CUSTOM TEXT | Öffnet einen Editor für einen eigenen Text auf dem Schild: fett, kursiv, unterstrichen, sechs Farben, GROSSBUCHSTABEN, Schnelltexte und ein GIF von Giphy. Solange der Text steht, ist der Button gefüllt und die Bedienansicht zeigt ihn mit AUSBLENDEN | Tippen, dann *Anzeigen* |
+| STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min. Darunter stellen zwei Drehräder (Min : Sek, je 00–99) eine eigene Zeit ein. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
 | MARKER | Eintrag für Nachbericht und Resolve | Tippen |
@@ -81,7 +81,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 **Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
 
-**Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit ABRUNDEN und SCHLUSS auf der Daumenseite liegen.
+**Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit CUSTOM TEXT und SCHLUSS auf der Daumenseite liegen.
 
 ### Zustände des Schilds
 
@@ -91,12 +91,21 @@ Jeder Zustand ist dreifach erkennbar: über Farbe, Form und Wort. Damit bleibt e
 | --- | --- | --- | --- |
 | läuft | Grün | nur Ziffern | – |
 | Warnstufe (5/2/1 min, 30 s) | Gelb | dicker Rahmen, pulst beim Eintritt 3× | NOCH 2 … |
-| ABRUNDEN (≤ 10 s oder Button) | Orange | Kreispfeil | ABRUNDEN |
+| letzte 10 s | Orange | Kreispfeil | FERTIG WERDEN |
 | überzogen | Rot | volle Fläche, 1 Hz gedimmt (WCAG 2.3.1) | ÜBER |
 | SCHLUSS | Rot | volle Fläche, Kreuz | SCHLUSS |
 | GLEICH DU | Blau | – | GLEICH DU |
 | Zuspieler, Pause | Grau | – | ZUSPIELER / PAUSE |
 | Spiel/Draft | sehr dunkel | zählt hoch | – |
+
+### Eigener Text und GIFs
+
+Der Text erscheint im Schild über der Restzeit und wird automatisch so groß gesetzt, wie der Platz erlaubt. Formatierungen werden auf dem Gerät und noch einmal auf dem Schild auf eine feste Liste (fett, kursiv, unterstrichen, Farben) reduziert; fremdes HTML kommt nicht durch.
+
+GIFs kommen ausschließlich von Giphy:
+
+- **Link einfügen** (z. B. `https://giphy.com/gifs/…`) funktioniert immer.
+- **Suche** läuft über den Relay und braucht einen kostenlosen API-Schlüssel von [developers.giphy.com](https://developers.giphy.com). Ihn als `GIPHY_API_KEY` in die `.env` eintragen und den Container neu starten. Gesucht wird mit Jugendschutzstufe `pg-13`.
 
 Eine Warnstufe erscheint nur, wenn sie höchstens die halbe Cue-Länge beträgt. Ein 3-min-Cue zeigt also 1:00 und 0:30, ein 15-s-Cue nur den Überzug. Ist auf dem iPad „Bewegung reduzieren“ aktiv, entfällt das Pulsieren.
 
@@ -127,7 +136,7 @@ Was gerade genutzt wird, zeigt *Einstellungen › Cue-Startzeit aus*. Die Rohant
 - **Nachbericht:** `/api/export/report.csv`. Enthält Plan- und Ist-Zeiten je Cue, Streckungen, Abweichungen sowie alle Signale und Marker (Semikolon-getrennt, öffnet direkt in Excel).
 - **DaVinci Resolve:** `/api/export/markers.edl?fps=25`. Import über *Timeline › Import › Timeline Markers from EDL*.
   - Standardmäßig ist der erste Cue 01:00:00:00. Mit `start=HH:MM:SS` lässt sich der Aufnahmestart setzen, mit `tc=tod` wird Uhrzeit-Timecode verwendet.
-  - Farben: Cue blau, Marker gelb, ABRUNDEN/SCHLUSS rot, Szenario lila.
+  - Farben: Cue blau, Marker gelb, SCHLUSS rot, eigener Text pink, Streckung türkis, Szenario lila.
 
 Beide Exporte sind auch über die Einstellungen erreichbar.
 

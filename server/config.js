@@ -30,6 +30,7 @@ export function loadConfig(env = process.env) {
     tlsCert: env.TLS_CERT || '',
     tlsKey: env.TLS_KEY || '',
     accessKey: env.ACCESS_KEY || '',
+    giphyApiKey: env.GIPHY_API_KEY || '',
     mode: env.MODE || (token ? 'live' : 'replay'),
     rundownBaseUrl: (env.RUNDOWN_BASE_URL || 'https://rundown.ffverwaltung.de').replace(/\/+$/, ''),
     rundownToken: token,

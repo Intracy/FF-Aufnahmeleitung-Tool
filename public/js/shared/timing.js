@@ -4,7 +4,7 @@
 /** Warnstufen analog zu den AL-Handzeichen. */
 export const STAGES_MS = [300_000, 120_000, 60_000, 30_000];
 export const STAGE_WORDS = { 300000: 'NOCH 5', 120000: 'NOCH 2', 60000: 'NOCH 1', 30000: '30 SEK' };
-/** Ab hier ABRUNDEN (wenn der Cue lang genug ist). */
+/** Ab hier FERTIG WERDEN (wenn der Cue lang genug ist). */
 export const WRAP_AT_MS = 10_000;
 /** So lange vor Ende eines Zuspielers geht das Schild auf GLEICH DU. */
 export const STANDBY_LEAD_MS = 15_000;
@@ -75,7 +75,7 @@ export function evaluate(p) {
     if (remainingMs < 0) return { ...base, state: 'over', word: 'ÜBER', digitsMs: -remainingMs, countUp: true, over: true };
     const { stages, wrap } = stagesFor(p.durationMs);
     if (signals.wrap || (wrap && remainingMs <= WRAP_AT_MS)) {
-      return { ...base, state: 'wrap', word: 'ABRUNDEN', icon: 'wrap', digitsMs: remainingMs };
+      return { ...base, state: 'wrap', word: 'FERTIG WERDEN', icon: 'wrap', digitsMs: remainingMs };
     }
     const reached = stages.filter((s) => remainingMs <= s);
     if (reached.length) {
@@ -86,7 +86,7 @@ export function evaluate(p) {
   }
 
   if (signals.wrap) {
-    return { ...base, state: 'wrap', word: 'ABRUNDEN', icon: 'wrap', digitsMs: known ? Math.max(0, remainingMs) : null };
+    return { ...base, state: 'wrap', word: 'FERTIG WERDEN', icon: 'wrap', digitsMs: known ? Math.max(0, remainingMs) : null };
   }
 
   if (p.kind === 'open') {

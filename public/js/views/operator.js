@@ -2,6 +2,7 @@
 
 import { formatClock, formatSigned, formatTimeOfDay, formatDuration, KINDS } from '../shared/timing.js';
 import { bindHold, bindTap } from '../ui/hold.js';
+import { safeGifUrl } from '../ui/richtext.js';
 
 const $ = (root, sel) => root.querySelector(sel);
 
@@ -26,6 +27,7 @@ export class OperatorView {
    * @param {()=>void} o.onSign               Schild zeigen
    * @param {()=>void} o.onSettings
    * @param {()=>void} o.onStretch            Auswahl der Streckzeit öffnen
+   * @param {()=>void} o.onText               Custom-Text-Editor öffnen
    * @param {(cmd:string)=>void} o.onManual   enter | exit | prev | next
    * @param {(text:string, undo?:()=>void)=>void} o.undo
    * @param {boolean} o.readonly
@@ -60,7 +62,7 @@ export class OperatorView {
       context: $(r, '#context'),
       controls: $(r, '#controls'),
       bSign: $(r, '#b-sign'),
-      bWrap: $(r, '#b-wrap'),
+      bText: $(r, '#b-text'),
       bStretch: $(r, '#b-stretch'),
       bStandby: $(r, '#b-standby'),
       bCut: $(r, '#b-cut'),
@@ -72,7 +74,7 @@ export class OperatorView {
     };
     // Kontext in festen Teilbereichen, damit Antippen nie durch ein Neuzeichnen unterbrochen wird.
     this.ctx = {};
-    for (const k of ['banner', 'scenarios', 'info', 'notes']) {
+    for (const k of ['banner', 'message', 'scenarios', 'info', 'notes']) {
       const d = document.createElement('div');
       d.className = `ctx-${k}`;
       d.style.display = 'contents';
@@ -91,7 +93,7 @@ export class OperatorView {
     const e = this.el;
     bindTap(e.bSign, () => this.onSign());
     bindTap($(this.root, '#op-settings'), () => this.onSettings());
-    bindTap(e.bWrap, () => this.act({ type: 'signal', kind: 'wrap', on: !this.signals.wrap }));
+    bindTap(e.bText, () => this.onText());
     bindTap(e.bStandby, () => this.act({ type: 'signal', kind: 'standby', on: !this.signals.standby }));
     bindTap(e.bStretch, () => this.onStretch());
     bindTap(e.bMarker, () => this.act({ type: 'marker' }));
@@ -238,6 +240,44 @@ export class OperatorView {
       if (b) bindHold(b, () => this.onManual('exit'));
     }
 
+    // Custom Text, der gerade auf dem Schild steht (ohne innerHTML: Inhalt kommt vom Gerät der AL)
+    const m = st?.message;
+    const msgKey = m ? `${m.at}|${this.readonly}` : '';
+    if (this.ctx.message.dataset.key !== msgKey) {
+      this.ctx.message.dataset.key = msgKey;
+      this.ctx.message.replaceChildren();
+      if (m) {
+        const card = document.createElement('div');
+        card.className = 'card ctx-card';
+        const head = document.createElement('div');
+        head.className = 'ctx-title';
+        head.textContent = 'Auf dem Schild';
+        const row = document.createElement('div');
+        row.className = 'msg-preview';
+        const gif = safeGifUrl(m.gif?.url);
+        if (gif) {
+          const img = document.createElement('img');
+          img.src = gif;
+          img.alt = 'GIF';
+          row.append(img);
+        }
+        const txt = document.createElement('div');
+        txt.className = `msg-text${m.upper ? ' upper' : ''}`;
+        txt.textContent = m.text || (gif ? 'GIF' : '');
+        row.append(txt);
+        if (!this.readonly) {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'btn tint-red';
+          b.textContent = 'AUSBLENDEN';
+          bindTap(b, () => this.act({ type: 'message', clear: true }));
+          row.append(b);
+        }
+        card.append(head, row);
+        this.ctx.message.append(card);
+      }
+    }
+
     // Szenarien
     const groups = (st?.groups || []).filter((g) => g.visible);
     const scen = groups
@@ -292,11 +332,10 @@ export class OperatorView {
     const st = vm.state;
     const has = !!vm.cue;
     const sig = st?.signals || {};
-    e.bWrap.disabled = !has;
     e.bStretch.disabled = !has || vm.cue?.kind === 'anchor';
     e.bStandby.disabled = !has;
     e.bCut.disabled = !has;
-    e.bWrap.setAttribute('aria-pressed', String(!!sig.wrap));
+    e.bText.setAttribute('aria-pressed', String(!!st?.message));
     e.bStandby.setAttribute('aria-pressed', String(!!sig.standby));
     e.bCut.setAttribute('aria-pressed', String(!!sig.cut));
     setText(e.bCutText, sig.cut ? 'AUFHEBEN' : 'SCHLUSS');
