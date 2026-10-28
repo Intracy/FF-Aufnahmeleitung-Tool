@@ -1,0 +1,14 @@
+{
+  "$comment": "Cue-Arten. Die Rundown-API liefert keine Art, deshalb wird sie aus dem Titel (erste Zeile) abgeleitet. Regeln werden von oben nach unten geprüft, die erste passende gewinnt. 'overrides' (nach Cue-Nummer) und 'overridesById' schlagen jede Regel. Arten: moderated (Countdown mit Warnstufen), fixed (Zuspieler/Pause, fester Countdown), open (Draft/Spiel, zählt hoch), special (Countdown ohne Alarm), anchor (zählt auf eine Uhrzeit herunter).",
+  "default": "moderated",
+  "rules": [
+    { "kind": "open", "match": "^(Draft\\b|SuP3 Game \\d|Finale Game \\d)" },
+    { "kind": "fixed", "match": "^(TLC Presenter|FF Stinger|Trailer|Highlights|Hypevideo|Winner MAZ|Abspann|Road to Glory|COUNTDOWN|SIGNAL LIVE|STREAM ENDE)" },
+    { "kind": "fixed", "match": "^(PAUSE|Countdown Pause)$" },
+    { "kind": "special", "match": "^(Einlauf Teams|Münzwurf|Noris Liga|Kahoot)" }
+  ],
+  "overrides": {
+    "65": { "kind": "anchor", "anchorTime": "15:45:15" }
+  },
+  "overridesById": {}
+}

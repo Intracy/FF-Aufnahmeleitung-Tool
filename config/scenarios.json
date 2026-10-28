@@ -1,0 +1,28 @@
+{
+  "$comment": "Verzweigungen im Rundown. 'jumps': nach Cue 'after' geht es mit Cue 'to' weiter. Die Auswahl erscheint in der Bedienansicht zwischen 'visibleFromCue' und 'visibleUntilCue'. Solange nichts gewählt ist, zeigt die Back-Time alle möglichen Enden.",
+  "groups": [
+    {
+      "id": "sup3",
+      "label": "Spiel um Platz 3",
+      "short": "SuP3",
+      "visibleFromCue": 27,
+      "visibleUntilCue": 51,
+      "options": [
+        { "id": "2-0", "label": "2:0", "jumps": [{ "after": 40, "to": 52 }] },
+        { "id": "2-1", "label": "2:1", "jumps": [] }
+      ]
+    },
+    {
+      "id": "finale",
+      "label": "Finale",
+      "short": "Finale",
+      "visibleFromCue": 88,
+      "visibleUntilCue": 141,
+      "options": [
+        { "id": "3-0", "label": "3:0", "jumps": [{ "after": 112, "to": 142 }] },
+        { "id": "3-1", "label": "3:1", "jumps": [{ "after": 123, "to": 142 }] },
+        { "id": "3-2", "label": "3:2", "jumps": [] }
+      ]
+    }
+  ]
+}

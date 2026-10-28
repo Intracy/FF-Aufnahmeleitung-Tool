@@ -1,0 +1,3205 @@
+{
+ "$comment": "Schnappschuss des Rundowns 'FF Offline Finale 2026' für den Replay-Modus. Interne Notizen entfernt; IDs neu erzeugt.",
+ "rundown": {
+  "id": "f1e6fa30-9dd5-487a-b18e-6793a6010036",
+  "title": "FF Offline Finale 2026",
+  "description": null,
+  "eventDate": "2026-11-01",
+  "startTime": "10:00:00",
+  "status": "planned"
+ },
+ "columns": [
+  {
+   "id": "a3aacd97-fe9e-4233-b20d-1acf8218b920",
+   "name": "GFX",
+   "type": "text"
+  },
+  {
+   "id": "180c2d1b-d1d9-4759-85d9-79ce4141d9dd",
+   "name": "Ort",
+   "type": "text"
+  },
+  {
+   "id": "af339ba6-6ce3-47a8-a977-034433e449e2",
+   "name": "Ton",
+   "type": "text"
+  }
+ ],
+ "currentItemId": null,
+ "isRunning": false,
+ "elements": [
+  {
+   "id": "db7825f5-5a50-58cd-8e25-92701b42921f",
+   "type": "cue",
+   "number": 1,
+   "title": "COUNTDOWN - 60 Min",
+   "notes": "",
+   "durationSeconds": 1800,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "10:00:00",
+   "plannedEnd": "10:30:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "05c1ef88-5d11-55f2-a9e6-1061afefbbe7",
+   "type": "cue",
+   "number": 2,
+   "title": "SIGNAL LIVE\n\nnoch 30 Min",
+   "notes": null,
+   "durationSeconds": 1800,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "10:30:00",
+   "plannedEnd": "11:00:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a94d2241-acd7-5e1a-a100-5adc1e240652",
+   "type": "block",
+   "number": null,
+   "title": "PreShow SuP3",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6dc52c6c-9193-5541-b704-e4d2fb0b5e37",
+   "type": "cue",
+   "number": 3,
+   "title": "TLC Presenter",
+   "notes": "",
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:00:00",
+   "plannedEnd": "11:00:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b7fc4086-5e28-5491-a75f-aa6002ab5940",
+   "type": "cue",
+   "number": 4,
+   "title": "Trailer",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:00:10",
+   "plannedEnd": "11:01:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "598b0751-d654-59bc-8efd-f4321e2c5c29",
+   "type": "cue",
+   "number": 5,
+   "title": "Begrüßung durch Felix Halle",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#2596be",
+   "blockId": null,
+   "plannedStart": "11:01:10",
+   "plannedEnd": "11:02:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "baae522f-5013-5d19-b368-bab5aad6d098",
+   "type": "cue",
+   "number": 6,
+   "title": "Begrüßung und Vorstellung Gäste",
+   "notes": "",
+   "durationSeconds": 90,
+   "actualDurationSeconds": null,
+   "color": "#2596be",
+   "blockId": null,
+   "plannedStart": "11:02:10",
+   "plannedEnd": "11:03:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "1c86dc62-4beb-56c1-b61d-ffaa78a4f493",
+   "type": "cue",
+   "number": 7,
+   "title": "Tagesprogramm",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:03:40",
+   "plannedEnd": "11:04:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "99635e78-24df-5798-a9aa-00cf54e197ce",
+   "type": "cue",
+   "number": 8,
+   "title": "Übergabe Münzwurf",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "11:04:40",
+   "plannedEnd": "11:05:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "69ef6e5e-f355-51fd-ba7a-751d437cbe0d",
+   "type": "cue",
+   "number": 9,
+   "title": "Münzwurf",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:05:10",
+   "plannedEnd": "11:06:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "0674abe3-c533-51d3-888b-e2347cd0ecba",
+   "type": "cue",
+   "number": 10,
+   "title": "Interview Spieler/Coach",
+   "notes": "",
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:06:10",
+   "plannedEnd": "11:08:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "72275017-08cd-5f92-8376-af8dffeec8b5",
+   "type": "cue",
+   "number": 11,
+   "title": "Übergabe Analyse",
+   "notes": "",
+   "durationSeconds": 15,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "11:08:10",
+   "plannedEnd": "11:08:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "3c44faeb-71c5-5003-ad4d-2e3e247b313e",
+   "type": "cue",
+   "number": 12,
+   "title": "Einleitung Spiel um Platz 3",
+   "notes": "Gespräch über SuP3",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:08:25",
+   "plannedEnd": "11:09:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b853822e-5fd3-519e-a59e-5e1e1d8b294a",
+   "type": "cue",
+   "number": 13,
+   "title": "Road to Glory Peak of Professionel Organisations",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:09:25",
+   "plannedEnd": "11:10:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d7ff4166-1420-503a-bd66-fdc3be5583e5",
+   "type": "cue",
+   "number": 14,
+   "title": "Road to Glory Rho intSport",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:10:25",
+   "plannedEnd": "11:11:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "92aa1869-0cd2-537b-b8d9-315f6ad9579b",
+   "type": "cue",
+   "number": 15,
+   "title": "Teamblock Peak of Professionel Organisations",
+   "notes": null,
+   "durationSeconds": 150,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:11:25",
+   "plannedEnd": "11:13:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6faf25c4-873b-5701-af92-97a742bd6130",
+   "type": "cue",
+   "number": 16,
+   "title": "Teamblock Rho intSport",
+   "notes": null,
+   "durationSeconds": 150,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:13:55",
+   "plannedEnd": "11:16:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "180a48c9-ca54-5e0a-bc7e-c066c14d2534",
+   "type": "cue",
+   "number": 17,
+   "title": "Champions to Watch",
+   "notes": "",
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:16:25",
+   "plannedEnd": "11:19:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "f0886707-4764-578c-a0a0-1754a1debd99",
+   "type": "cue",
+   "number": 18,
+   "title": "Frage und Überleitung Einlauf",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:19:25",
+   "plannedEnd": "11:20:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "50cf549a-6f4e-5b2d-9bff-13b3e8e481b3",
+   "type": "cue",
+   "number": 19,
+   "title": "Hypevideo Sup3",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "11:20:25",
+   "plannedEnd": "11:21:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fefa5324-dae1-500e-b659-dc9d30547e2f",
+   "type": "cue",
+   "number": 20,
+   "title": "Hype Felix",
+   "notes": "",
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:21:25",
+   "plannedEnd": "11:21:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "919ad9f5-780b-522f-9728-da2c844dabe2",
+   "type": "cue",
+   "number": 21,
+   "title": "Einlauf Teams",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:21:55",
+   "plannedEnd": "11:23:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9d04a116-7930-5598-b48c-5d1beb13d2f3",
+   "type": "cue",
+   "number": 22,
+   "title": "Hype Felix und Übergabe Analyse",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "11:23:55",
+   "plannedEnd": "11:24:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b3f1f0b5-b3d1-51d0-bb2c-55b61e509e39",
+   "type": "cue",
+   "number": 23,
+   "title": "Vorstellung Gäste",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#2596be",
+   "blockId": null,
+   "plannedStart": "11:24:25",
+   "plannedEnd": "11:24:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8c376f8a-acd7-509e-b4fa-6eb535c2490d",
+   "type": "cue",
+   "number": 24,
+   "title": "Erwartungen an Series",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:24:55",
+   "plannedEnd": "11:27:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a5b670fa-fd9f-5c6a-89ee-8eb110d69007",
+   "type": "cue",
+   "number": 25,
+   "title": "Predictions",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:27:55",
+   "plannedEnd": "11:29:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "7b0720e3-7b79-5283-8987-75ce649e0520",
+   "type": "cue",
+   "number": 26,
+   "title": "Gedanken zum Spiel\n",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:29:55",
+   "plannedEnd": "11:30:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "1c7d6d37-12b4-5334-a06e-0380d6dc5f31",
+   "type": "block",
+   "number": null,
+   "title": "SuP3 - Game 1",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9e22f36f-67fc-5959-8fe2-0830f138461d",
+   "type": "cue",
+   "number": 27,
+   "title": "Draft Sup3 Game 1",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "11:30:55",
+   "plannedEnd": "11:37:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d2819777-2087-556d-8ea0-5f7be29b23d2",
+   "type": "cue",
+   "number": 28,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "11:37:55",
+   "plannedEnd": "11:38:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "00d304da-2894-5714-a1ab-416aebe33ad8",
+   "type": "cue",
+   "number": 29,
+   "title": "SuP3 Game 1",
+   "notes": null,
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "11:38:55",
+   "plannedEnd": "12:18:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e4eba0b1-7fb6-5530-8ccf-f69209b454dd",
+   "type": "cue",
+   "number": 30,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:18:55",
+   "plannedEnd": "12:19:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "f2b53684-4573-5f78-94ea-77676e204610",
+   "type": "cue",
+   "number": 31,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "12:19:55",
+   "plannedEnd": "12:20:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "1ec91564-6d31-5f2a-a3fa-bbce7ac9757d",
+   "type": "cue",
+   "number": 32,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:20:55",
+   "plannedEnd": "12:23:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e1c609af-9d2e-5053-a365-977ea7a14f08",
+   "type": "cue",
+   "number": 33,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "12:23:55",
+   "plannedEnd": "12:25:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "7b42379a-61a2-51da-9905-8e14754690b4",
+   "type": "cue",
+   "number": 34,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:25:55",
+   "plannedEnd": "12:26:05",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4c097247-e7ec-54cf-9aa4-ec8d52ce9296",
+   "type": "cue",
+   "number": 35,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:26:05",
+   "plannedEnd": "12:26:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "0634055d-b708-51f7-aa94-ebd7b773b7f6",
+   "type": "cue",
+   "number": 36,
+   "title": "Analyse SuP3 Game 1",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "12:26:15",
+   "plannedEnd": "12:31:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "998e9be3-b55b-5e52-b42b-f9b1fd251b10",
+   "type": "cue",
+   "number": 37,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:31:15",
+   "plannedEnd": "12:32:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9904f010-5df1-50e4-9ca6-afd7858ead98",
+   "type": "block",
+   "number": null,
+   "title": "SuP3 - Game 2",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "254e00cf-5cc2-551c-b5d6-ad46ab1f3cbe",
+   "type": "cue",
+   "number": 38,
+   "title": "Draft Sup3 Game 2",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "12:32:15",
+   "plannedEnd": "12:39:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fbc3957e-d0ea-5e68-9259-f9cd06d34ad6",
+   "type": "cue",
+   "number": 39,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "12:39:15",
+   "plannedEnd": "12:40:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "f6392f61-c4fa-5a59-b6f3-9ba91ebe16c5",
+   "type": "cue",
+   "number": 40,
+   "title": "SuP3 Game 2",
+   "notes": "WENN 2:0 Jump to Cue 52",
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "12:40:15",
+   "plannedEnd": "13:20:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "31e9c1f8-6c6c-573a-9c92-f968ee5c8e29",
+   "type": "cue",
+   "number": 41,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:20:15",
+   "plannedEnd": "13:21:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "74245942-605b-5ab0-879c-3fde4874385a",
+   "type": "cue",
+   "number": 42,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "13:21:15",
+   "plannedEnd": "13:22:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fe790b61-51ef-5650-9c51-92d89a114771",
+   "type": "cue",
+   "number": 43,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:22:15",
+   "plannedEnd": "13:25:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9d397065-6569-5840-959e-349fb053825f",
+   "type": "cue",
+   "number": 44,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "13:25:15",
+   "plannedEnd": "13:27:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "afcc96c4-f80a-50a3-88f0-71b275f94bca",
+   "type": "cue",
+   "number": 45,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:27:15",
+   "plannedEnd": "13:27:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8dbf63fa-8b53-5fef-8b07-d51905164a88",
+   "type": "cue",
+   "number": 46,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:27:25",
+   "plannedEnd": "13:27:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4dc7c4dd-df99-56f2-8770-72dbcb0bba18",
+   "type": "cue",
+   "number": 47,
+   "title": "Analyse SuP3 Game 2",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "13:27:35",
+   "plannedEnd": "13:32:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8c5f6a37-0a14-5b6d-9704-724eed6a0817",
+   "type": "cue",
+   "number": 48,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:32:35",
+   "plannedEnd": "13:33:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "530d6717-5b41-5625-bb7c-dc7306889f06",
+   "type": "block",
+   "number": null,
+   "title": "SuP3 - Game 3",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8b978f6d-abaa-5664-b3f1-8c43d3670cce",
+   "type": "cue",
+   "number": 49,
+   "title": "Draft Sup3 Game 3",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "13:33:35",
+   "plannedEnd": "13:40:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "273859b1-b59f-5123-8710-6aa3a88c8a27",
+   "type": "cue",
+   "number": 50,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "13:40:35",
+   "plannedEnd": "13:41:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8b8d3007-ddec-5a93-8e5b-4b9748a00419",
+   "type": "cue",
+   "number": 51,
+   "title": "SuP3 Game 3",
+   "notes": null,
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "13:41:35",
+   "plannedEnd": "14:21:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "784e7b7c-bd4c-58de-b1f9-a9d1c5961267",
+   "type": "block",
+   "number": null,
+   "title": "SuP3 – Winner + Analyse",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b3190c8f-b5b7-5778-a60d-918fb2f318d1",
+   "type": "cue",
+   "number": 52,
+   "title": "Winner MAZ",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#9aa4b2",
+   "blockId": null,
+   "plannedStart": "14:21:35",
+   "plannedEnd": "14:22:35",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6c301f13-d021-5529-94e3-8d85c141bc39",
+   "type": "cue",
+   "number": 53,
+   "title": "Übergabe Felix",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "14:22:35",
+   "plannedEnd": "14:23:05",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "39b26ad9-2614-5ffa-b093-a016be5ca209",
+   "type": "cue",
+   "number": 54,
+   "title": "Siegerehrung",
+   "notes": "inkls. Interviews mit Winner und Loser",
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "14:23:05",
+   "plannedEnd": "14:26:05",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "864f4f62-3a54-544d-8ad2-7c831615858d",
+   "type": "cue",
+   "number": 55,
+   "title": "Highlights",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "14:26:05",
+   "plannedEnd": "14:27:05",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "2766228b-113d-5baa-8bad-0d78d588db63",
+   "type": "cue",
+   "number": 56,
+   "title": "Pause",
+   "notes": null,
+   "durationSeconds": 240,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "14:27:05",
+   "plannedEnd": "14:31:05",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "cfab7b12-1931-552c-bb8d-2a352e302083",
+   "type": "cue",
+   "number": 57,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "14:31:05",
+   "plannedEnd": "14:31:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "41e54dd8-51f0-5f81-a978-81891478479d",
+   "type": "cue",
+   "number": 58,
+   "title": "Trailer",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "14:31:15",
+   "plannedEnd": "14:32:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "50955fb6-f525-5f06-ae31-5d45a7d93bb3",
+   "type": "cue",
+   "number": 59,
+   "title": "Analyse Sup3 Game 3\nGast Gewinner Team",
+   "notes": "",
+   "durationSeconds": 600,
+   "actualDurationSeconds": null,
+   "color": "#ff1f1f",
+   "blockId": null,
+   "plannedStart": "14:32:15",
+   "plannedEnd": "14:42:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a1ce2d37-2987-55ba-88f1-a14ad31723bd",
+   "type": "cue",
+   "number": 60,
+   "title": "Weiteres Programm",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "14:42:15",
+   "plannedEnd": "14:43:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b269de61-ca4a-5121-9575-ca1890a0d1f8",
+   "type": "cue",
+   "number": 61,
+   "title": "Countdown Pause",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "14:43:15",
+   "plannedEnd": "14:45:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "ae756b7d-b12e-5868-81f1-52c8310ec8c4",
+   "type": "block",
+   "number": null,
+   "title": "Rahmenprogramm Cosplay | Kahoot",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "350b8238-3903-5abd-bf87-3891284df94f",
+   "type": "cue",
+   "number": 62,
+   "title": "Noris Liga | Quiz",
+   "notes": "",
+   "durationSeconds": 1800,
+   "actualDurationSeconds": null,
+   "color": "#ff2bab",
+   "blockId": null,
+   "plannedStart": "14:45:15",
+   "plannedEnd": "15:15:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "c6142b08-d0a1-5d7b-9746-27610eab3831",
+   "type": "cue",
+   "number": 63,
+   "title": "Countdown Pause",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "15:15:15",
+   "plannedEnd": "15:20:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b6bec888-70bf-5caf-bf94-d5659250e408",
+   "type": "cue",
+   "number": 64,
+   "title": "Kahoot",
+   "notes": "",
+   "durationSeconds": 1200,
+   "actualDurationSeconds": null,
+   "color": "#9aa4b2",
+   "blockId": null,
+   "plannedStart": "15:20:15",
+   "plannedEnd": "15:40:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4b6ad84e-e73b-5d9a-921d-fba2035bbff4",
+   "type": "cue",
+   "number": 65,
+   "title": "Countdown Pause",
+   "notes": "PAUSE BIS 15:45 Uhr",
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "15:40:15",
+   "plannedEnd": "15:45:15",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "cc1eb8df-d29b-5e3c-86c8-7c0392f373fe",
+   "type": "block",
+   "number": null,
+   "title": "PreShow Finale",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "bb97470a-d2be-591f-a5d5-fe49623efe37",
+   "type": "cue",
+   "number": 66,
+   "title": "TLC Presenter",
+   "notes": "",
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:45:15",
+   "plannedEnd": "15:45:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6c11b000-a168-525b-bf53-dc6c56da24c4",
+   "type": "cue",
+   "number": 67,
+   "title": "Trailer",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:45:25",
+   "plannedEnd": "15:46:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "653d745e-1516-588f-8b6a-46a75b199493",
+   "type": "cue",
+   "number": 68,
+   "title": "Wilkommen zrück und Vorstellung Gäste",
+   "notes": "",
+   "durationSeconds": 90,
+   "actualDurationSeconds": null,
+   "color": "#2596be",
+   "blockId": null,
+   "plannedStart": "15:46:25",
+   "plannedEnd": "15:47:55",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b3337e75-5e52-5452-9cee-ed9547c0c8c2",
+   "type": "cue",
+   "number": 69,
+   "title": "Übergabe Münzwurf",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "15:47:55",
+   "plannedEnd": "15:48:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "7bfefa0c-9c92-56b3-9157-0d845f36bfbd",
+   "type": "cue",
+   "number": 70,
+   "title": "Münzwurf",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:48:25",
+   "plannedEnd": "15:49:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d01f219c-f342-59de-9bae-cd1be4f3c671",
+   "type": "cue",
+   "number": 71,
+   "title": "Interview Spieler/Coach",
+   "notes": "",
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:49:25",
+   "plannedEnd": "15:51:25",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fc5f23dc-fc4f-5f47-8033-9b34f7214e43",
+   "type": "cue",
+   "number": 72,
+   "title": "Übergabe Analyse",
+   "notes": "",
+   "durationSeconds": 15,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "15:51:25",
+   "plannedEnd": "15:51:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9830b860-b53c-5d16-8b87-3d669067e441",
+   "type": "cue",
+   "number": 73,
+   "title": "Einleitung Finale",
+   "notes": "Gespräch über SuP3",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:51:40",
+   "plannedEnd": "15:52:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d0c46f1f-8225-5316-acdd-3065eb4d6a50",
+   "type": "cue",
+   "number": 74,
+   "title": "Road to Glory AceGaming",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:52:40",
+   "plannedEnd": "15:53:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "df187caf-944a-5ac1-9b24-5adbc87ceec2",
+   "type": "cue",
+   "number": 75,
+   "title": "Road to Glory OnGromp",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:53:40",
+   "plannedEnd": "15:54:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6d7d4a55-1d23-56e0-b49c-12664bf7a14d",
+   "type": "cue",
+   "number": 76,
+   "title": "Teamblock AceGaming",
+   "notes": null,
+   "durationSeconds": 150,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:54:40",
+   "plannedEnd": "15:57:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "79c8dfef-1a26-560f-a498-9051fdaa8852",
+   "type": "cue",
+   "number": 77,
+   "title": "Teamblock OnGromp",
+   "notes": null,
+   "durationSeconds": 150,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:57:10",
+   "plannedEnd": "15:59:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "073d1d00-7339-5fc6-917d-70a30d0ccd68",
+   "type": "cue",
+   "number": 78,
+   "title": "Champions to Watch",
+   "notes": "",
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "15:59:40",
+   "plannedEnd": "16:02:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "eee9c541-6aef-56f8-b247-df31926f05d2",
+   "type": "cue",
+   "number": 79,
+   "title": "Frage und Überleitung Einlauf",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:02:40",
+   "plannedEnd": "16:03:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "84f5baf7-b358-51a3-938c-c4583e9774ad",
+   "type": "cue",
+   "number": 80,
+   "title": "Hypevideo Finale",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "16:03:40",
+   "plannedEnd": "16:04:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "62017c3d-4d65-5243-9c94-3baa1cac5a51",
+   "type": "cue",
+   "number": 81,
+   "title": "Hype Felix",
+   "notes": "",
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:04:40",
+   "plannedEnd": "16:05:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "cf42d98c-ad43-5804-8f56-c18752d81327",
+   "type": "cue",
+   "number": 82,
+   "title": "Einlauf Teams",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:05:10",
+   "plannedEnd": "16:07:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "ce62c7d7-ad79-5822-8ead-dc53cc99bd17",
+   "type": "cue",
+   "number": 83,
+   "title": "Hype Felix und Übergabe Analyse",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "16:07:10",
+   "plannedEnd": "16:07:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a3105a7f-921a-5d4a-ae62-637c1e8b471b",
+   "type": "cue",
+   "number": 84,
+   "title": "Begrüßung Analyse",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": "#2596be",
+   "blockId": null,
+   "plannedStart": "16:07:40",
+   "plannedEnd": "16:08:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6b90b82f-9600-52ce-8d42-83011273c54c",
+   "type": "cue",
+   "number": 85,
+   "title": "Erwartungen an Series",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:08:10",
+   "plannedEnd": "16:11:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6ec5f790-c51b-5198-9a28-b51571957a93",
+   "type": "cue",
+   "number": 86,
+   "title": "Predictions",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:11:10",
+   "plannedEnd": "16:13:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "08554eca-a3da-5a31-b220-44368c878c2f",
+   "type": "cue",
+   "number": 87,
+   "title": "Gedanken zum Spiel\n",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:13:10",
+   "plannedEnd": "16:14:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "233a64c8-547d-585c-90c7-883132286dfd",
+   "type": "block",
+   "number": null,
+   "title": "Finale - Game 1",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "5931a50f-3999-5e61-829b-cfa83e88f657",
+   "type": "cue",
+   "number": 88,
+   "title": "Draft Finale Game 1",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "16:14:10",
+   "plannedEnd": "16:21:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "55040f63-271e-5912-bd23-5522c434ba6e",
+   "type": "cue",
+   "number": 89,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "16:21:10",
+   "plannedEnd": "16:22:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "99560d21-342a-59c1-b9e7-4b6a0fb9bac1",
+   "type": "cue",
+   "number": 90,
+   "title": "Finale Game 1",
+   "notes": null,
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "16:22:10",
+   "plannedEnd": "17:02:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "133438e0-20aa-5360-843c-3a738d8eece2",
+   "type": "cue",
+   "number": 91,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:02:10",
+   "plannedEnd": "17:03:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "80a03841-fda7-5670-aef8-02b844b28b9a",
+   "type": "cue",
+   "number": 92,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "17:03:10",
+   "plannedEnd": "17:04:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "c8b6eb85-f178-52a5-a22e-f9adb3c53e01",
+   "type": "cue",
+   "number": 93,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:04:10",
+   "plannedEnd": "17:07:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "cc299293-3d17-57f9-a9ad-eb93b75de332",
+   "type": "cue",
+   "number": 94,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "17:07:10",
+   "plannedEnd": "17:09:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "76ca210e-8550-5125-a879-a68c2fd3e6e5",
+   "type": "cue",
+   "number": 95,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:09:10",
+   "plannedEnd": "17:09:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "03012763-2251-553f-9355-c4d1bbee689b",
+   "type": "cue",
+   "number": 96,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:09:20",
+   "plannedEnd": "17:09:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "eab7b13b-3156-58d3-82a9-eb14bca7d806",
+   "type": "cue",
+   "number": 97,
+   "title": "Analyse SuP3 Game 1",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "17:09:30",
+   "plannedEnd": "17:14:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8dce1827-20d9-58d4-a271-6f449a8a2fc5",
+   "type": "cue",
+   "number": 98,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:14:30",
+   "plannedEnd": "17:15:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e3463dbf-99c5-5e22-b229-9c041da224b9",
+   "type": "block",
+   "number": null,
+   "title": "Finale - Game 2",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "2a4d3b5e-c777-5fb8-b73e-48851ec6ee65",
+   "type": "cue",
+   "number": 99,
+   "title": "Draft Finale Game 2",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "17:15:30",
+   "plannedEnd": "17:22:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "75813112-b0a2-5e42-956d-5f52f2859514",
+   "type": "cue",
+   "number": 100,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "17:22:30",
+   "plannedEnd": "17:23:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a4fd4ae1-6ee0-5dbf-8539-10a273ba7b5e",
+   "type": "cue",
+   "number": 101,
+   "title": "Finale Game 2",
+   "notes": null,
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "17:23:30",
+   "plannedEnd": "18:03:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "32f0c181-9779-5623-8149-0c56914b42aa",
+   "type": "cue",
+   "number": 102,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:03:30",
+   "plannedEnd": "18:04:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8679d42e-c446-574b-bac5-279ca57d68cb",
+   "type": "cue",
+   "number": 103,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "18:04:30",
+   "plannedEnd": "18:05:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4fab9924-24c5-5f4d-ac11-d7905e250734",
+   "type": "cue",
+   "number": 104,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:05:30",
+   "plannedEnd": "18:08:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "5c6c2547-84db-53b3-9d8a-57c72d82c9ef",
+   "type": "cue",
+   "number": 105,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "18:08:30",
+   "plannedEnd": "18:10:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "0c89ad69-0a7e-5868-9bee-fa782faa789c",
+   "type": "cue",
+   "number": 106,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:10:30",
+   "plannedEnd": "18:10:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "0d6c0210-fe81-5bfc-bff8-da8e4c48f13c",
+   "type": "cue",
+   "number": 107,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:10:40",
+   "plannedEnd": "18:10:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e9354482-4a04-53aa-af88-94150890cefb",
+   "type": "cue",
+   "number": 108,
+   "title": "Analyse Finale Game 2",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "18:10:50",
+   "plannedEnd": "18:15:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9f4d869a-4cbb-5237-972d-f67f7d4b3129",
+   "type": "cue",
+   "number": 109,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:15:50",
+   "plannedEnd": "18:16:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d809ad32-744d-56c9-a9ca-6b0c1f423b39",
+   "type": "block",
+   "number": null,
+   "title": "Finale - Game 3",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "5b01b9ef-9a5b-5f3e-a75d-f16b0ee547a4",
+   "type": "cue",
+   "number": 110,
+   "title": "Draft Finale Game 3",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "18:16:50",
+   "plannedEnd": "18:23:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8e2b9dde-4e47-530f-aab6-76e9a7df3fa0",
+   "type": "cue",
+   "number": 111,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "18:23:50",
+   "plannedEnd": "18:24:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "70c45260-c61f-5758-a048-7612136fc100",
+   "type": "cue",
+   "number": 112,
+   "title": "Finale Game 3",
+   "notes": "WENN 3:0 skip to Cue 142",
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "18:24:50",
+   "plannedEnd": "19:04:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "dca19b40-d2bc-51c9-89cf-699a540e6ea7",
+   "type": "cue",
+   "number": 113,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:04:50",
+   "plannedEnd": "19:05:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "c6eec100-8e86-5f24-b0d1-4821444a5347",
+   "type": "cue",
+   "number": 114,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "19:05:50",
+   "plannedEnd": "19:06:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "18f5a9a9-ab59-5d06-bac0-d53c504c49d2",
+   "type": "cue",
+   "number": 115,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:06:50",
+   "plannedEnd": "19:09:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "50b6c44e-2d2d-5593-aecb-30c0e2cec218",
+   "type": "cue",
+   "number": 116,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "19:09:50",
+   "plannedEnd": "19:11:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "ff449b0c-3807-51a8-8d41-1132a8b1c0aa",
+   "type": "cue",
+   "number": 117,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:11:50",
+   "plannedEnd": "19:12:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "bbee806c-cb80-5190-ac37-35c6ba91a21f",
+   "type": "cue",
+   "number": 118,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:12:00",
+   "plannedEnd": "19:12:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "66c3c59e-b055-5a60-9028-64937cd914da",
+   "type": "cue",
+   "number": 119,
+   "title": "Analyse Finale Game 3",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "19:12:10",
+   "plannedEnd": "19:17:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fab8ab8c-359a-581a-a8b1-a9b015462f7f",
+   "type": "cue",
+   "number": 120,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:17:10",
+   "plannedEnd": "19:18:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "1623e1ca-30e8-5cab-b90d-5781600ebcc2",
+   "type": "block",
+   "number": null,
+   "title": "Finale - Game 4",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "bcfc5bbe-3130-5d5c-a6b6-890ba71fb8fd",
+   "type": "cue",
+   "number": 121,
+   "title": "Draft Finale Game 4",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "19:18:10",
+   "plannedEnd": "19:25:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "89aeb729-2dc4-5c72-a254-c95728cf59f9",
+   "type": "cue",
+   "number": 122,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "19:25:10",
+   "plannedEnd": "19:26:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "770ab1fc-167a-568b-8ebe-aead4209d9ea",
+   "type": "cue",
+   "number": 123,
+   "title": "Finale Game 4",
+   "notes": "WENN 3:1 skip to Cue 142",
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "19:26:10",
+   "plannedEnd": "20:06:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e82d1916-e8a2-5be5-b42b-d6b0ad6d55a7",
+   "type": "cue",
+   "number": 124,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:06:10",
+   "plannedEnd": "20:07:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "811e3339-aa3c-5775-9490-57d4683b25aa",
+   "type": "cue",
+   "number": 125,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "20:07:10",
+   "plannedEnd": "20:08:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "8b1150fa-4101-55ed-840a-b32d219d8908",
+   "type": "cue",
+   "number": 126,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:08:10",
+   "plannedEnd": "20:11:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4b18995a-35a1-56f3-9307-16473bc38ebc",
+   "type": "cue",
+   "number": 127,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "20:11:10",
+   "plannedEnd": "20:13:10",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "363caf64-8edb-5745-b783-48ce4d38cb87",
+   "type": "cue",
+   "number": 128,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:13:10",
+   "plannedEnd": "20:13:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9faf67af-906b-5235-9f03-8d2d97725c9a",
+   "type": "cue",
+   "number": 129,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:13:20",
+   "plannedEnd": "20:13:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a7d863c2-a6d3-5f86-bc8a-c2705e8f3a92",
+   "type": "cue",
+   "number": 130,
+   "title": "Analyse Finale Game 4",
+   "notes": null,
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "20:13:30",
+   "plannedEnd": "20:18:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "db477eee-8ffc-566d-88ce-8dd6254abcae",
+   "type": "cue",
+   "number": 131,
+   "title": "Gedanken zum Spiel\nVariabel zum Draft",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:18:30",
+   "plannedEnd": "20:19:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "e0e99a99-752f-5f58-989b-1331369ea981",
+   "type": "block",
+   "number": null,
+   "title": "Finale - Game 5",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "7df75b0e-a964-5beb-8a12-637d6910468d",
+   "type": "cue",
+   "number": 132,
+   "title": "Draft Finale Game 5",
+   "notes": null,
+   "durationSeconds": 420,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "20:19:30",
+   "plannedEnd": "20:26:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "51c84a71-9785-50b5-8944-e1cc566ea259",
+   "type": "cue",
+   "number": 133,
+   "title": "FF Stinger",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "20:26:30",
+   "plannedEnd": "20:27:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a34bd837-640d-5def-8c9d-1dfa304f243c",
+   "type": "cue",
+   "number": 134,
+   "title": "Finale Game 5",
+   "notes": null,
+   "durationSeconds": 2400,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "20:27:30",
+   "plannedEnd": "21:07:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "a83fb8a6-9dbf-54c0-ab48-263a2b99bf12",
+   "type": "cue",
+   "number": 135,
+   "title": "Fazit Game",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:07:30",
+   "plannedEnd": "21:08:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "2af2319a-78bc-593b-9956-dd2f1cfcbaff",
+   "type": "cue",
+   "number": 136,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:08:30",
+   "plannedEnd": "21:09:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "b276b15e-2ae1-5b63-a4d7-13a2a7ee58b1",
+   "type": "cue",
+   "number": 137,
+   "title": "Felix vs Felix",
+   "notes": null,
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:09:30",
+   "plannedEnd": "21:12:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "63c0260f-fbdc-5e82-803f-68495979c345",
+   "type": "cue",
+   "number": 138,
+   "title": "PAUSE",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:12:30",
+   "plannedEnd": "21:14:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "d94d6e90-de85-5428-b836-0004c5b4318c",
+   "type": "cue",
+   "number": 139,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:14:30",
+   "plannedEnd": "21:14:40",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "dead4051-a3e0-5459-9746-195e071c4f91",
+   "type": "cue",
+   "number": 140,
+   "title": "FF Stinger",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:14:40",
+   "plannedEnd": "21:14:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "c447ef55-aa35-5314-8bb6-3a1b56dbda89",
+   "type": "cue",
+   "number": 141,
+   "title": "Analyse Finale Game 5",
+   "notes": "",
+   "durationSeconds": 300,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "21:14:50",
+   "plannedEnd": "21:19:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "5ea3394c-d1b8-5e70-ab79-2d90d4bff1a9",
+   "type": "block",
+   "number": null,
+   "title": "Finale – Winner + Analyse",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": null,
+   "plannedEnd": null,
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "9acad18e-57fc-54a8-b0bd-cf7a53ddb249",
+   "type": "cue",
+   "number": 142,
+   "title": "Winner MAZ",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#9aa4b2",
+   "blockId": null,
+   "plannedStart": "21:19:50",
+   "plannedEnd": "21:20:50",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "fc113594-11b6-55f7-8701-147ab5a8e592",
+   "type": "cue",
+   "number": 143,
+   "title": "Übergabe Felix",
+   "notes": null,
+   "durationSeconds": 30,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:20:50",
+   "plannedEnd": "21:21:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "bffdd0c5-7c4b-5619-9318-5e27bea89125",
+   "type": "cue",
+   "number": 144,
+   "title": "Siegerehrung",
+   "notes": "inkls. Interviews mit Winner und Loser",
+   "durationSeconds": 180,
+   "actualDurationSeconds": null,
+   "color": "#00d954",
+   "blockId": null,
+   "plannedStart": "21:21:20",
+   "plannedEnd": "21:24:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "44788161-1320-5f22-940d-26510032842a",
+   "type": "cue",
+   "number": 145,
+   "title": "Highlights",
+   "notes": "",
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:24:20",
+   "plannedEnd": "21:25:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4877a466-563d-5716-a75d-55319d7f0098",
+   "type": "cue",
+   "number": 146,
+   "title": "Pause",
+   "notes": null,
+   "durationSeconds": 240,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:25:20",
+   "plannedEnd": "21:29:20",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "20ad0bed-eaef-5828-8a82-71c28bd6ffe1",
+   "type": "cue",
+   "number": 147,
+   "title": "TLC Presenter",
+   "notes": null,
+   "durationSeconds": 10,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:29:20",
+   "plannedEnd": "21:29:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "6368d271-3f24-56fd-9c6b-2f7980286be3",
+   "type": "cue",
+   "number": 148,
+   "title": "Trailer",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:29:30",
+   "plannedEnd": "21:30:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "4a84d115-a6d3-50a5-b304-b397c4b09a79",
+   "type": "cue",
+   "number": 149,
+   "title": "Analyse Finale Game 5 Gast Gewinner Team",
+   "notes": "",
+   "durationSeconds": 600,
+   "actualDurationSeconds": null,
+   "color": "#ffd60a",
+   "blockId": null,
+   "plannedStart": "21:30:30",
+   "plannedEnd": "21:40:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "ebdedfba-de32-54aa-a074-789e9f7997a4",
+   "type": "cue",
+   "number": 150,
+   "title": "Danksagung",
+   "notes": null,
+   "durationSeconds": 150,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:40:30",
+   "plannedEnd": "21:43:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "7fedb4bf-6beb-502f-a42a-f736fc0b5fa7",
+   "type": "cue",
+   "number": 151,
+   "title": "Verabschiedung Felix + Felix Halle",
+   "notes": null,
+   "durationSeconds": 120,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:43:00",
+   "plannedEnd": "21:45:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "bad525fa-bc94-556c-82bf-34020802503f",
+   "type": "cue",
+   "number": 152,
+   "title": "Highlights",
+   "notes": null,
+   "durationSeconds": 60,
+   "actualDurationSeconds": null,
+   "color": null,
+   "blockId": null,
+   "plannedStart": "21:45:00",
+   "plannedEnd": "21:46:00",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "032c242e-0f02-5882-92c4-f9bb7967bc3b",
+   "type": "cue",
+   "number": 153,
+   "title": "Abspann",
+   "notes": null,
+   "durationSeconds": 90,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:46:00",
+   "plannedEnd": "21:47:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  },
+  {
+   "id": "f14e32fd-c879-559a-b90e-40a7dc6c889a",
+   "type": "cue",
+   "number": 154,
+   "title": "STREAM ENDE",
+   "notes": null,
+   "durationSeconds": 0,
+   "actualDurationSeconds": null,
+   "color": "#8b2bff",
+   "blockId": null,
+   "plannedStart": "21:47:30",
+   "plannedEnd": "21:47:30",
+   "columns": {
+    "GFX": "",
+    "Ort": "",
+    "Ton": ""
+   },
+   "isActive": false
+  }
+ ]
+}

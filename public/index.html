@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de" data-appearance="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AL" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>FF Aufnahmeleitung</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="/icons/icon-192.png" />
+    <link rel="stylesheet" href="/css/app.css" />
+    <script type="module" src="/js/app.js"></script>
+  </head>
+  <body>
+    <!-- Eigene Symbole (SF Symbols sind außerhalb von Apple-Apps nicht lizenziert) -->
+    <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5" /><circle cx="12" cy="12" r="6.6" /></symbol>
+      <symbol id="i-wrap" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" /><path d="M19.6 3.6v4.2h-4.2" /></symbol>
+      <symbol id="i-cut" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
+      <symbol id="i-stretch" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4" /></symbol>
+      <symbol id="i-sign" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="13" rx="2.5" /><path d="M8.5 21h7M12 17.5V21M7 11h10" /></symbol>
+      <symbol id="i-standby" viewBox="0 0 24 24"><path d="M5 7l5 5-5 5M12 7l5 5-5 5" /></symbol>
+      <symbol id="i-marker" viewBox="0 0 24 24"><path d="M6 21V3.5M6 4h11.5l-2.5 4.5 2.5 4.5H6" /></symbol>
+      <symbol id="i-prev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></symbol>
+      <symbol id="i-source" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L19.5 9M19.5 4.5V9H15M19.5 12a7.5 7.5 0 0 1-12.8 5.3L4.5 15M4.5 19.5V15H9" /></symbol>
+      <symbol id="i-jump" viewBox="0 0 24 24"><path d="M5 4v7a3 3 0 0 0 3 3h11M15 10l4 4-4 4" /></symbol>
+      <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></symbol>
+      <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 21.5 20h-19z" /><path d="M12 10v4.5M12 17.3v.2" /></symbol>
+      <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" /><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" /></symbol>
+      <symbol id="i-display" viewBox="0 0 24 24"><rect x="3.5" y="3" width="17" height="18" rx="2.5" /><path d="M8 8h8M8 12h8M8 16h5" /></symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /></symbol>
+    </svg>
+
+    <!-- Startseite -->
+    <main id="home" class="home" hidden>
+      <div class="home-inner">
+        <h1 class="t-large-title">Aufnahmeleitung</h1>
+        <p class="lead t-subheadline secondary" id="home-rundown">Verbinde mit dem Relay …</p>
+        <section class="group">
+          <h2 class="group-header">Ansicht wählen</h2>
+          <nav class="group-body" aria-label="Ansichten">
+            <a class="row row-link" href="/al" data-keep-key>
+              <span class="row-text"><span class="t-headline">Bedienung</span><span class="t-subheadline secondary">AL neben der Kamera · hochkant bedienen, quer als Schild</span></span>
+            </a>
+            <a class="row row-link" href="/schild" data-keep-key>
+              <span class="row-text"><span class="t-headline">Schild</span><span class="t-subheadline secondary">Zweites Gerät, nur Restzeit für die Moderation</span></span>
+            </a>
+            <a class="row row-link" href="/regie" data-keep-key>
+              <span class="row-text"><span class="t-headline">Regie</span><span class="t-subheadline secondary">Mitlesen ohne Bedienung</span></span>
+            </a>
+          </nav>
+          <p class="group-footer">Auf dem iPad: Teilen › Zum Home-Bildschirm. Die App startet dann ohne Safari-Leisten direkt in der Bedienung.</p>
+        </section>
+      </div>
+    </main>
+
+    <!-- Bedienansicht -->
+    <main id="operator" class="op" hidden>
+      <header class="nav">
+        <div class="nav-leading">
+          <span class="pill" id="op-mode"><span class="dot"></span><span id="op-mode-text">–</span></span>
+          <span class="pill warn" id="op-alert" hidden></span>
+        </div>
+        <h1 class="nav-title" id="op-title">Aufnahmeleitung</h1>
+        <div class="nav-trailing">
+          <button class="icon-btn" id="op-settings" type="button" aria-label="Einstellungen">
+            <svg class="i"><use href="#i-gear" /></svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="card now" id="now" data-state="idle" aria-label="Aktueller Cue">
+        <div class="now-head">
+          <span class="cat-stripe" id="now-cat"></span>
+          <div class="now-titles">
+            <div class="now-title t-title3"><span class="cue-num" id="now-num"></span><span id="now-title">Kein Cue aktiv</span></div>
+            <div class="now-meta t-subheadline"><span class="kind-badge" id="now-kind" hidden></span><span id="now-sub"></span></div>
+          </div>
+          <span class="state-badge" id="now-word"></span>
+        </div>
+        <div class="now-time">
+          <span class="now-digits" id="now-digits" role="timer" aria-live="off">–:––</span>
+          <span class="now-aside t-subheadline" id="now-aside"></span>
+        </div>
+        <div class="progress" aria-hidden="true"><div class="progress-fill" id="now-bar"></div></div>
+        <div class="now-foot t-subheadline">
+          <span class="foot-label">Danach</span>
+          <span class="cue-num" id="next-num"></span>
+          <span id="next-title">–</span>
+          <span class="jump-tag" id="next-jump" hidden>SPRUNG</span>
+          <span class="foot-dur" id="next-dur"></span>
+        </div>
+      </section>
+
+      <section class="card status" aria-label="Show-Status">
+        <div class="stat"><span class="stat-label">Moderation</span><span class="stat-value" id="st-mod">±0:00</span></div>
+        <div class="stat"><span class="stat-label">Spiel</span><span class="stat-value" id="st-game">±0:00</span></div>
+        <div class="stat"><span class="stat-label">Uhr</span><span class="stat-value" id="st-clock">–</span></div>
+        <div class="stat"><span class="stat-label">Verbindung</span><span class="stat-value" id="st-conn">–</span></div>
+        <div class="stat stat-ends"><span class="stat-label">Ende</span><span class="ends" id="st-ends">–</span></div>
+      </section>
+
+      <section class="context" id="context" aria-label="Kontext"></section>
+
+      <section class="controls" id="controls" data-grip="right" aria-label="Steuerung">
+        <button class="btn btn-prominent tint-blue ctl-sign" id="b-sign" type="button">
+          <svg class="i"><use href="#i-sign" /></svg><span>SCHILD ZEIGEN</span>
+        </button>
+        <button class="btn tint-orange ctl-wrap" id="b-wrap" type="button" aria-pressed="false">
+          <svg class="i"><use href="#i-wrap" /></svg><span>ABRUNDEN</span>
+        </button>
+        <button class="btn tint-blue ctl-stretch" id="b-stretch" type="button">
+          <svg class="i"><use href="#i-stretch" /></svg><span>STRECKEN +30 s</span>
+        </button>
+        <button class="btn tint-blue ctl-standby" id="b-standby" type="button" aria-pressed="false">
+          <svg class="i"><use href="#i-standby" /></svg><span>GLEICH DU</span>
+        </button>
+        <button class="btn tint-red ctl-cut" id="b-cut" type="button" aria-pressed="false">
+          <svg class="i"><use href="#i-cut" /></svg><span class="btn-label"><span id="b-cut-text">SCHLUSS</span><small>halten</small></span>
+        </button>
+        <button class="btn btn-gray ctl-marker" id="b-marker" type="button">
+          <svg class="i"><use href="#i-marker" /></svg><span>MARKER</span>
+        </button>
+        <div class="ctl-manual" id="manual-slot">
+          <button class="btn tint-orange" id="b-manual" type="button" hidden>
+            <span class="btn-label"><span>MANUELL</span><small>halten</small></span>
+          </button>
+          <button class="btn tint-orange" id="b-prev" type="button" aria-label="Vorheriger Cue (halten)" hidden>
+            <svg class="i"><use href="#i-prev" /></svg>
+          </button>
+          <button class="btn tint-orange" id="b-next" type="button" aria-label="Nächster Cue (halten)" hidden>
+            <svg class="i"><use href="#i-next" /></svg>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Schild -->
+    <main id="sign" class="sign force-dark" data-state="idle" hidden>
+      <div class="sign-fill" aria-hidden="true"></div>
+      <div class="sign-frame" aria-hidden="true"></div>
+      <div class="sign-inner">
+        <div class="sign-top" id="sign-top">
+          <svg class="i sign-icon" id="sign-icon" hidden><use href="#i-wrap" /></svg>
+          <span class="sign-word" id="sign-word"></span>
+        </div>
+        <div class="sign-box" id="sign-box">
+          <span class="sign-digits" id="sign-digits" role="timer" aria-live="off"></span>
+        </div>
+        <div class="sign-bar" aria-hidden="true"><div class="sign-bar-fill" id="sign-bar"></div></div>
+      </div>
+      <div class="sign-status" id="sign-status"></div>
+      <div class="sign-hint" id="sign-hint" hidden>1 s halten zum Verlassen</div>
+    </main>
+
+    <!-- Einstellungen (Sheet) -->
+    <dialog id="settings" class="sheet" aria-labelledby="settings-title">
+      <form method="dialog" class="sheet-inner">
+        <header class="sheet-nav">
+          <h2 id="settings-title">Einstellungen</h2>
+          <button class="nav-done" value="close" type="submit">Fertig</button>
+        </header>
+        <div class="sheet-scroll">
+          <section class="group">
+            <h3 class="group-header">Bedienung</h3>
+            <div class="group-body">
+              <div class="row">
+                <span>Griffhand</span>
+                <div class="segmented compact" role="radiogroup" aria-label="Griffhand" id="set-grip">
+                  <button type="button" role="radio" data-value="left">Links</button>
+                  <button type="button" role="radio" data-value="right">Rechts</button>
+                </div>
+              </div>
+              <label class="row"><span>Querformat zeigt Schild</span><input type="checkbox" class="switch" id="set-rotate" /></label>
+              <div class="row">
+                <span>Erscheinungsbild</span>
+                <div class="segmented compact" role="radiogroup" aria-label="Erscheinungsbild" id="set-appearance">
+                  <button type="button" role="radio" data-value="dark">Dunkel</button>
+                  <button type="button" role="radio" data-value="light">Hell</button>
+                </div>
+              </div>
+            </div>
+            <p class="group-footer">Die Griffhand legt ABRUNDEN und SCHLUSS auf ihre Seite. Das Schild ist immer dunkel.</p>
+          </section>
+
+          <section class="group">
+            <h3 class="group-header">Showtag</h3>
+            <div class="group-body">
+              <div class="row"><span>Display wach halten</span><span class="row-value" id="set-wake">–</span></div>
+              <div class="row"><span>Uhr-Abgleich</span><span class="row-value" id="set-sync">–</span></div>
+              <div class="row"><span>Rundown-Quelle</span><span class="row-value" id="set-source">–</span></div>
+              <div class="row"><span>Cue-Startzeit aus</span><span class="row-value" id="set-starthow">–</span></div>
+            </div>
+            <p class="group-footer">Für 12 Stunden Show: Dauerstrom, Automatische Sperre „Nie“, Geführter Zugriff an, True Tone und Night Shift aus.</p>
+          </section>
+
+          <section class="group">
+            <h3 class="group-header">Export</h3>
+            <div class="group-body">
+              <a class="row row-link" id="exp-csv" href="/api/export/report.csv" download>Nachbericht (CSV)</a>
+              <div class="row">
+                <span>Bildrate</span>
+                <div class="segmented compact" role="radiogroup" aria-label="Bildrate" id="set-fps">
+                  <button type="button" role="radio" data-value="25">25</button>
+                  <button type="button" role="radio" data-value="30">30</button>
+                  <button type="button" role="radio" data-value="50">50</button>
+                </div>
+              </div>
+              <a class="row row-link" id="exp-edl" href="/api/export/markers.edl" download>Marker für DaVinci Resolve (EDL)</a>
+              <a class="row row-link" id="exp-edl-tod" href="/api/export/markers.edl?tc=tod" download>Marker mit Uhrzeit-Timecode (EDL)</a>
+            </div>
+            <p class="group-footer">Resolve: Timeline › Import › Timeline Markers from EDL. Standard: 01:00:00:00 = erster Cue.</p>
+          </section>
+
+          <section class="group" id="grp-replay" hidden>
+            <h3 class="group-header">Replay</h3>
+            <div class="group-body">
+              <div class="row">
+                <span>Springe zu Cue</span>
+                <span><input type="number" id="replay-cue" inputmode="numeric" min="1" value="119" aria-label="Cue-Nummer" /> <button type="button" class="btn-inline" id="replay-go">Los</button></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="group">
+            <h3 class="group-header">Weitere Ansichten</h3>
+            <div class="group-body">
+              <a class="row row-link" href="/schild" data-keep-key>Schild auf zweitem Gerät</a>
+              <a class="row row-link" href="/regie" data-keep-key>Regie (nur lesen)</a>
+              <a class="row row-link" href="/" data-keep-key>Startseite</a>
+            </div>
+            <p class="group-footer" id="set-version"></p>
+          </section>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <div class="undo" id="undo" role="status" aria-live="polite" hidden><span id="undo-text"></span><button type="button" id="undo-btn">Widerrufen</button></div>
+    <svg class="hold-ring" id="hold-ring" viewBox="0 0 112 112" aria-hidden="true"><circle class="track" cx="56" cy="56" r="50" /><circle class="prog" cx="56" cy="56" r="50" /></svg>
+  </body>
+</html>

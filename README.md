@@ -1,0 +1,166 @@
+# FF Aufnahmeleitung
+
+Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die AL steht neben der Kamera, liest den aktuellen Cue aus dem Rundown und zeigt dem Moderator auf einem großen Schild, wie viel Zeit er noch hat.
+
+- **Hochkant:** Bedienansicht. Oben stehen aktueller Cue, Restzeit, nächster Cue, Salden und Back-Time, unten die Buttons in der Daumenzone.
+- **Quer:** Schild für den Moderator. Die Restzeit ist so groß wie möglich: grün, gelb mit Rahmen bei den Warnstufen, orange bei ABRUNDEN und rot pulsierend beim Überziehen.
+- **Relay-Server:** pollt die Rundown-API, hält eine gemeinsame Uhr und verteilt den Zustand per WebSocket an alle Geräte.
+
+| Bedienung (hoch) | Schild (quer) |
+| --- | --- |
+| ![Bedienung](docs/screenshots/bedienung-hoch-laeuft.png) | ![Schild läuft](docs/screenshots/schild-quer-laeuft.png) |
+| ![Überzug](docs/screenshots/bedienung-hoch-ueber.png) | ![Schild Überzug](docs/screenshots/schild-quer-ueber.png) |
+
+Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): NOCH 2, ABRUNDEN, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
+
+---
+
+## Schnellstart
+
+```bash
+npm install
+npm run replay          # Test ohne Show: spielt den Rundown "FF Offline Finale 2026" ab
+# → http://localhost:8080/al   (Bedienung)
+#   http://localhost:8080/schild (Schild auf zweitem Gerät)
+#   http://localhost:8080/regie  (nur lesen)
+```
+
+Live gegen das Rundown-Tool:
+
+```bash
+cp .env.example .env    # RUNDOWN_TOKEN eintragen, MODE=live
+npm start
+```
+
+Der Token liegt nur in `.env` auf dem Server und erreicht nie das iPad. `.env` ist in `.gitignore` eingetragen, weil dieses Repo öffentlich ist.
+
+Node.js ≥ 20 wird vorausgesetzt. Einzige Abhängigkeit ist `ws`.
+
+## Am Showtag
+
+1. **HTTPS einrichten.** Wake Lock (Display bleibt an), Offline-Cache und die Homescreen-App funktionieren auf dem iPad nur über HTTPS. Zwei Wege:
+   - **Show-Laptop im Produktionsnetz:** Mit [mkcert](https://github.com/FiloSottile/mkcert) ein Zertifikat für die IP des Laptops erzeugen (`mkcert 192.168.1.20`). `TLS_CERT` und `TLS_KEY` in `.env` setzen. Das Root-Zertifikat (`mkcert -CAROOT`) per AirDrop aufs iPad schicken und unter *Einstellungen › Allgemein › VPN und Geräteverwaltung* installieren. Danach unter *Info › Zertifikatsvertrauen* auf vollständiges Vertrauen stellen.
+   - **Server im Internet** hinter einem HTTPS-Proxy. Dafür unbedingt `ACCESS_KEY` setzen und das iPad einmal mit `/al?key=…` öffnen; der Schlüssel bleibt im Gerät gespeichert.
+2. **Homescreen-App anlegen:** Auf dem iPad `/al` öffnen und *Teilen › Zum Home-Bildschirm* wählen. Wake Lock funktioniert in der Homescreen-App ab iPadOS 18.4.
+3. **iPad vorbereiten:** Dauerstrom (die Show dauert fast 12 h, der Akku hält laut Apple bis zu 10 h), *Automatische Sperre: Nie*, *Geführter Zugriff* an, True Tone und Night Shift aus, Helligkeit fest auf Maximum. Die *Ausrichtungssperre* bleibt aus, denn Drehen ist der Moduswechsel.
+4. **Uhr prüfen:** Unter *Einstellungen › Uhr-Abgleich* sollte die Genauigkeit im WLAN unter ±50 ms liegen. Der Server braucht NTP.
+
+## Bedienung
+
+| Button | Wirkung | Auslösen |
+| --- | --- | --- |
+| SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
+| ABRUNDEN | Schild orange mit Kreispfeil; erneut tippen hebt auf | Tippen |
+| STRECKEN +30 s | Verlängert den laufenden Cue. Zählt als gewollt, nicht als Überzug | Tippen |
+| GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
+| SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
+| MARKER | Eintrag für Nachbericht und Resolve | Tippen |
+| MANUELL ◀ ▶ | Erscheint erst, wenn die Quelle oder der Relay 10 s ausfällt | 0,6 s halten |
+
+**Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
+
+**Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit ABRUNDEN und SCHLUSS auf der Daumenseite liegen.
+
+### Zustände des Schilds
+
+Jeder Zustand ist dreifach erkennbar: über Farbe, Form und Wort. Damit bleibt er auch bei Rot-Grün-Schwäche eindeutig.
+
+| Zustand | Farbe | Form | Wort |
+| --- | --- | --- | --- |
+| läuft | Grün | nur Ziffern | – |
+| Warnstufe (5/2/1 min, 30 s) | Gelb | dicker Rahmen, pulst beim Eintritt 3× | NOCH 2 … |
+| ABRUNDEN (≤ 10 s oder Button) | Orange | Kreispfeil | ABRUNDEN |
+| überzogen | Rot | volle Fläche, 1 Hz gedimmt (WCAG 2.3.1) | ÜBER |
+| SCHLUSS | Rot | volle Fläche, Kreuz | SCHLUSS |
+| GLEICH DU | Blau | – | GLEICH DU |
+| Zuspieler, Pause | Grau | – | ZUSPIELER / PAUSE |
+| Spiel/Draft | sehr dunkel | zählt hoch | – |
+
+Eine Warnstufe erscheint nur, wenn sie höchstens die halbe Cue-Länge beträgt. Ein 3-min-Cue zeigt also 1:00 und 0:30, ein 15-s-Cue nur den Überzug. Ist auf dem iPad „Bewegung reduzieren“ aktiv, entfällt das Pulsieren.
+
+Die Ziffern wachsen, je knapper die Zeit wird: MM:SS ab 10 min, M:SS darunter, in der letzten Minute nur noch Sekunden. `fitText` misst die Schrift und füllt die verfügbare Breite bzw. Höhe.
+
+## Konfiguration
+
+| Datei | Inhalt |
+| --- | --- |
+| `.env` | Modus, Token, Port, HTTPS, Zugangsschlüssel, Polling (siehe `.env.example`) |
+| `config/cue-kinds.json` | Cue-Arten aus dem Titel: `moderated`, `fixed`, `open`, `special`, `anchor`. Overrides nach Cue-Nummer, z. B. Cue 65 als Anker bis 15:45:15 |
+| `config/scenarios.json` | Verzweigungen (SuP3 2:0 → nach Cue 40 weiter mit 52; Finale 3:0/3:1 → weiter mit 142) |
+
+Die Rundown-API liefert keine Cue-Art. Wird der Rundown umgebaut, die Regeln in `cue-kinds.json` prüfen.
+
+### Startzeit eines Cues
+
+Aus `/current` ist noch nicht bekannt, ob es ein Startzeit-Feld gibt. Der Relay versucht deshalb nacheinander:
+
+1. ein Zeitstempel-Feld im `current`-Objekt (`startedAt`, `actualStart` …),
+2. `liveSinceSeconds`, sofern es sich auf den Cue bezieht und nicht auf die Show,
+3. eigene Beobachtung beim Cue-Wechsel (Genauigkeit ±0,5 s bei 500 ms Polling).
+
+Was gerade genutzt wird, zeigt *Einstellungen › Cue-Startzeit aus*. Die Rohantwort der API steht unter `/api/debug/source`. Festlegen lässt sich die Quelle über `CUE_START_SOURCE=observed | liveSince | field:<name>`.
+
+## Exporte
+
+- **Nachbericht:** `/api/export/report.csv`. Enthält Plan- und Ist-Zeiten je Cue, Streckungen, Abweichungen sowie alle Signale und Marker (Semikolon-getrennt, öffnet direkt in Excel).
+- **DaVinci Resolve:** `/api/export/markers.edl?fps=25`. Import über *Timeline › Import › Timeline Markers from EDL*.
+  - Standardmäßig ist der erste Cue 01:00:00:00. Mit `start=HH:MM:SS` lässt sich der Aufnahmestart setzen, mit `tc=tod` wird Uhrzeit-Timecode verwendet.
+  - Farben: Cue blau, Marker gelb, ABRUNDEN/SCHLUSS rot, Szenario lila.
+
+Beide Exporte sind auch über die Einstellungen erreichbar.
+
+## Ausfälle
+
+| Ausfall | Verhalten |
+| --- | --- |
+| Rundown-API antwortet nicht | Anzeige läuft weiter, Hinweis „QUELLE m:ss“; nach 10 s erscheint MANUELL, die AL schaltet am Relay weiter |
+| Relay/WLAN weg | iPad zählt mit der zuletzt abgeglichenen Uhr weiter, Hinweis „OFFLINE“. Nach 10 s ist ein lokaler Modus möglich; Marker werden nachgereicht |
+| Seite neu geladen | Zustand liegt im Relay (`data/state.json`), alles ist sofort wieder da |
+| Relay neu gestartet | Zustand und Log werden aus `data/` geladen |
+| Rundown pausiert | Zeit steht, Hinweis „PAUSIERT“ |
+
+## Gestaltung nach SwiftUI / Human Interface Guidelines
+
+Die Oberfläche ist eine Web-App, folgt aber den Vorgaben von [SwiftUI](https://developer.apple.com/documentation/swiftui) und den [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines). Die Umsetzung im Web:
+
+| SwiftUI / HIG | Web |
+| --- | --- |
+| `VStack`/`HStack`/`Grid`, Safe Area | CSS Grid/Flex, `env(safe-area-inset-*)`, 20 pt Rand, 8-pt-Raster |
+| Size Classes, Ausrichtung | `@media (orientation)`; hoch Bedienung, quer zweispaltig bzw. Schild |
+| `Font.TextStyle`, Dynamic Type | Textstile mit HIG-Größen, in Safari `font: -apple-system-body` usw. |
+| `.monospacedDigit()` | `font-variant-numeric: tabular-nums` |
+| Systemfarben, semantische Farben | Tokens mit den HIG-Werten für Dunkel, Hell und *Erhöhter Kontrast* |
+| Farbe nicht als einzige Information | Jeder Zustand mit Wort und Form |
+| `accessibilityReduceMotion` | `prefers-reduced-motion` |
+| `.buttonStyle(.bordered/.borderedProminent)` | getönte bzw. gefüllte Buttons, gedimmt beim Drücken |
+| `Picker(.segmented)`, `Toggle`, `List(.insetGrouped)`, Sheet | entsprechende Komponenten in `app.css` |
+| `onLongPressGesture(minimumDuration:)` | Halten zum Bestätigen mit Füllring (`ui/hold.js`) |
+| Tippflächen ≥ 44 pt | hier ≥ 72 pt, kritische Buttons 96–120 pt |
+| Liquid Glass für die Steuerungsebene | Icon-Button mit `backdrop-filter` |
+
+Zwei Abweichungen sind technisch bedingt:
+
+- **SF Symbols** sind laut Apple nur für Apps auf Apple-Plattformen lizenziert. Deshalb gibt es eigene Symbole.
+- **Haptik** gibt es in Safari nicht. Füllring und Farbumschlag ersetzen sie.
+
+## Entwicklung
+
+```bash
+npm test                 # Zeitmodell, Szenario-Enden, Zustandsautomat (node:test)
+npm run mock-api         # Nachbau der Rundown-API, z. B. MOCK_PORT=9090 REPLAY_START_CUE=119
+MODE=live RUNDOWN_BASE_URL=http://localhost:9090 RUNDOWN_TOKEN=test npm start
+npm run screenshots      # braucht: npm i -D playwright && npx playwright install chromium
+npm run icons            # braucht Pillow
+```
+
+Replay-Schalter zum Testen: `REPLAY_START_CUE=119 REPLAY_START_OFFSET=190 REPLAY_HOLD=1` startet 190 s in Cue 119 und hält dort an. `REPLAY_SPEED=10` lässt den Rundown zehnmal schneller laufen. In den Einstellungen gibt es im Replay „Springe zu Cue“.
+
+```
+server/          Relay: index.js (HTTP/WS), relay.js (Zustand), model.js (Cue-Arten, Back-Time),
+                 exports.js (CSV, EDL), sources/live.js, sources/replay.js
+public/          PWA: index.html, css/app.css, js/app.js, js/views/{operator,sign}.js,
+                 js/shared/timing.js (gemeinsam mit dem Server), sw.js, manifest.webmanifest
+config/          Cue-Arten und Szenarien
+fixtures/        Rundown-Schnappschuss für den Replay (interne Notizen entfernt)
+test/            Unit-Tests
+```
