@@ -1,6 +1,6 @@
 {
   "name": "ff-aufnahmeleitung-tool",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Aufnahmeleitungs-Tool als Web-App (PWA) für das iPad mini: Restzeit-Schild für die Moderation, Bedienansicht für die AL, Relay zur Rundown-API.",
   "type": "module",
   "private": true,
@@ -13,9 +13,15 @@
     "mock-api": "node scripts/mock-api.mjs",
     "test": "node --test test/*.test.js",
     "icons": "python3 scripts/make_icons.py",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "build:giphy": "node scripts/build-giphy.mjs"
   },
   "dependencies": {
+    "@giphy/js-fetch-api": "^5.8.0",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@giphy/js-components": "^5.13.0",
+    "esbuild": "^0.28.2"
   }
 }

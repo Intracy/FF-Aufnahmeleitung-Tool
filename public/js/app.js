@@ -273,8 +273,9 @@ function openText() {
   syncTextUi();
   textDlg.returnValue = '';
   textDlg.showModal();
-  if (giphyEnabled && !$('#gif-grid').children.length && !$('#gif-query').value) searchGifs('');
-  if (!giphyEnabled) $('#gif-hint').textContent = 'Für die GIF-Suche fehlt auf dem Server ein Giphy-Schlüssel. Einen Giphy-Link einfügen funktioniert trotzdem.';
+  $('#gif-type').hidden = !giphyEnabled;
+  if (giphyEnabled) requestAnimationFrame(() => renderGifGrid());
+  else $('#gif-hint').textContent = 'Für die GIF-Suche fehlt auf dem Server ein Giphy-Schlüssel. Einen Giphy-Link einfügen funktioniert trotzdem.';
 }
 
 // Formatierung: Knöpfe nehmen dem Editor den Fokus nicht weg, damit die Auswahl bleibt.
@@ -307,13 +308,89 @@ $('#quick-texts').addEventListener('click', (e) => {
   syncTextUi();
 });
 
-// GIFs: Suche über das Relay (Schlüssel bleibt auf dem Server) oder Giphy-Link einfügen
+// GIFs: Gitter aus dem Giphy-SDK (@giphy/js-components). Die Daten holt das Relay mit dem
+// SDK-Fetch (@giphy/js-fetch-api), damit der Schlüssel auf dem Server bleibt.
+// Ein eingefügter Giphy-Link funktioniert auch ohne Schlüssel.
 let gifTimer;
-let gifSeq = 0;
-async function searchGifs(q) {
-  const seq = ++gifSeq;
-  const hint = $('#gif-hint');
+let gifQuery = '';
+let gifType = 'gifs';
+let gifSdk = null;
+let gifGridRemove = null;
+let gifGridKey = '';
+
+function gifRendition(gif) {
+  const im = gif.images || {};
+  const big = im.downsized_medium || im.downsized || im.original || {};
+  return { url: safeGifUrl(big.url), width: Number(big.width) || 0, height: Number(big.height) || 0 };
+}
+
+function gifColumns(w) {
+  return w >= 560 ? 3 : 2;
+}
+
+async function renderGifGrid(force = false) {
   const grid = $('#gif-grid');
+  const hint = $('#gif-hint');
+  const width = grid.clientWidth;
+  if (!giphyEnabled || !width) return;
+  const key = `${gifType}|${gifQuery}|${width}`;
+  if (!force && key === gifGridKey) return;
+  gifGridKey = key;
+  try {
+    gifSdk ||= await import('../vendor/giphy.js');
+  } catch {
+    hint.textContent = 'GIF-Suche konnte nicht geladen werden.';
+    return;
+  }
+  gifGridRemove?.();
+  grid.replaceChildren();
+  grid.classList.toggle('stickers', gifType === 'stickers');
+  hint.textContent = '';
+  const q = gifQuery;
+  const type = gifType;
+  gifGridRemove = gifSdk.renderGrid(
+    {
+      width,
+      columns: gifColumns(width),
+      gutter: 8,
+      borderRadius: 10,
+      noLink: true,
+      hideAttribution: true,
+      noResultsMessage: 'Keine GIFs gefunden.',
+      fetchGifs: async (offset) => {
+        const r = await fetch(withKey(`/api/giphy?q=${encodeURIComponent(q)}&type=${type}&offset=${offset}&limit=24`), { cache: 'no-store' });
+        const j = await r.json();
+        if (!r.ok) {
+          hint.textContent = j.error || 'GIF-Suche nicht verfügbar.';
+          throw new Error(j.error || 'giphy');
+        }
+        return j;
+      },
+      onGifClick: (gif, e) => {
+        e?.preventDefault?.();
+        const r = gifRendition(gif);
+        if (!r.url) return;
+        draft.gif = { ...r, id: gif.id, title: gif.title || '' };
+        grid.querySelectorAll('.giphy-gif.is-selected').forEach((n) => n.classList.remove('is-selected'));
+        e?.currentTarget?.classList?.add('is-selected');
+        syncTextUi();
+        $('#gif-selected').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      },
+      onGifKeyPress: (gif, e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        const r = gifRendition(gif);
+        if (!r.url) return;
+        draft.gif = { ...r, id: gif.id, title: gif.title || '' };
+        syncTextUi();
+      },
+    },
+    grid,
+  );
+}
+
+async function searchGifs(q) {
+  const hint = $('#gif-hint');
   const link = gifFromGiphyLink(q);
   if (link) {
     draft.gif = { url: link, width: 0, height: 0 };
@@ -322,40 +399,19 @@ async function searchGifs(q) {
     return;
   }
   if (!giphyEnabled) return;
-  hint.textContent = 'Suche …';
-  try {
-    const r = await fetch(withKey(`/api/giphy?q=${encodeURIComponent(q)}`), { cache: 'no-store' });
-    const j = await r.json();
-    if (seq !== gifSeq) return;
-    if (!r.ok) {
-      hint.textContent = j.error || 'GIF-Suche nicht verfügbar.';
-      return;
-    }
-    hint.textContent = j.results.length ? '' : 'Keine GIFs gefunden.';
-    grid.replaceChildren(
-      ...j.results
-        .filter((g) => safeGifUrl(g.url) && safeGifUrl(g.preview))
-        .map((g) => {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.setAttribute('aria-label', g.title || 'GIF');
-          const img = document.createElement('img');
-          img.loading = 'lazy';
-          img.alt = '';
-          img.src = g.preview;
-          b.append(img);
-          b.addEventListener('click', () => {
-            draft.gif = { url: g.url, width: g.width, height: g.height };
-            syncTextUi();
-            $('#gif-selected').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-          });
-          return b;
-        }),
-    );
-  } catch {
-    if (seq === gifSeq) hint.textContent = 'Keine Verbindung zur GIF-Suche.';
-  }
+  gifQuery = q;
+  renderGifGrid();
 }
+
+document.querySelectorAll('#gif-type [data-value]').forEach((b) =>
+  b.addEventListener('click', () => {
+    gifType = b.dataset.value;
+    syncSegmented('gif-type', gifType);
+    renderGifGrid();
+  }),
+);
+// Breite ändert sich beim Drehen des iPads: Gitter neu aufbauen
+new ResizeObserver(() => textDlg.open && renderGifGrid()).observe($('#gif-grid'));
 $('#gif-query').addEventListener('input', (e) => {
   clearTimeout(gifTimer);
   gifTimer = setTimeout(() => searchGifs(e.target.value.trim()), 400);

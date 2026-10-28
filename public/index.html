@@ -319,6 +319,10 @@
               <svg class="i"><use href="#i-search" /></svg>
               <input type="search" id="gif-query" placeholder="Giphy durchsuchen oder Link einfügen" autocomplete="off" enterkeyhint="search" />
             </div>
+            <div class="segmented compact gif-type" role="radiogroup" aria-label="Art" id="gif-type">
+              <button type="button" role="radio" data-value="gifs" aria-checked="true">GIFs</button>
+              <button type="button" role="radio" data-value="stickers" aria-checked="false">Sticker</button>
+            </div>
             <p class="t-footnote secondary" id="gif-hint"></p>
             <div class="gif-grid" id="gif-grid"></div>
             <p class="giphy-attr">Powered by GIPHY</p>

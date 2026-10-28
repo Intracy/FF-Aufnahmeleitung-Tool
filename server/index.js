@@ -61,7 +61,7 @@ const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'no-referrer',
   'Content-Security-Policy':
-    "default-src 'self'; connect-src 'self' ws: wss:; img-src 'self' data: https://*.giphy.com; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'",
+    "default-src 'self'; connect-src 'self' ws: wss: https://pingback.giphy.com; img-src 'self' data: https://*.giphy.com; style-src 'self' 'unsafe-inline'; script-src 'self'; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'",
 };
 
 function send(res, status, body, type = 'application/json; charset=utf-8', extra = {}) {
@@ -146,36 +146,36 @@ async function handleApi(req, res, url) {
 }
 
 /** GIF-Suche über den Relay: der Giphy-Schlüssel bleibt auf dem Server. */
-async function giphy(res, url) {
-  if (!cfg.giphyApiKey) return send(res, 501, { error: 'GIPHY_API_KEY fehlt', results: [] });
-  const q = (url.searchParams.get('q') || '').slice(0, 80).trim();
-  const offset = Math.max(0, Math.min(500, Number(url.searchParams.get('offset')) || 0));
-  const kind = q ? 'search' : 'trending';
-  const api = new URL(`https://api.giphy.com/v1/gifs/${kind}`);
-  api.searchParams.set('api_key', cfg.giphyApiKey);
-  api.searchParams.set('limit', '24');
-  api.searchParams.set('offset', String(offset));
-  api.searchParams.set('rating', 'pg-13');
-  if (q) {
-    api.searchParams.set('q', q);
-    api.searchParams.set('lang', 'de');
+// GIF-Suche über das offizielle Giphy-SDK. Der Schlüssel bleibt auf dem Server,
+// das Gitter im Browser (ebenfalls SDK) bekommt die Ergebnisse von hier.
+let giphyFetch = null;
+async function giphyClient() {
+  if (!giphyFetch) {
+    const { GiphyFetch, setServerUrl } = await import('@giphy/js-fetch-api');
+    if (process.env.GIPHY_API_URL) setServerUrl(process.env.GIPHY_API_URL); // nur für Tests
+    giphyFetch = new GiphyFetch(cfg.giphyApiKey);
   }
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 6000);
+  return giphyFetch;
+}
+
+async function giphy(res, url) {
+  if (!cfg.giphyApiKey) return send(res, 501, { error: 'GIPHY_API_KEY fehlt', data: [] });
+  const q = (url.searchParams.get('q') || '').slice(0, 80).trim();
+  const offset = Math.max(0, Math.min(4999, Number(url.searchParams.get('offset')) || 0));
+  const limit = Math.max(1, Math.min(50, Number(url.searchParams.get('limit')) || 24));
+  const type = url.searchParams.get('type') === 'stickers' ? 'stickers' : 'gifs';
+  const opts = { offset, limit, rating: 'pg-13', type };
   try {
-    const r = await fetch(api, { signal: ctrl.signal });
-    if (!r.ok) return send(res, 502, { error: `Giphy antwortet mit HTTP ${r.status}`, results: [] });
-    const j = await r.json();
-    const results = (j.data || []).map((g) => {
-      const big = g.images?.downsized_medium || g.images?.original || {};
-      const small = g.images?.fixed_width_small || g.images?.fixed_width || big;
-      return { id: g.id, title: g.title || '', preview: small.url, url: big.url, width: Number(big.width) || 0, height: Number(big.height) || 0 };
-    });
-    return send(res, 200, { results, next: offset + results.length });
+    const gf = await giphyClient();
+    const result = await Promise.race([
+      q ? gf.search(q, { ...opts, lang: 'de' }) : gf.trending(opts),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000)),
+    ]);
+    return send(res, 200, result);
   } catch (err) {
-    return send(res, 502, { error: err.name === 'AbortError' ? 'Giphy antwortet nicht' : 'Giphy nicht erreichbar', results: [] });
-  } finally {
-    clearTimeout(t);
+    const status = err?.status || 0;
+    const msg = err?.message === 'timeout' ? 'Giphy antwortet nicht' : status === 401 || status === 403 ? 'Giphy-Schlüssel ungültig' : 'Giphy nicht erreichbar';
+    return send(res, 502, { error: msg, data: [] });
   }
 }
 

@@ -102,10 +102,12 @@ Jeder Zustand ist dreifach erkennbar: über Farbe, Form und Wort. Damit bleibt e
 
 Der Text erscheint im Schild über der Restzeit und wird automatisch so groß gesetzt, wie der Platz erlaubt. Formatierungen werden auf dem Gerät und noch einmal auf dem Schild auf eine feste Liste (fett, kursiv, unterstrichen, Farben) reduziert; fremdes HTML kommt nicht durch.
 
-GIFs kommen ausschließlich von Giphy:
+GIFs kommen ausschließlich von Giphy und laufen über das offizielle [Giphy-SDK für JavaScript](https://developers.giphy.com/docs/sdk/):
 
-- **Link einfügen** (z. B. `https://giphy.com/gifs/…`) funktioniert immer.
-- **Suche** läuft über den Relay und braucht einen kostenlosen API-Schlüssel von [developers.giphy.com](https://developers.giphy.com). Ihn als `GIPHY_API_KEY` in die `.env` eintragen und den Container neu starten. Gesucht wird mit Jugendschutzstufe `pg-13`.
+- **Suchen, ansehen, auswählen:** Das Gitter im Editor ist `@giphy/js-components` (Masonry, lädt beim Scrollen nach). Ohne Suchbegriff zeigt es die Trends, umschaltbar zwischen *GIFs* und *Sticker*. Ein Tipp wählt das GIF aus.
+- **Schlüssel bleibt auf dem Server:** Die Daten holt der Relay mit `@giphy/js-fetch-api` unter `/api/giphy`. Den kostenlosen Schlüssel von [developers.giphy.com](https://developers.giphy.com) als `GIPHY_API_KEY` eintragen (`.env` oder `environment` im Compose-Projekt) und den Container neu starten. Gesucht wird mit Jugendschutzstufe `pg-13`.
+- **Link einfügen** (z. B. `https://giphy.com/gifs/…`) funktioniert auch ohne Schlüssel.
+- Das Browser-Bundle liegt fertig unter `public/vendor/giphy.js`. Nach einem SDK-Update neu bauen: `npm run build:giphy`.
 
 Eine Warnstufe erscheint nur, wenn sie höchstens die halbe Cue-Länge beträgt. Ein 3-min-Cue zeigt also 1:00 und 0:30, ein 15-s-Cue nur den Überzug. Ist auf dem iPad „Bewegung reduzieren“ aktiv, entfällt das Pulsieren.
 
