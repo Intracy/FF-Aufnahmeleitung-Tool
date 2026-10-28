@@ -1,5 +1,5 @@
 {
-  "$comment": "Cue-Arten. Die Rundown-API liefert keine Art, deshalb wird sie aus dem Titel (erste Zeile) abgeleitet. Regeln werden von oben nach unten geprüft, die erste passende gewinnt. 'overrides' (nach Cue-Nummer) und 'overridesById' schlagen jede Regel. Arten: moderated (Countdown mit Warnstufen), fixed (Zuspieler/Pause, fester Countdown), open (Draft/Spiel, zählt hoch), special (Countdown ohne Alarm), anchor (zählt auf eine Uhrzeit herunter).",
+  "$comment": "Cue-Arten. Die Rundown-API liefert keine Art, deshalb wird sie aus dem Titel (erste Zeile) abgeleitet. Regeln werden von oben nach unten geprüft, die erste passende gewinnt. 'overrides' (nach Cue-Nummer) und 'overridesById' schlagen jede Regel und dürfen auch 'emoji' setzen. Arten: moderated (Countdown mit Warnstufen), fixed (Zuspieler/Pause, fester Countdown), open (Draft/Spiel, zählt hoch), special (Countdown ohne Alarm), anchor (zählt auf eine Uhrzeit herunter). 'emojis' ordnet Cues ein Emoji für die Bedienansicht zu (erste passende Regel gewinnt, sonst 'emojiByKind').",
   "default": "moderated",
   "rules": [
     { "kind": "open", "match": "^(Draft\\b|SuP3 Game \\d|Finale Game \\d)" },
@@ -10,5 +10,51 @@
   "overrides": {
     "65": { "kind": "anchor", "anchorTime": "15:45:15" }
   },
-  "overridesById": {}
+  "overridesById": {},
+  "emojis": [
+    { "match": "^COUNTDOWN", "emoji": "⏳" },
+    { "match": "^SIGNAL LIVE", "emoji": "📡" },
+    { "match": "^STREAM ENDE", "emoji": "🔴" },
+    { "match": "^(PAUSE|Pause|Countdown Pause)$", "emoji": "☕" },
+    { "match": "^TLC Presenter", "emoji": "🎬" },
+    { "match": "^FF Stinger", "emoji": "✨" },
+    { "match": "^Trailer", "emoji": "🎞️" },
+    { "match": "^Highlights", "emoji": "⭐" },
+    { "match": "^Hypevideo", "emoji": "🔥" },
+    { "match": "^Hype", "emoji": "📣" },
+    { "match": "^Winner MAZ", "emoji": "🏆" },
+    { "match": "^Siegerehrung", "emoji": "🥇" },
+    { "match": "^Abspann", "emoji": "🏁" },
+    { "match": "^Draft", "emoji": "📋" },
+    { "match": "^(SuP3|Finale) Game \\d", "emoji": "🎮" },
+    { "match": "^Analyse", "emoji": "🔍" },
+    { "match": "^Fazit", "emoji": "💬" },
+    { "match": "^Felix vs Felix", "emoji": "⚔️" },
+    { "match": "^(Begrüßung|Wilkommen|Willkommen)", "emoji": "👋" },
+    { "match": "^Verabschiedung", "emoji": "👋" },
+    { "match": "^Vorstellung", "emoji": "🙋" },
+    { "match": "^(Tagesprogramm|Weiteres Programm)", "emoji": "🗓️" },
+    { "match": "^Übergabe", "emoji": "🔄" },
+    { "match": "^Münzwurf", "emoji": "🪙" },
+    { "match": "^Interview", "emoji": "🎤" },
+    { "match": "^Einleitung", "emoji": "🎙️" },
+    { "match": "^Road to Glory", "emoji": "🛣️" },
+    { "match": "^Teamblock", "emoji": "👥" },
+    { "match": "^Champions to Watch", "emoji": "👀" },
+    { "match": "^Frage", "emoji": "❓" },
+    { "match": "^Einlauf", "emoji": "🏟️" },
+    { "match": "^Erwartungen", "emoji": "🤔" },
+    { "match": "^Predictions", "emoji": "🔮" },
+    { "match": "^Gedanken", "emoji": "💭" },
+    { "match": "^Noris Liga", "emoji": "🧠" },
+    { "match": "^Kahoot", "emoji": "🧩" },
+    { "match": "^Danksagung", "emoji": "🙏" }
+  ],
+  "emojiByKind": {
+    "moderated": "🎙️",
+    "fixed": "🎬",
+    "open": "🎮",
+    "special": "⭐",
+    "anchor": "⏰"
+  }
 }

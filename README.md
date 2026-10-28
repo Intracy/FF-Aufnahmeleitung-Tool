@@ -73,7 +73,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | --- | --- | --- |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
 | ABRUNDEN | Schild orange mit Kreispfeil; erneut tippen hebt auf | Tippen |
-| STRECKEN +30 s | Verlängert den laufenden Cue. Zählt als gewollt, nicht als Überzug | Tippen |
+| STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min und verlängert den laufenden Cue. Zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
 | MARKER | Eintrag für Nachbericht und Resolve | Tippen |
@@ -107,7 +107,7 @@ Die Ziffern wachsen, je knapper die Zeit wird: MM:SS ab 10 min, M:SS darunter, i
 | Datei | Inhalt |
 | --- | --- |
 | `.env` | Modus, Token, Port, HTTPS, Zugangsschlüssel, Polling (siehe `.env.example`) |
-| `config/cue-kinds.json` | Cue-Arten aus dem Titel: `moderated`, `fixed`, `open`, `special`, `anchor`. Overrides nach Cue-Nummer, z. B. Cue 65 als Anker bis 15:45:15 |
+| `config/cue-kinds.json` | Cue-Arten aus dem Titel: `moderated`, `fixed`, `open`, `special`, `anchor`. Overrides nach Cue-Nummer, z. B. Cue 65 als Anker bis 15:45:15. Außerdem die Emojis je Cue (`emojis`, Rückfall `emojiByKind`), die die Bedienansicht vor den Titel setzt |
 | `config/scenarios.json` | Verzweigungen (SuP3 2:0 → nach Cue 40 weiter mit 52; Finale 3:0/3:1 → weiter mit 142) |
 
 Die Rundown-API liefert keine Cue-Art. Wird der Rundown umgebaut, die Regeln in `cue-kinds.json` prüfen.

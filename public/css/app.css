@@ -583,6 +583,42 @@ dialog.sheet::backdrop {
   user-select: text;
 }
 
+/* Streckzeit-Auswahl */
+dialog.stretch-sheet {
+  width: min(520px, calc(100vw - 40px));
+  background: var(--grouped-2);
+}
+.stretch-sheet .sheet-inner {
+  padding: 8px 20px 20px;
+  gap: 16px;
+}
+.stretch-head {
+  text-align: center;
+  padding-top: 12px;
+}
+.stretch-head h2 {
+  margin: 0 0 4px;
+  font: 600 20px/25px var(--font-display);
+}
+.stretch-head p {
+  margin: 0;
+  min-height: 20px;
+}
+.stretch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+.stretch-grid .btn {
+  min-height: 96px;
+  font-size: 26px;
+  font-variant-numeric: tabular-nums;
+}
+.stretch-cancel {
+  min-height: 60px;
+  font-size: 18px;
+}
+
 /* ---------- Toast / Undo ---------- */
 .toast,
 .undo {

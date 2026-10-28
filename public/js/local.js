@@ -64,7 +64,7 @@ export class LocalFallback {
         this.signals[msg.kind] = !!msg.on;
         break;
       case 'stretch':
-        this.stretch += STRETCH_STEP_MS;
+        this.stretch = Math.max(0, this.stretch + (Number.isFinite(msg.ms) ? msg.ms : STRETCH_STEP_MS));
         this.signals.stretchAt = now;
         break;
       case 'marker':

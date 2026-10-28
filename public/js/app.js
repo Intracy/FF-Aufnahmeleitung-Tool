@@ -8,7 +8,7 @@ import { SignView } from './views/sign.js';
 import { LocalFallback } from './local.js';
 import { initWakeLock } from './ui/wakelock.js';
 import { bindHold, bindTap } from './ui/hold.js';
-import { formatTimeOfDay } from './shared/timing.js';
+import { formatTimeOfDay, formatSigned } from './shared/timing.js';
 
 const ROUTES = { '/': 'home', '/al': 'al', '/schild': 'schild', '/regie': 'regie' };
 const path = location.pathname.replace(/\/+$/, '') || '/';
@@ -178,6 +178,7 @@ if (role === 'home') {
     act,
     onSign: () => showSign(true),
     onSettings: openSettings,
+    onStretch: openStretch,
     onManual,
     undo,
     readonly: role === 'regie',
@@ -198,6 +199,27 @@ if (role === 'home') {
     bindHold(signEl, () => showSign(false), 1000);
   }
 }
+
+// ---------- Strecken: Zeit wählen ----------
+const stretchDlg = $('#stretch-sheet');
+function openStretch() {
+  const st = local.active ? local.state() : data.state;
+  const cue = st?.cue;
+  if (!cue) return;
+  const parts = [`${cue.emoji ? cue.emoji + ' ' : ''}${cue.title}`];
+  if (cue.stretchMs) parts.push(`bisher ${formatSigned(cue.stretchMs)}`);
+  $('#stretch-info').textContent = parts.join(' · ');
+  stretchDlg.returnValue = '';
+  stretchDlg.showModal();
+}
+stretchDlg.addEventListener('close', () => {
+  const ms = Number(stretchDlg.returnValue);
+  if (ms > 0) act({ type: 'stretch', ms });
+});
+// Tippen neben das Sheet schließt es (wie in iPadOS)
+stretchDlg.addEventListener('click', (e) => {
+  if (e.target === stretchDlg) stretchDlg.close('cancel');
+});
 
 // ---------- Einstellungen ----------
 const dlg = $('#settings');

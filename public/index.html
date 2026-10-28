@@ -116,7 +116,7 @@
           <svg class="i"><use href="#i-wrap" /></svg><span>ABRUNDEN</span>
         </button>
         <button class="btn tint-blue ctl-stretch" id="b-stretch" type="button">
-          <svg class="i"><use href="#i-stretch" /></svg><span>STRECKEN +30 s</span>
+          <svg class="i"><use href="#i-stretch" /></svg><span>STRECKEN</span>
         </button>
         <button class="btn tint-blue ctl-standby" id="b-standby" type="button" aria-pressed="false">
           <svg class="i"><use href="#i-standby" /></svg><span>GLEICH DU</span>
@@ -238,6 +238,23 @@
             <p class="group-footer" id="set-version"></p>
           </section>
         </div>
+      </form>
+    </dialog>
+
+    <!-- Streckzeit wählen (SwiftUI: confirmationDialog) -->
+    <dialog id="stretch-sheet" class="sheet stretch-sheet" aria-labelledby="stretch-title">
+      <form method="dialog" class="sheet-inner">
+        <header class="stretch-head">
+          <h2 id="stretch-title">Strecken um</h2>
+          <p class="t-subheadline secondary" id="stretch-info"></p>
+        </header>
+        <div class="stretch-grid">
+          <button class="btn tint-blue" type="submit" value="30000">+30 s</button>
+          <button class="btn tint-blue" type="submit" value="60000">+1 Min</button>
+          <button class="btn tint-blue" type="submit" value="120000">+2 Min</button>
+          <button class="btn tint-blue" type="submit" value="300000">+5 Min</button>
+        </div>
+        <button class="btn btn-gray stretch-cancel" type="submit" value="cancel">Abbrechen</button>
       </form>
     </dialog>
 

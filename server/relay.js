@@ -311,7 +311,7 @@ export class Relay extends EventEmitter {
       }
       case 'stretch': {
         if (!cue) return;
-        const step = Number.isFinite(msg.ms) ? Math.max(-STRETCH_STEP_MS * 4, Math.min(STRETCH_STEP_MS * 4, msg.ms)) : STRETCH_STEP_MS;
+        const step = Number.isFinite(msg.ms) ? Math.max(-600_000, Math.min(600_000, msg.ms)) : STRETCH_STEP_MS;
         this.st.stretch[cue.id] = Math.max(0, (this.st.stretch[cue.id] || 0) + step);
         this.st.signals.stretchAt = this.now();
         this.addLog('stretch', { ms: step, totalMs: this.st.stretch[cue.id] });

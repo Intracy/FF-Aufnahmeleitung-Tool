@@ -25,6 +25,7 @@ export class OperatorView {
    * @param {(msg:object)=>void} o.act        Befehl an Relay bzw. lokalen Rückfall
    * @param {()=>void} o.onSign               Schild zeigen
    * @param {()=>void} o.onSettings
+   * @param {()=>void} o.onStretch            Auswahl der Streckzeit öffnen
    * @param {(cmd:string)=>void} o.onManual   enter | exit | prev | next
    * @param {(text:string, undo?:()=>void)=>void} o.undo
    * @param {boolean} o.readonly
@@ -92,7 +93,7 @@ export class OperatorView {
     bindTap($(this.root, '#op-settings'), () => this.onSettings());
     bindTap(e.bWrap, () => this.act({ type: 'signal', kind: 'wrap', on: !this.signals.wrap }));
     bindTap(e.bStandby, () => this.act({ type: 'signal', kind: 'standby', on: !this.signals.standby }));
-    bindTap(e.bStretch, () => this.act({ type: 'stretch' }));
+    bindTap(e.bStretch, () => this.onStretch());
     bindTap(e.bMarker, () => this.act({ type: 'marker' }));
     bindHold(e.bCut, () => this.act({ type: 'signal', kind: 'cut', on: !this.signals.cut }));
     bindHold(e.bManual, () => this.onManual('enter'));
@@ -138,7 +139,7 @@ export class OperatorView {
     else if (st?.mode === 'replay') mode = { cls: 'pill info', text: `REPLAY ×${st.speed}` };
     if (e.modePill.className !== mode.cls) e.modePill.className = mode.cls;
     setText(e.modeText, mode.text);
-    const alert = st?.show?.isPaused ? 'PAUSIERT' : meta.wakeBad ? 'DISPLAY KANN AUSGEHEN' : '';
+    const alert = st?.show?.isPaused ? 'PAUSIERT' : '';
     e.alert.hidden = !alert;
     setText(e.alert, alert);
     setText(e.title, st?.rundown?.title || 'Aufnahmeleitung');
@@ -147,7 +148,7 @@ export class OperatorView {
     if (e.now.dataset.state !== ev.state) e.now.dataset.state = ev.state;
     e.cat.style.background = cue?.color || '';
     setText(e.num, cue ? cue.number : '');
-    setText(e.cueTitle, cue ? cue.title : st?.next ? 'Show noch nicht gestartet' : 'Kein Cue aktiv');
+    setText(e.cueTitle, cue ? [cue.emoji, cue.title].filter(Boolean).join(' ') : st?.next ? 'Show noch nicht gestartet' : 'Kein Cue aktiv');
     e.kind.hidden = !cue;
     setText(e.kind, cue ? KINDS[cue.kind] || cue.kind : '');
     setText(e.sub, cue ? [cue.subtitle, cue.block].filter(Boolean).join(' · ') : '');
@@ -181,7 +182,7 @@ export class OperatorView {
 
     const nx = vm.next;
     setText(e.nextNum, nx ? nx.number : '');
-    setText(e.nextTitle, nx ? nx.title : '–');
+    setText(e.nextTitle, nx ? [nx.emoji, nx.title].filter(Boolean).join(' ') : '–');
     e.nextJump.hidden = st?.nextReason !== 'jump';
     setText(e.nextDur, nx ? (nx.kind === 'anchor' && nx.anchorAt ? `bis ${formatTimeOfDay(nx.anchorAt, meta.timeZone)}` : formatDuration(nx.durationMs)) : '');
 

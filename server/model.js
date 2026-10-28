@@ -24,15 +24,25 @@ export function compileKindConfig(raw) {
     rules: (raw.rules || []).map((r) => ({ kind: r.kind, re: new RegExp(r.match, r.flags ?? 'i') })),
     byNumber: raw.overrides || {},
     byId: raw.overridesById || {},
+    emojiRules: (raw.emojis || []).map((r) => ({ emoji: r.emoji, re: new RegExp(r.match, r.flags ?? 'i') })),
+    emojiByKind: raw.emojiByKind || {},
   };
 }
 
 export function classifyCue(cue, kc) {
   const o = kc.byId[cue.id] || kc.byNumber[String(cue.number)];
-  if (o && o.kind) return { kind: o.kind, anchorTime: o.anchorTime ?? null };
   const title = firstLine(cue.title);
-  for (const r of kc.rules) if (r.re.test(title)) return { kind: r.kind, anchorTime: null };
-  return { kind: kc.def, anchorTime: null };
+  let kind = kc.def;
+  let anchorTime = null;
+  if (o && o.kind) {
+    kind = o.kind;
+    anchorTime = o.anchorTime ?? null;
+  } else {
+    const rule = kc.rules.find((r) => r.re.test(title));
+    if (rule) kind = rule.kind;
+  }
+  const emoji = o?.emoji ?? kc.emojiRules?.find((r) => r.re.test(title))?.emoji ?? kc.emojiByKind?.[kind] ?? '';
+  return { kind, anchorTime, emoji };
 }
 
 // ---------- Zeitzone ----------
@@ -98,7 +108,7 @@ export function buildRundown(full, kc, timeZone) {
       continue;
     }
     if (el.type !== 'cue') continue;
-    const { kind, anchorTime } = classifyCue(el, kc);
+    const { kind, anchorTime, emoji } = classifyCue(el, kc);
     let plannedStartAt = null;
     if (el.plannedStart && r.eventDate) {
       plannedStartAt = zonedToEpoch(r.eventDate, el.plannedStart, timeZone);
@@ -120,6 +130,7 @@ export function buildRundown(full, kc, timeZone) {
       notes: (el.notes || '').trim(),
       color: el.color || null,
       kind,
+      emoji,
       durationMs: Math.max(0, Number(el.durationSeconds) || 0) * 1000,
       actualDurationMs: el.actualDurationSeconds != null ? Number(el.actualDurationSeconds) * 1000 : null,
       plannedStartAt,
@@ -154,6 +165,7 @@ export function publicCue(c) {
     notes: c.notes,
     color: c.color,
     kind: c.kind,
+    emoji: c.emoji,
     durationMs: c.durationMs,
     plannedStartAt: c.plannedStartAt,
     anchorAt: c.anchorAt,
