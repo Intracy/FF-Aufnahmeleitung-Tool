@@ -97,7 +97,25 @@ conn.addEventListener('state', (e) => {
   }
   frame();
 });
-conn.addEventListener('status', () => frame());
+// Fehlt der Zugangsschlüssel (z. B. in der Homescreen-App, die einen eigenen Speicher hat),
+// lehnt der Server ab. Dann einmal nachfragen statt still offline zu bleiben.
+let keyAsked = false;
+conn.addEventListener('status', async (e) => {
+  frame();
+  if (e.detail !== 'closed' || keyAsked || data.state) return;
+  try {
+    const r = await fetch(withKey('/api/state'), { cache: 'no-store' });
+    if (r.status !== 401) return;
+    keyAsked = true;
+    const k = prompt(key ? 'Zugangsschlüssel stimmt nicht. Bitte neu eingeben:' : 'Zugangsschlüssel für das AL-Tool:');
+    if (k && k.trim()) {
+      storeSet('al.key', k.trim());
+      location.reload();
+    }
+  } catch {
+    /* Server nicht erreichbar – kein Schlüsselproblem */
+  }
+});
 conn.connect();
 
 /** Befehl der AL: an das Relay, ohne Relay an den lokalen Rückfall. */

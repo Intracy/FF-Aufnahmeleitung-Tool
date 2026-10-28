@@ -41,9 +41,31 @@ Node.js ≥ 20 wird vorausgesetzt. Einzige Abhängigkeit ist `ws`.
 1. **HTTPS einrichten.** Wake Lock (Display bleibt an), Offline-Cache und die Homescreen-App funktionieren auf dem iPad nur über HTTPS. Zwei Wege:
    - **Show-Laptop im Produktionsnetz:** Mit [mkcert](https://github.com/FiloSottile/mkcert) ein Zertifikat für die IP des Laptops erzeugen (`mkcert 192.168.1.20`). `TLS_CERT` und `TLS_KEY` in `.env` setzen. Das Root-Zertifikat (`mkcert -CAROOT`) per AirDrop aufs iPad schicken und unter *Einstellungen › Allgemein › VPN und Geräteverwaltung* installieren. Danach unter *Info › Zertifikatsvertrauen* auf vollständiges Vertrauen stellen.
    - **Server im Internet** hinter einem HTTPS-Proxy. Dafür unbedingt `ACCESS_KEY` setzen und das iPad einmal mit `/al?key=…` öffnen; der Schlüssel bleibt im Gerät gespeichert.
+   - **Synology NAS:** siehe [Betrieb auf einer Synology](#betrieb-auf-einer-synology).
 2. **Homescreen-App anlegen:** Auf dem iPad `/al` öffnen und *Teilen › Zum Home-Bildschirm* wählen. Wake Lock funktioniert in der Homescreen-App ab iPadOS 18.4.
 3. **iPad vorbereiten:** Dauerstrom (die Show dauert fast 12 h, der Akku hält laut Apple bis zu 10 h), *Automatische Sperre: Nie*, *Geführter Zugriff* an, True Tone und Night Shift aus, Helligkeit fest auf Maximum. Die *Ausrichtungssperre* bleibt aus, denn Drehen ist der Moduswechsel.
 4. **Uhr prüfen:** Unter *Einstellungen › Uhr-Abgleich* sollte die Genauigkeit im WLAN unter ±50 ms liegen. Der Server braucht NTP.
+
+## Betrieb auf einer Synology
+
+Der Server läuft im Container auf dem NAS. DSM übernimmt HTTPS mit einem Let's-Encrypt-Zertifikat, das iPad erreicht die App dann über WLAN oder Mobilfunk.
+
+1. **Dateien aufs NAS:** Das Repo als ZIP herunterladen und z. B. nach `/docker/al-tool` entpacken. Daneben eine `.env` mit `MODE=live`, `RUNDOWN_TOKEN=…` und einem langen `ACCESS_KEY=…` anlegen. `TLS_CERT` und `TLS_KEY` bleiben leer.
+2. **Container starten:** *Container Manager › Projekt › Erstellen*, Pfad `/docker/al-tool` wählen. Die vorhandene `docker-compose.yml` wird übernommen.
+3. **Adresse und Zertifikat:**
+   - DDNS einrichten unter *Systemsteuerung › Externer Zugriff › DDNS*, z. B. `name.synology.me`.
+   - Ein Let's-Encrypt-Zertifikat dafür anlegen unter *Sicherheit › Zertifikat*.
+4. **Reverse Proxy:** unter *Systemsteuerung › Anmeldeportal › Erweitert › Reverse Proxy*.
+   - Quelle: HTTPS, `name.synology.me`, Port `8443`.
+   - Ziel: HTTP, `localhost`, Port `8080`.
+   - Unter *Benutzerdefinierte Kopfzeile › Erstellen › WebSocket* eintragen; ohne diesen Schritt bleibt das iPad „OFFLINE“.
+   - Dem Eintrag unter *Sicherheit › Zertifikat › Einstellungen* das Let's-Encrypt-Zertifikat zuweisen.
+5. **Router:** TCP-Port `8443` an das NAS weiterleiten.
+6. **iPad:** `https://name.synology.me:8443/al` öffnen und *Zum Home-Bildschirm* wählen. Beim ersten Start fragt die App nach dem Zugangsschlüssel.
+
+Ohne offenen Port geht es auch mit Tailscale, das es als Synology-Paket und als iPad-App gibt. Dann ist das NAS nur für eigene Geräte erreichbar.
+
+Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und nach 10 s lassen sich die Cues lokal schalten.
 
 ## Bedienung
 

@@ -1,0 +1,19 @@
+# Betrieb im Container, z. B. Synology Container Manager (Projekt) oder docker compose.
+# Vorher .env aus .env.example anlegen (MODE, RUNDOWN_TOKEN, ACCESS_KEY).
+# HTTPS übernimmt der Reverse Proxy davor (z. B. DSM), daher TLS_CERT/TLS_KEY leer lassen.
+services:
+  al-tool:
+    image: node:22-alpine
+    container_name: al-tool
+    working_dir: /app
+    command: sh -c "npm ci --omit=dev --no-audit --no-fund && node server/index.js"
+    env_file: .env
+    environment:
+      - TZ=Europe/Berlin
+      - PORT=8080
+      - HOST=0.0.0.0
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
