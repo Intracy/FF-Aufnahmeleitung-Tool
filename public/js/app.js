@@ -38,6 +38,22 @@ const applyAppearance = () => {
 };
 applyAppearance();
 
+// ---------- LEA MODE: alle Farben in Pastell (rosé, lila, orange, pink), pro Gerät ----------
+const applyLea = () => {
+  const on = !!settings.get('lea');
+  if (on) document.documentElement.dataset.lea = 'on';
+  else delete document.documentElement.dataset.lea;
+  const b = document.getElementById('op-lea');
+  if (b) b.setAttribute('aria-pressed', String(on));
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = on ? '#1d1020' : '#000000';
+};
+applyLea();
+document.getElementById('op-lea')?.addEventListener('click', () => {
+  settings.set('lea', !settings.get('lea'));
+  toast(settings.get('lea') ? 'LEA MODE an' : 'LEA MODE aus');
+});
+
 // ---------- Service Worker (Offline-Start, Homescreen-App) ----------
 if ('serviceWorker' in navigator && window.isSecureContext) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
@@ -494,6 +510,7 @@ $('#set-rotate').addEventListener('change', (e) => settings.set('rotateToSign', 
 settings.onChange((k) => {
   if (k === 'grip') opView?.setGrip(settings.get('grip'));
   if (k === 'appearance') applyAppearance();
+  if (k === 'lea') applyLea();
   if (k === 'fps') exportLinks();
 });
 bindTap($('#replay-go'), () => {

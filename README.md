@@ -81,6 +81,8 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 **Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
 
+**LEA MODE:** Der Button oben rechts neben den Einstellungen schaltet alle Farben auf Pastell um (rosé, lila, orange, pink), auch auf dem Schild. Erneut tippen stellt die normalen Farben wieder her. Die Einstellung gilt pro Gerät; Wort und Form der Schild-Zustände bleiben gleich.
+
 **Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit CUSTOM TEXT und SCHLUSS auf der Daumenseite liegen.
 
 ### Zustände des Schilds

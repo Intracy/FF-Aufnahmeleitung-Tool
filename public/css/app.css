@@ -132,6 +132,105 @@
   }
 }
 
+/* ---------- LEA MODE: Pastell (rosé, lila, orange, pink) ----------
+   Gleiche Bedeutung wie sonst, nur andere Töne: läuft = rosé, Warnstufe = Pfirsich,
+   FERTIG WERDEN = Orange, Überzug/SCHLUSS = kräftiges Pink, GLEICH DU = Lila.
+   Wort und Form bleiben, daher ist jeder Zustand weiter eindeutig. */
+:root[data-lea='on'],
+:root[data-lea='on'] .force-dark {
+  --green: rgb(255 175 210);
+  --yellow: rgb(255 204 160);
+  --orange: rgb(255 160 112);
+  --red: rgb(255 92 160);
+  --over-fill: rgb(232 62 140);
+  --blue: rgb(190 160 255);
+  --gray: rgb(196 170 200);
+  --bg: #1d1020;
+  --bg-2: #2c1830;
+  --bg-3: #3a2240;
+  --grouped: #1d1020;
+  --grouped-2: #2c1830;
+  --grouped-3: #3a2240;
+  --label: #fff5fa;
+  --label-2: rgb(255 225 240 / 0.66);
+  --label-3: rgb(255 225 240 / 0.34);
+  --label-4: rgb(255 225 240 / 0.18);
+  --fill: rgb(200 140 190 / 0.34);
+  --fill-2: rgb(200 140 190 / 0.3);
+  --fill-3: rgb(200 140 190 / 0.22);
+  --fill-4: rgb(200 140 190 / 0.16);
+  --separator: rgb(150 100 150 / 0.6);
+  --segment-selected: rgb(140 95 150);
+  --glass: rgb(255 200 230 / 0.12);
+  --glass-edge: rgb(255 200 230 / 0.22);
+}
+:root[data-lea='on'][data-appearance='light'] {
+  --green: rgb(214 96 150);
+  --yellow: rgb(214 130 60);
+  --orange: rgb(226 110 50);
+  --red: rgb(214 40 120);
+  --blue: rgb(134 96 214);
+  --gray: rgb(150 120 156);
+  --bg: #fff6fa;
+  --bg-2: #fbe8f1;
+  --bg-3: #fff6fa;
+  --grouped: #fbe8f1;
+  --grouped-2: #fff6fa;
+  --grouped-3: #fbe8f1;
+  --label: #3a1033;
+  --label-2: rgb(90 40 80 / 0.66);
+  --label-3: rgb(90 40 80 / 0.34);
+  --label-4: rgb(90 40 80 / 0.18);
+  --fill: rgb(200 120 170 / 0.22);
+  --fill-2: rgb(200 120 170 / 0.18);
+  --fill-3: rgb(200 120 170 / 0.13);
+  --fill-4: rgb(200 120 170 / 0.09);
+  --separator: rgb(150 80 130 / 0.3);
+  --segment-selected: #fff;
+  --glass: rgb(255 255 255 / 0.7);
+  --glass-edge: rgb(150 80 130 / 0.12);
+}
+/* Pastellflächen brauchen dunkle Schrift */
+:root[data-lea='on']:not([data-appearance='light']) .tint-blue,
+:root[data-lea='on']:not([data-appearance='light']) .tint-red {
+  --on-tint: #2a0f2e;
+}
+:root[data-lea='on'] .now[data-state='cut'] .state-badge,
+:root[data-lea='on'] .now[data-state='stretch'] .state-badge {
+  color: #2a0f2e;
+}
+
+:root[data-lea='on'] .sign,
+:root[data-lea='on'] .editor {
+  background: #1d1020;
+}
+
+/* Umschalter oben rechts */
+.lea-btn {
+  appearance: none;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 22px;
+  border: 0.5px solid var(--glass-edge);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  color: var(--label);
+  font: 700 15px/1 var(--font);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.lea-btn:active {
+  opacity: 0.55;
+}
+.lea-btn[aria-pressed='true'] {
+  border-color: transparent;
+  background: linear-gradient(120deg, rgb(255 175 210), rgb(200 165 255) 55%, rgb(255 190 140));
+  color: #3a1033;
+}
+
 /* ---------- Basis ---------- */
 *,
 *::before,
