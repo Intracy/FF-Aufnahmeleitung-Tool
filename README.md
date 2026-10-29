@@ -2,7 +2,7 @@
 
 Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die AL steht neben der Kamera, liest den aktuellen Cue aus dem Rundown und zeigt dem Moderator auf einem großen Schild, wie viel Zeit er noch hat.
 
-- **Hochkant:** Bedienansicht. Oben stehen aktueller Cue, Restzeit, nächster Cue, Salden und Back-Time, unten die Buttons in der Daumenzone.
+- **Hochkant:** Bedienansicht. Oben steht der aktuelle Cue mit Restzeit, halbtransparent dahinter der vorherige (mit Ist-Dauer) und der nächste Cue, darunter Salden und Back-Time, unten die Buttons in der Daumenzone.
 - **Quer:** Schild für den Moderator. Die Restzeit ist so groß wie möglich: grün, gelb mit Rahmen bei den Warnstufen, orange mit FERTIG WERDEN in den letzten 10 s und rot pulsierend beim Überziehen. Auf Knopfdruck zeigt es zusätzlich einen eigenen Text, auf Wunsch mit GIF.
 - **Relay-Server:** pollt die Rundown-API, hält eine gemeinsame Uhr und verteilt den Zustand per WebSocket an alle Geräte.
 
@@ -95,7 +95,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 ### Regieansicht (`/regie`)
 
-Der aktuelle Cue ist das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es STRECKEN und die Reihe START · NEXT · PAUSE · ZURÜCK · BEENDEN (jeweils halten) · MARKER. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
+Wie in der Bedienansicht ist der aktuelle Cue das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es STRECKEN und die Reihe START · NEXT · PAUSE · ZURÜCK · BEENDEN (jeweils halten) · MARKER. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
 
 ![Regie](docs/screenshots/regie-hoch.png)
 

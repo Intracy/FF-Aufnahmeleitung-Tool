@@ -90,11 +90,12 @@ export class OperatorView {
       this.el.context.appendChild(d);
       this.ctx[k] = d;
     }
+    // Vorheriger und nächster Cue als Karten hinter dem aktuellen (AL und Regie)
+    this.el.peekPrev.hidden = false;
+    this.el.peekNext.hidden = false;
     if (o.readonly) {
-      // Regieansicht: nur Strecken, Rundown-Steuerung und Marker; vorheriger/nächster Cue als Karten
+      // Regieansicht: nur Strecken, Rundown-Steuerung und Marker
       r.dataset.readonly = '';
-      this.el.peekPrev.hidden = false;
-      this.el.peekNext.hidden = false;
     }
     this.signals = {};
     this.bind();
@@ -224,7 +225,7 @@ export class OperatorView {
 
     // ---- Steuerung
     this.renderControls(vm, meta);
-    if (this.readonly) this.renderPeeks(vm, meta);
+    this.renderPeeks(vm, meta);
   }
 
   renderBalance(el, ms) {
@@ -351,7 +352,7 @@ export class OperatorView {
     setHtml(this.ctx.notes, notes.length ? `<div class="card ctx-card"><div class="ctx-title"><span>Notizen</span></div>${notes.join('')}</div>` : '');
   }
 
-  /** Regie: vorheriger und nächster Cue halbtransparent hinter dem aktuellen. */
+  /** Vorheriger und nächster Cue halbtransparent hinter dem aktuellen. */
   renderPeeks(vm, meta) {
     const st = vm.state;
     const tz = meta.timeZone;

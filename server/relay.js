@@ -562,6 +562,12 @@ export class Relay extends EventEmitter {
         prev = { ...publicCue(c), startedAt: s, actualMs: actual, stretchMs: st, deltaMs: actual == null ? null : actual - c.durationMs - st };
         break;
       }
+      // Noch nichts beobachtet (z. B. Relay mitten in der Show gestartet): Cue davor laut Plan
+      if (!prev && cue && cue.index > 0) {
+        const c = rd.cues[cue.index - 1];
+        const actual = c.actualDurationMs ?? null;
+        prev = { ...publicCue(c), startedAt: null, actualMs: actual, stretchMs: 0, deltaMs: actual == null ? null : actual - c.durationMs };
+      }
     }
     const elapsed = cue ? elapsedFor({ startedAt }, now, this.st.pausedAt) : 0;
     const effective = cue ? cue.durationMs + stretchMs : 0;

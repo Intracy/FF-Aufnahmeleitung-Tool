@@ -1100,8 +1100,8 @@ dialog.text-sheet {
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-  grid-template-areas: 'nav' 'now' 'status' 'context' 'controls';
+  grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto;
+  grid-template-areas: 'nav' 'peekprev' 'now' 'peeknext' 'status' 'context' 'controls';
   gap: var(--gap);
   padding: max(env(safe-area-inset-top), 12px) max(env(safe-area-inset-right), var(--margin)) max(env(safe-area-inset-bottom), 16px)
     max(env(safe-area-inset-left), var(--margin));
@@ -1542,10 +1542,12 @@ svg.i.solid {
 @media (orientation: landscape) {
   .op {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto minmax(0, 1fr);
     grid-template-areas:
       'nav nav'
+      'peekprev controls'
       'now controls'
+      'peeknext controls'
       'status controls'
       'context controls';
   }
@@ -1553,7 +1555,9 @@ svg.i.solid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     grid-template-areas:
       'nav nav'
+      'controls peekprev'
       'controls now'
+      'controls peeknext'
       'controls status'
       'controls context';
   }
@@ -2138,12 +2142,13 @@ dialog.rundown-sheet {
   margin-top: calc(-1 * var(--gap) - 14px);
   padding-top: 26px;
 }
-.op[data-readonly] .now {
+.op .now {
   position: relative;
   z-index: 1;
   box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
 }
-.op[data-readonly] .now-foot {
+/* Die Danach-Zeile im Kasten entfällt: der nächste Cue steht als Karte darunter */
+.op .now-foot {
   display: none;
 }
 .peek-label {
