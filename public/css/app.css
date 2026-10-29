@@ -1580,7 +1580,7 @@ dialog.text-sheet {
     max(env(safe-area-inset-left), 5vmin);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 22fr 70fr 4fr;
+  grid-template-rows: 22fr 70fr auto 4fr;
   row-gap: 2vmin;
 }
 .sign-top {
@@ -1629,7 +1629,32 @@ dialog.text-sheet {
 }
 /* Custom Text auf dem Schild: Nachricht groß, Zeit kleiner darunter */
 .sign.has-msg .sign-inner {
-  grid-template-rows: 11fr 55fr 28fr 4fr;
+  grid-template-rows: 11fr 55fr 28fr auto 4fr;
+}
+/* Aktueller Cue klein unter den Ziffern, damit der Moderator sieht, wo die Show steht */
+.sign-cue {
+  min-width: 0;
+  text-align: center;
+  font: 600 clamp(18px, 4.4vmin, 46px)/1.15 var(--font);
+  color: rgb(255 255 255 / 0.72);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sign-cue:empty {
+  display: none;
+}
+.sign-cue .num {
+  color: rgb(255 255 255 / 0.5);
+  font-variant-numeric: tabular-nums;
+  margin-right: 0.35em;
+}
+.sign-cue .emo {
+  margin-right: 0.3em;
+}
+.sign[data-state='over'] .sign-cue,
+.sign[data-state='cut'] .sign-cue {
+  color: rgb(255 255 255 / 0.9);
 }
 .editor b,
 .sign-msg-text b {

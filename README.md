@@ -114,6 +114,8 @@ GIFs kommen ausschließlich von Giphy und laufen über das offizielle [Giphy-SDK
 
 Eine Warnstufe erscheint nur, wenn sie höchstens die halbe Cue-Länge beträgt. Ein 3-min-Cue zeigt also 1:00 und 0:30, ein 15-s-Cue nur den Überzug. Ist auf dem iPad „Bewegung reduzieren“ aktiv, entfällt das Pulsieren.
 
+Unter den Ziffern steht klein der aktuelle Cue mit Emoji, Nummer und Titel, damit der Moderator sieht, wo die Show gerade steht.
+
 Die Ziffern wachsen, je knapper die Zeit wird: MM:SS ab 10 min, M:SS darunter, in der letzten Minute nur noch Sekunden. `fitText` misst die Schrift und füllt die verfügbare Breite bzw. Höhe.
 
 ## Konfiguration

@@ -22,6 +22,8 @@ export class SignView {
     this.msgGif = root.querySelector('#sign-msg-gif');
     this.msgBox = root.querySelector('#sign-msg-textbox');
     this.msgText = root.querySelector('#sign-msg-text');
+    this.cueEl = root.querySelector('#sign-cue');
+    this.cueKey = null;
     this.msgKey = null;
     this.lastStage = null;
     this.pulseTimer = null;
@@ -120,6 +122,20 @@ export class SignView {
     if (this.digits.textContent !== text) this.digits.textContent = text;
     if (sample) fitText(this.digits, this.box, sample, { heightFactor: 1.3, widthFactor: 0.97 });
     this.digits.setAttribute('aria-label', ev.digitsMs != null ? `${ev.word ? ev.word + ', ' : ''}${formatClock(ev.digitsMs, ev.countUp)}` : text);
+
+    // Aktueller Cue klein unter den Ziffern (Symbol, Nummer, Titel)
+    const cue = state === 'idle' ? null : vm.state?.cue;
+    const cueKey = cue ? `${cue.id}|${cue.emoji}|${cue.number}|${cue.title}` : '';
+    if (cueKey !== this.cueKey) {
+      this.cueKey = cueKey;
+      this.cueEl.replaceChildren();
+      if (cue) {
+        if (cue.emoji) this.cueEl.append(Object.assign(document.createElement('span'), { className: 'emo', textContent: cue.emoji }));
+        if (cue.number != null) this.cueEl.append(Object.assign(document.createElement('span'), { className: 'num', textContent: String(cue.number) }));
+        this.cueEl.append(document.createTextNode(cue.title || ''));
+      }
+      delete this.digits.dataset.fitKey; // Platz für die Ziffern hat sich geändert
+    }
 
     // Balken
     let p = 0;
