@@ -426,12 +426,14 @@ export class OperatorView {
     e.tNext.disabled = ctlOff || !running;
     e.tPause.disabled = ctlOff || !running;
     e.tPrev.disabled = ctlOff || !running;
-    setText(e.tPauseText, paused ? 'WEITER' : 'PAUSE');
-    const pauseIcon = paused ? '#i-play' : '#i-pause';
+    // Toggle: läuft → PAUSE (Pause-Symbol); pausiert → PAUSIERT (Stop-Symbol), erneut halten setzt fort
+    setText(e.tPauseText, paused ? 'PAUSIERT' : 'PAUSE');
+    const pauseIcon = paused ? '#i-stop' : '#i-pause';
     if (e.tPauseUse.getAttribute('href') !== pauseIcon) {
       e.tPauseUse.setAttribute('href', pauseIcon);
       e.tPauseUse.parentElement.classList.toggle('solid', paused);
-      e.tPause.setAttribute('aria-label', paused ? 'Weiter: Show fortsetzen (halten)' : 'Pause (halten)');
+      e.tPause.setAttribute('aria-label', paused ? 'Pausiert – halten zum Fortsetzen' : 'Pause (halten)');
+      e.tPause.setAttribute('aria-pressed', String(paused));
     }
     e.tPause.classList.toggle('tint-orange', paused);
     e.tPause.classList.toggle('btn-gray', !paused);

@@ -296,7 +296,9 @@ async function control(action) {
     });
     const j = await r.json().catch(() => ({}));
     if (j.ignored) return;
-    toast(r.ok ? CONTROL_TOAST[action] : `Rundown: ${j.error || 'Fehler'}`);
+    const st = local.active ? local.state() : data.state;
+    const label = action === 'toggle' ? (st?.show?.isPaused ? 'Rundown läuft weiter' : 'Rundown pausiert') : CONTROL_TOAST[action];
+    toast(r.ok ? label : `Rundown: ${j.error || 'Fehler'}`);
   } catch {
     toast('Rundown: keine Verbindung zum Relay');
   }
