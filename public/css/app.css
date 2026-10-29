@@ -1452,10 +1452,10 @@ dialog.text-sheet {
   grid-area: controls;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: 120px 120px 96px 84px 72px;
+  grid-template-rows: 120px 104px 96px 84px 72px;
   grid-template-areas:
     'sign sign'
-    'stretch wrap'
+    'wrap wrap'
     'standby cut'
     'transport transport'
     'manual manual';
@@ -1465,17 +1465,16 @@ dialog.text-sheet {
 .controls[data-grip='left'] {
   grid-template-areas:
     'sign sign'
-    'wrap stretch'
+    'wrap wrap'
     'cut standby'
     'transport transport'
     'manual manual';
 }
 .controls.no-manual {
-  grid-template-rows: 120px 120px 96px 84px;
+  grid-template-rows: 120px 104px 96px 84px;
 }
 .ctl-sign { grid-area: sign; font-size: 22px; }
 .ctl-text { grid-area: wrap; font-size: 22px; }
-.ctl-stretch { grid-area: stretch; font-size: 22px; }
 .ctl-standby { grid-area: standby; }
 .ctl-cut { grid-area: cut; }
 /* Rundown-Steuerung: Start, Next, Pause, Zurück, Beenden – Marker ganz rechts */
@@ -1532,8 +1531,7 @@ svg.i.solid {
   grid-column: 1 / -1;
 }
 .ctl-sign svg.i,
-.ctl-text svg.i,
-.ctl-stretch svg.i {
+.ctl-text svg.i {
   width: 28px;
   height: 28px;
 }
@@ -1576,12 +1574,10 @@ svg.i.solid {
     align-self: end;
   }
   .ctl-sign,
-  .ctl-text,
-  .ctl-stretch {
+  .ctl-text {
     font-size: 19px;
   }
-  .ctl-text svg.i,
-  .ctl-stretch svg.i {
+  .ctl-text svg.i {
     width: 24px;
     height: 24px;
   }
@@ -2191,13 +2187,13 @@ dialog.rundown-sheet {
 }
 .peek-delta.over { color: var(--red); font-weight: 600; }
 .peek-delta.under { color: var(--green); font-weight: 600; }
-/* Steuerung in der Regie: oben STRECKEN, darunter Start/Next/Pause/Zurück/Beenden/Marker */
+/* Steuerung in der Regie: nur die Reihe Start/Beenden, Next, Pause, Zurück, Zeit +, Marker */
 .op[data-readonly] .controls,
 .op[data-readonly] .controls[data-grip='left'],
 .op[data-readonly] .controls.no-manual {
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: 84px 84px;
-  grid-template-areas: 'stretch' 'transport';
+  grid-template-rows: 92px;
+  grid-template-areas: 'transport';
 }
 .op[data-readonly] .ctl-sign,
 .op[data-readonly] .ctl-text,
@@ -2206,11 +2202,69 @@ dialog.rundown-sheet {
 .op[data-readonly] .ctl-manual {
   display: none;
 }
+/* Regie: Spalten-Container. Hochformat: unsichtbar (Kinder bleiben im Raster). */
+.regie-col {
+  display: contents;
+}
+/* Regie quer: links der Cue-Stapel, rechts Status, Steuerung und Kontext – lückenlos untereinander */
 @media (orientation: landscape) {
-  .op[data-readonly] .status {
-    align-self: start;
+  .op[data-readonly] {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      'nav nav'
+      'left right';
   }
-  .op[data-readonly] .controls {
-    align-self: end;
+  .op[data-readonly] .regie-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    min-height: 0;
+    min-width: 0;
+  }
+  .op[data-readonly] .regie-left {
+    grid-area: left;
+  }
+  .op[data-readonly] .regie-right {
+    grid-area: right;
+  }
+  .op[data-readonly] .regie-left .now {
+    flex: 1 1 auto;
+    justify-content: space-between;
+  }
+  .op[data-readonly] .regie-left .peek {
+    flex: none;
+  }
+  .op[data-readonly] .regie-right .context {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+  .op[data-readonly] .regie-right .controls {
+    flex: none;
+    order: 2;
+  }
+  .op[data-readonly] .regie-right .status {
+    order: 1;
+  }
+  .op[data-readonly] .regie-right .context {
+    order: 3;
+  }
+  .op[data-readonly] .regie-right .controls {
+    align-self: stretch;
+  }
+  .op[data-readonly] .regie-right .stat {
+    padding: 8px 12px;
+  }
+  .op[data-readonly] .regie-right .stat-value {
+    font-size: 20px;
+  }
+  .op[data-readonly] .now-digits {
+    font-size: clamp(96px, 17vh, 132px);
+  }
+  .op[data-readonly] .regie-left .now .now-time {
+    flex: 1 1 auto;
+    align-items: center;
+    flex-wrap: wrap;
   }
 }

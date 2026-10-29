@@ -1,5 +1,5 @@
 // Service Worker: App-Hülle offline verfügbar, API und WebSocket nie aus dem Cache.
-const VERSION = 'al-1.7.1';
+const VERSION = 'al-1.8.0';
 const SHELL = [
   '/',
   '/index.html',

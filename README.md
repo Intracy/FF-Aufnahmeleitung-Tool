@@ -11,7 +11,7 @@ Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die A
 | ![Bedienung](docs/screenshots/bedienung-hoch-laeuft.png) | ![Schild läuft](docs/screenshots/schild-quer-laeuft.png) |
 | ![Überzug](docs/screenshots/bedienung-hoch-ueber.png) | ![Schild Überzug](docs/screenshots/schild-quer-ueber.png) |
 
-Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): Rundown-Tabelle, NOCH 2, FERTIG WERDEN, STRECKEN-Drehrad, CUSTOM TEXT, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
+Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): Rundown-Tabelle, NOCH 2, FERTIG WERDEN, ZEIT-+-Drehrad, CUSTOM TEXT, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
 
 ---
 
@@ -74,14 +74,13 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | Cue-Kasten oben | Öffnet den kompletten Rundown als Tabelle: vergangene Cues mit Ist-Start, Ist-Dauer und Abweichung, der aktuelle Cue hervorgehoben mit Restzeit, kommende Cues mit erwarteter Startzeit entlang der gewählten Szenarien. Dazu Plan-Start, Dauer, Streckung, Art, Notizen und die eigenen Spalten des Rundowns (z. B. GFX, Ort, Ton). *Zu JETZT* springt zurück zum aktuellen Cue | Tippen |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
 | CUSTOM TEXT | Öffnet einen Editor für einen eigenen Text auf dem Schild: fett, kursiv, unterstrichen, sechs Farben, GROSSBUCHSTABEN, Schnelltexte und ein GIF von Giphy. Solange der Text steht, ist der Button gefüllt und die Bedienansicht zeigt ihn mit AUSBLENDEN | Tippen, dann *Anzeigen* |
-| STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min. Darunter stellen zwei Drehräder (Min : Sek, je 00–99) eine eigene Zeit ein. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
-| START ▶ | Startet die Show im Rundown-Backend (nur aktiv, solange sie nicht läuft) | 0,6 s halten |
+| START ▶ / BEENDEN ⏹ | Ein Button für beides: grün START, solange der Rundown nicht läuft; nach dem Start rot BEENDEN; nach dem Beenden wieder grün START | 0,6 s halten |
 | NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | 0,6 s halten |
 | PAUSE ⏸ / WEITER ▶ | Pausiert die Show im Backend bzw. setzt sie fort | 0,6 s halten |
 | ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | 0,6 s halten |
-| BEENDEN ⏹ | Beendet die Show im Backend | 0,6 s halten |
+| ZEIT + | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min, darunter zwei Drehräder (Min : Sek, je 00–99) für eine eigene Zeit. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | MARKER | Eintrag für Nachbericht und Resolve (ganz rechts in der unteren Reihe) | Tippen |
 | MANUELL ◀ ▶ | Erscheint erst, wenn die Quelle oder der Relay 10 s ausfällt | 0,6 s halten |
 
@@ -95,7 +94,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 ### Regieansicht (`/regie`)
 
-Wie in der Bedienansicht ist der aktuelle Cue das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es STRECKEN und die Reihe START · NEXT · PAUSE · ZURÜCK · BEENDEN (jeweils halten) · MARKER. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
+Wie in der Bedienansicht ist der aktuelle Cue das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es die Reihe START/BEENDEN · NEXT · PAUSE · ZURÜCK (jeweils halten) · ZEIT + · MARKER. Im Querformat steht links der Cue-Stapel, rechts lückenlos untereinander Status, Steuerung und Hinweise. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
 
 ![Regie](docs/screenshots/regie-hoch.png)
 

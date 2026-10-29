@@ -41,6 +41,7 @@
       <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></symbol>
       <symbol id="i-skip-prev" viewBox="0 0 24 24"><path d="M19.5 5v14l-10-7z" /><path d="M5.5 5v14" /></symbol>
       <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="2" /></symbol>
+      <symbol id="i-plus-time" viewBox="0 0 24 24"><circle cx="11" cy="13" r="7.5" /><path d="M11 9.5V13l2.2 1.6M18.5 2.5v5M16 5h5" /></symbol>
       <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4.5" cy="6" r="1" /><circle cx="4.5" cy="12" r="1" /><circle cx="4.5" cy="18" r="1" /></symbol>
       <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /></symbol>
     </svg>
@@ -127,9 +128,6 @@
         <button class="btn tint-orange ctl-text" id="b-text" type="button" aria-pressed="false">
           <svg class="i"><use href="#i-text" /></svg><span>CUSTOM TEXT</span>
         </button>
-        <button class="btn tint-blue ctl-stretch" id="b-stretch" type="button">
-          <svg class="i"><use href="#i-stretch" /></svg><span>STRECKEN</span>
-        </button>
         <button class="btn tint-blue ctl-standby" id="b-standby" type="button" aria-pressed="false">
           <svg class="i"><use href="#i-standby" /></svg><span>GLEICH DU</span>
         </button>
@@ -138,7 +136,7 @@
         </button>
         <div class="ctl-transport" id="transport" role="group" aria-label="Rundown steuern">
           <button class="btn tint-green tbtn" id="t-start" type="button" aria-label="Start: Show starten (halten)">
-            <svg class="i solid"><use href="#i-play" /></svg><span class="btn-label"><span>START</span><small>halten</small></span>
+            <svg class="i solid"><use href="#i-play" /></svg><span class="btn-label"><span id="t-start-text">START</span><small>halten</small></span>
           </button>
           <button class="btn tint-blue tbtn" id="t-next" type="button" aria-label="Next: nächster Cue (halten)">
             <svg class="i solid"><use href="#i-skip-next" /></svg><span class="btn-label"><span>NEXT</span><small>halten</small></span>
@@ -149,8 +147,8 @@
           <button class="btn btn-gray tbtn" id="t-prev" type="button" aria-label="Zurück: vorheriger Cue (halten)">
             <svg class="i solid"><use href="#i-skip-prev" /></svg><span class="btn-label"><span>ZURÜCK</span><small>halten</small></span>
           </button>
-          <button class="btn tint-red tbtn" id="t-finish" type="button" aria-label="Show beenden (halten)">
-            <svg class="i solid"><use href="#i-stop" /></svg><span class="btn-label"><span>BEENDEN</span><small>halten</small></span>
+          <button class="btn tint-blue tbtn ctl-stretch" id="b-stretch" type="button" aria-label="Zeit hinzufügen">
+            <svg class="i"><use href="#i-plus-time" /></svg><span class="btn-label"><span>ZEIT +</span><small>hinzufügen</small></span>
           </button>
           <button class="btn btn-gray ctl-marker" id="b-marker" type="button">
             <svg class="i"><use href="#i-marker" /></svg><span>MARKER</span>

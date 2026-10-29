@@ -76,7 +76,8 @@ export class OperatorView {
       tPauseText: $(r, '#t-pause-text'),
       tPauseUse: $(r, '#t-pause use'),
       tPrev: $(r, '#t-prev'),
-      tFinish: $(r, '#t-finish'),
+      tStartText: $(r, '#t-start-text'),
+      tStartUse: $(r, '#t-start use'),
       bManual: $(r, '#b-manual'),
       bPrev: $(r, '#b-prev'),
       bNext: $(r, '#b-next'),
@@ -94,8 +95,19 @@ export class OperatorView {
     this.el.peekPrev.hidden = false;
     this.el.peekNext.hidden = false;
     if (o.readonly) {
-      // Regieansicht: nur Strecken, Rundown-Steuerung und Marker
+      // Regieansicht: nur Rundown-Steuerung, Zeit + und Marker.
+      // Zwei Spalten-Container, damit im Querformat alles lückenlos untereinander steht
+      // (im Hochformat sind sie per display:contents unsichtbar).
       r.dataset.readonly = '';
+      const left = document.createElement('div');
+      left.className = 'regie-col regie-left';
+      const right = document.createElement('div');
+      right.className = 'regie-col regie-right';
+      this.el.now.before(left);
+      left.append(this.el.peekPrev, this.el.now, this.el.peekNext);
+      const status = r.querySelector('.status');
+      status.before(right);
+      right.append(status, this.el.controls, this.el.context);
     }
     this.signals = {};
     this.bind();
@@ -116,11 +128,11 @@ export class OperatorView {
     bindTap(e.bStretch, () => this.onStretch());
     bindTap(e.bMarker, () => this.act({ type: 'marker' }));
     // Rundown im Backend steuern – alle Aktionen 0,6 s halten, damit nichts aus Versehen passiert
-    bindHold(e.tStart, () => this.onControl?.('start'));
+    // START wird zu BEENDEN, sobald die Show läuft (und danach wieder zu START)
+    bindHold(e.tStart, () => this.onControl?.(this.running ? 'finish' : 'start'));
     bindHold(e.tNext, () => this.onControl?.('next'));
     bindHold(e.tPause, () => this.onControl?.('toggle'));
     bindHold(e.tPrev, () => this.onControl?.('prev'));
-    bindHold(e.tFinish, () => this.onControl?.('finish'));
     bindHold(e.bCut, () => this.act({ type: 'signal', kind: 'cut', on: !this.signals.cut }));
     bindHold(e.bManual, () => this.onManual('enter'));
     bindHold(e.bPrev, () => this.onManual('prev'));
@@ -401,11 +413,19 @@ export class OperatorView {
     const running = !!st?.show?.isRunning;
     const paused = !!st?.show?.isPaused;
     const ctlOff = meta.local || !st;
-    e.tStart.disabled = ctlOff || running;
+    this.running = running;
+    e.tStart.disabled = ctlOff;
+    setText(e.tStartText, running ? 'BEENDEN' : 'START');
+    const startIcon = running ? '#i-stop' : '#i-play';
+    if (e.tStartUse.getAttribute('href') !== startIcon) {
+      e.tStartUse.setAttribute('href', startIcon);
+      e.tStart.setAttribute('aria-label', running ? 'Show beenden (halten)' : 'Start: Show starten (halten)');
+    }
+    e.tStart.classList.toggle('tint-green', !running);
+    e.tStart.classList.toggle('tint-red', running);
     e.tNext.disabled = ctlOff || !running;
     e.tPause.disabled = ctlOff || !running;
     e.tPrev.disabled = ctlOff || !running;
-    e.tFinish.disabled = ctlOff || !running;
     setText(e.tPauseText, paused ? 'WEITER' : 'PAUSE');
     const pauseIcon = paused ? '#i-play' : '#i-pause';
     if (e.tPauseUse.getAttribute('href') !== pauseIcon) {
