@@ -22,7 +22,7 @@ npm install
 npm run replay          # Test ohne Show: spielt den Rundown "FF Offline Finale 2026" ab
 # → http://localhost:8080/al   (Bedienung)
 #   http://localhost:8080/schild (Schild auf zweitem Gerät)
-#   http://localhost:8080/regie  (nur lesen)
+#   http://localhost:8080/regie  (Regie: Cue-Stapel, Strecken, Rundown-Steuerung, Marker)
 ```
 
 Live gegen das Rundown-Tool:
@@ -92,6 +92,12 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 **LEA MODE:** Der Button oben rechts neben den Einstellungen schaltet alle Farben auf Pastell um (rosé, lila, orange, pink), auch auf dem Schild. Erneut tippen stellt die normalen Farben wieder her. Die Einstellung gilt pro Gerät; Wort und Form der Schild-Zustände bleiben gleich.
 
 **Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit CUSTOM TEXT und SCHLUSS auf der Daumenseite liegen.
+
+### Regieansicht (`/regie`)
+
+Der aktuelle Cue ist das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es STRECKEN und die Reihe START · NEXT · PAUSE · ZURÜCK · BEENDEN (jeweils halten) · MARKER. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
+
+![Regie](docs/screenshots/regie-hoch.png)
 
 ### Zustände des Schilds
 

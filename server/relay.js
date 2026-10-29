@@ -547,6 +547,22 @@ export class Relay extends EventEmitter {
     }
     const stretchMs = cue ? this.st.stretch[cue.id] || 0 : 0;
     const startedAt = cue ? this.st.cueStarts[cue.id] : null;
+    // Vorheriger Cue (zuletzt gelaufen) mit Ist-Dauer für die Regieansicht
+    let prev = null;
+    if (rd) {
+      const v = this.st.visited;
+      for (let i = v.length - 1; i >= 0; i--) {
+        if (v[i] === this.st.currentId) continue;
+        const c = rd.byId.get(v[i]);
+        if (!c) break;
+        const s = this.st.cueStarts[c.id] ?? null;
+        const e = this.st.cueEnds[c.id] ?? null;
+        const actual = c.actualDurationMs ?? (s != null && e != null ? e - s : null);
+        const st = this.st.stretch[c.id] || 0;
+        prev = { ...publicCue(c), startedAt: s, actualMs: actual, stretchMs: st, deltaMs: actual == null ? null : actual - c.durationMs - st };
+        break;
+      }
+    }
     const elapsed = cue ? elapsedFor({ startedAt }, now, this.st.pausedAt) : 0;
     const effective = cue ? cue.durationMs + stretchMs : 0;
     let remaining = null;
@@ -587,6 +603,7 @@ export class Relay extends EventEmitter {
       manual: this.st.manual,
       cue: cue ? { ...publicCue(cue), startedAt, stretchMs, effectiveMs: effective } : null,
       next: next ? publicCue(next) : null,
+      prev,
       nextReason,
       signals: this.st.signals,
       message: this.st.message,

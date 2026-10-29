@@ -236,7 +236,8 @@ wss.on('connection', (ws, role) => {
       sendWs(ws, { type: 'pong', id: msg.id, t0: msg.t0, ts: relay.now(), speed: source.speed || 1 });
       return;
     }
-    if (ws.role === 'al') relay.handle(msg);
+    // AL darf alles; die Regie nur Streckung und Marker (Rundown-Steuerung läuft über /api/control).
+    if (ws.role === 'al' || (ws.role === 'regie' && (msg.type === 'stretch' || msg.type === 'marker'))) relay.handle(msg);
   });
 });
 

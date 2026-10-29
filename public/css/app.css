@@ -1108,8 +1108,8 @@ dialog.text-sheet {
   background: var(--grouped);
 }
 .op[data-readonly] {
-  grid-template-rows: auto auto auto minmax(0, 1fr);
-  grid-template-areas: 'nav' 'now' 'status' 'context';
+  grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto;
+  grid-template-areas: 'nav' 'peekprev' 'now' 'peeknext' 'status' 'context' 'controls';
 }
 .nav {
   grid-area: nav;
@@ -1558,12 +1558,15 @@ svg.i.solid {
       'controls context';
   }
   .op[data-readonly] {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
     grid-template-areas:
       'nav nav'
+      'peekprev context'
       'now context'
-      'status context';
+      'peeknext context'
+      'status context'
+      'status controls';
   }
   .controls {
     align-self: end;
@@ -2105,4 +2108,104 @@ dialog.rundown-sheet {
 @media (max-width: 700px) {
   .rd-table { font-size: 14px; }
   .rd-table td, .rd-table thead th { padding-left: 7px; padding-right: 7px; }
+}
+
+
+/* ---------- Regieansicht: Cue-Stapel und reduzierte Steuerung ---------- */
+.peek[hidden] {
+  display: none !important;
+}
+.peek {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 14px;
+  margin-inline: 22px;
+  padding: 12px 18px;
+  opacity: 0.5;
+  font-size: 15px;
+  pointer-events: none;
+}
+.peek-prev {
+  grid-area: peekprev;
+  margin-bottom: calc(-1 * var(--gap) - 14px);
+  padding-bottom: 26px;
+}
+.peek-next {
+  grid-area: peeknext;
+  margin-top: calc(-1 * var(--gap) - 14px);
+  padding-top: 26px;
+}
+.op[data-readonly] .now {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+}
+.op[data-readonly] .now-foot {
+  display: none;
+}
+.peek-label {
+  color: var(--label-2);
+  font: 700 11px/1.2 var(--font);
+  letter-spacing: 0.08em;
+}
+.peek-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.peek-main .cat-stripe {
+  width: 4px;
+  height: 22px;
+  border-radius: 2px;
+  flex: none;
+}
+.peek-main .cue-num {
+  color: var(--label-2);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.peek-title {
+  font: 600 17px/1.25 var(--font);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.peek-main .kind-badge {
+  flex: none;
+}
+.peek-aside {
+  color: var(--label-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-align: right;
+}
+.peek-delta.over { color: var(--red); font-weight: 600; }
+.peek-delta.under { color: var(--green); font-weight: 600; }
+/* Steuerung in der Regie: oben STRECKEN, darunter Start/Next/Pause/Zurück/Beenden/Marker */
+.op[data-readonly] .controls,
+.op[data-readonly] .controls[data-grip='left'],
+.op[data-readonly] .controls.no-manual {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: 84px 84px;
+  grid-template-areas: 'stretch' 'transport';
+}
+.op[data-readonly] .ctl-sign,
+.op[data-readonly] .ctl-text,
+.op[data-readonly] .ctl-standby,
+.op[data-readonly] .ctl-cut,
+.op[data-readonly] .ctl-manual {
+  display: none;
+}
+@media (orientation: landscape) {
+  .op[data-readonly] .status {
+    align-self: start;
+  }
+  .op[data-readonly] .controls {
+    align-self: end;
+  }
 }

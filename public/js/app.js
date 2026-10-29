@@ -140,7 +140,8 @@ conn.connect();
 
 /** Befehl der AL: an das Relay, ohne Relay an den lokalen Rückfall. */
 function act(msg) {
-  if (role !== 'al') return;
+  // Regie darf strecken und Marker setzen, sonst nur die AL
+  if (role !== 'al' && !(role === 'regie' && (msg.type === 'stretch' || msg.type === 'marker'))) return;
   if (local.active) {
     local.handle(msg, conn.showNow());
     if (msg.type === 'marker') toast('Marker vorgemerkt – wird nachgereicht');

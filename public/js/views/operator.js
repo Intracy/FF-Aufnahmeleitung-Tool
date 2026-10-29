@@ -68,6 +68,8 @@ export class OperatorView {
       bCut: $(r, '#b-cut'),
       bCutText: $(r, '#b-cut-text'),
       bMarker: $(r, '#b-marker'),
+      peekPrev: $(r, '#peek-prev'),
+      peekNext: $(r, '#peek-next'),
       tStart: $(r, '#t-start'),
       tNext: $(r, '#t-next'),
       tPause: $(r, '#t-pause'),
@@ -89,8 +91,10 @@ export class OperatorView {
       this.ctx[k] = d;
     }
     if (o.readonly) {
+      // Regieansicht: nur Strecken, Rundown-Steuerung und Marker; vorheriger/nächster Cue als Karten
       r.dataset.readonly = '';
-      this.el.controls.hidden = true;
+      this.el.peekPrev.hidden = false;
+      this.el.peekNext.hidden = false;
     }
     this.signals = {};
     this.bind();
@@ -219,7 +223,8 @@ export class OperatorView {
     this.renderContext(vm, meta);
 
     // ---- Steuerung
-    if (!this.readonly) this.renderControls(vm, meta);
+    this.renderControls(vm, meta);
+    if (this.readonly) this.renderPeeks(vm, meta);
   }
 
   renderBalance(el, ms) {
@@ -346,6 +351,38 @@ export class OperatorView {
     setHtml(this.ctx.notes, notes.length ? `<div class="card ctx-card"><div class="ctx-title"><span>Notizen</span></div>${notes.join('')}</div>` : '');
   }
 
+  /** Regie: vorheriger und nächster Cue halbtransparent hinter dem aktuellen. */
+  renderPeeks(vm, meta) {
+    const st = vm.state;
+    const tz = meta.timeZone;
+    const card = (label, c, aside) => {
+      if (!c) return `<div class="peek-label">${label}</div><div class="peek-title peek-empty">–</div>`;
+      const kind = c.kind && KINDS[c.kind] ? `<span class="kind-badge">${KINDS[c.kind]}</span>` : '';
+      return `<div class="peek-label">${label}</div>
+<div class="peek-main"><span class="cat-stripe" style="${c.color ? `background:${esc(c.color)}` : ''}"></span><span class="cue-num">${esc(c.number ?? '')}</span><span class="peek-title">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.title)}</span>${kind}</div>
+<div class="peek-aside">${aside}</div>`;
+    };
+    const p = st?.prev;
+    let pAside = '';
+    if (p) {
+      const d = p.deltaMs;
+      const cls = d == null ? '' : d > 999 ? 'over' : d < -999 ? 'under' : '';
+      pAside = `${p.startedAt != null ? formatTimeOfDay(p.startedAt, tz) + ' · ' : ''}${p.actualMs != null ? formatDuration(p.actualMs) : formatDuration(p.durationMs)}${d != null ? ` <span class="peek-delta ${cls}">${formatSigned(d)}</span>` : ''}`;
+    }
+    const n = vm.next;
+    const nAside = n ? `${st?.nextReason === 'jump' ? '<span class="jump-tag">SPRUNG</span> ' : ''}${formatDuration(n.durationMs)}` : '';
+    const ph = card('VORHER', p, pAside);
+    const nh = card(st?.nextReason === 'start' ? 'ERSTER CUE' : 'DANACH', n, nAside);
+    if (this.el.peekPrev.dataset.html !== ph) {
+      this.el.peekPrev.innerHTML = ph;
+      this.el.peekPrev.dataset.html = ph;
+    }
+    if (this.el.peekNext.dataset.html !== nh) {
+      this.el.peekNext.innerHTML = nh;
+      this.el.peekNext.dataset.html = nh;
+    }
+  }
+
   renderControls(vm, meta) {
     const e = this.el;
     const st = vm.state;
@@ -379,8 +416,8 @@ export class OperatorView {
     e.tPause.classList.toggle('btn-gray', !paused);
 
     // Manuell-Bereich: nur bei Ausfall der Quelle bzw. des Relays
-    const manualActive = meta.local || !!st?.manual?.active;
-    const sourceDown = (st?.mode === 'live' && (st?.source?.staleForMs ?? 0) >= 10_000) || meta.offlineMs >= 10_000;
+    const manualActive = !this.readonly && (meta.local || !!st?.manual?.active);
+    const sourceDown = !this.readonly && ((st?.mode === 'live' && (st?.source?.staleForMs ?? 0) >= 10_000) || meta.offlineMs >= 10_000);
     e.bPrev.hidden = !manualActive;
     e.bNext.hidden = !manualActive;
     e.bManual.hidden = manualActive || !sourceDown;

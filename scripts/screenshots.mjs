@@ -149,6 +149,14 @@ await withServer({ REPLAY_START_CUE: '108', REPLAY_START_OFFSET: '0', REPLAY_SPE
   await shot(pg, 'rundown-hoch');
 });
 
+// Regieansicht: Cue-Stapel und reduzierte Steuerung
+await withServer({ REPLAY_START_CUE: '118', REPLAY_START_OFFSET: '0', REPLAY_SPEED: '30', REPLAY_HOLD: '0' }, async (base) => {
+  const pg = await page(browser, PORTRAIT);
+  await pg.goto(`${base}/regie`);
+  await pg.waitForTimeout(4000);
+  await shot(pg, 'regie-hoch');
+});
+
 // Zuspieler vor moderiertem Cue → GLEICH DU
 await withServer({ REPLAY_START_CUE: '118', REPLAY_START_OFFSET: '1' }, async (base) => {
   const pg = await page(browser, LANDSCAPE);
