@@ -135,6 +135,16 @@ Aus `/current` ist noch nicht bekannt, ob es ein Startzeit-Feld gibt. Der Relay 
 
 Was gerade genutzt wird, zeigt *Einstellungen › Cue-Startzeit aus*. Die Rohantwort der API steht unter `/api/debug/source`. Festlegen lässt sich die Quelle über `CUE_START_SOURCE=observed | liveSince | field:<name>`.
 
+### Neustart der Show
+
+Startet die Show im Rundown-Backend neu, setzt der Relay alles zurück, was zum alten Lauf gehört: Streckungen, Cue-Startzeiten, Salden, Signale, Szenario-Wahl und Custom Text. Als Neustart gilt:
+
+1. ein neuer, frischer `showStartedAt` (höchstens 15 min alt; auch wenn der Relay zwischendurch aus war),
+2. die Show war mindestens 1,5 s gestoppt und läuft wieder,
+3. die Show springt mitten im Lauf zurück auf den ersten Cue.
+
+Springt das Backend auf einen späteren Cue zurück, verliert nur dieser Cue seine alte Streckung. Nachbericht und Marker-Export enthalten nur den aktuellen Lauf; das vollständige Log bleibt unter `/api/log`.
+
 ## Exporte
 
 - **Nachbericht:** `/api/export/report.csv`. Enthält Plan- und Ist-Zeiten je Cue, Streckungen, Abweichungen sowie alle Signale und Marker (Semikolon-getrennt, öffnet direkt in Excel).

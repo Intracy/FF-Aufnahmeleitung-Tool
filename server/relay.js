@@ -40,6 +40,8 @@ export class Relay extends EventEmitter {
     this.log = [];
     this.st = this.emptyState();
     this.pending = null;
+    this.runningSeen = null; // zuletzt gesehenes isRunning (null = noch nichts gesehen)
+    this.stoppedSince = null;
     const replay = cfg.mode === 'replay';
     this.persistFile = replay ? null : path.join(cfg.dataDir, 'state.json');
     this.logFile = path.join(cfg.dataDir, replay ? 'log-replay.jsonl' : 'log.jsonl');
@@ -62,6 +64,7 @@ export class Relay extends EventEmitter {
       manual: { active: false, since: null },
       pausedAt: null,
       message: null,
+      showStartedAt: null,
     };
   }
 
@@ -188,8 +191,61 @@ export class Relay extends EventEmitter {
       this.changed();
       return;
     }
+    this.detectRestart(json, fetchedAt);
     this.applyCurrent(json, fetchedAt);
     this.changed();
+  }
+
+  /**
+   * Erkennt einen Neustart der Show im Rundown-Backend und setzt dann alle Zeiten zurück
+   * (Streckungen, Cue-Starts, Salden, Signale, Szenarien, Custom Text).
+   * Anzeichen, jedes für sich reicht:
+   *  1. `showStartedAt` ändert sich (neuer Showstart, auch nach Neustart des Relays),
+   *  2. die Show war gestoppt (isRunning=false, mind. 1,5 s) und läuft wieder,
+   *  3. die Show springt mitten im Lauf zurück auf den ersten Cue.
+   */
+  detectRestart(json, fetchedAt) {
+    const showStart = parseTimestamp(json.showStartedAt);
+    const running = !!json.isRunning;
+    let reason = null;
+
+    // Nur ein frischer Showstart zählt (≤ 15 min alt). So löst ein Backend, das den Startwert
+    // z. B. nach einer Pause verschiebt, keinen Reset mitten in der Show aus.
+    if (showStart != null && this.st.showStartedAt != null && showStart - this.st.showStartedAt > 5000 && fetchedAt - showStart < 15 * 60000) reason = 'showStartedAt';
+
+    if (!running) {
+      if (this.runningSeen === true && this.stoppedSince == null) this.stoppedSince = fetchedAt;
+    } else if (this.runningSeen === false && this.stoppedSince != null && fetchedAt - this.stoppedSince >= 1500 && this.st.visited.length) {
+      reason ||= 'stopStart';
+    }
+    if (running) this.stoppedSince = null;
+    this.runningSeen = running;
+
+    if (!reason && running && !this.st.manual.active) {
+      const id = resolveCurrentId(json) ?? this.fullCurrentId;
+      const first = this.rundown?.cues?.[0]?.id;
+      if (id && first && id === first && this.st.currentId && this.st.currentId !== first && this.st.visited.length > 1) reason = 'firstCue';
+    }
+
+    if (reason) this.resetRun(reason, fetchedAt);
+    if (showStart != null && this.st.showStartedAt !== showStart) {
+      this.st.showStartedAt = showStart;
+      this.persist();
+    }
+  }
+
+  /** Neuer Showlauf: alles, was zum alten Lauf gehört, verwerfen. */
+  resetRun(reason, at = this.now()) {
+    const rundownId = this.st.rundownId;
+    this.st = { ...this.emptyState(), rundownId };
+    this.addLog('reset', { reason }, at);
+    this.persist();
+  }
+
+  /** Log ab dem letzten Show-Neustart (für Nachbericht und Marker-Export). */
+  runLog() {
+    for (let i = this.log.length - 1; i >= 0; i--) if (this.log[i].type === 'reset') return this.log.slice(i + 1);
+    return this.log;
   }
 
   applyCurrent(json, fetchedAt) {
@@ -267,6 +323,9 @@ export class Relay extends EventEmitter {
     this.st.currentId = id;
     this.st.signals = emptySignals();
     if (id) {
+      // Ein Cue, der erneut beginnt (nach anderen Cues), startet ohne Streckung aus dem
+      // früheren Durchlauf. Ein kurzer Aussetzer der Quelle auf demselben Cue zählt nicht.
+      if (this.st.visited[this.st.visited.length - 1] !== id) delete this.st.stretch[id];
       this.st.cueStarts[id] = startedAt;
       this.st.startHow[id] = how;
       delete this.st.cueEnds[id];

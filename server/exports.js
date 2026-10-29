@@ -36,7 +36,7 @@ export function reportCsv(relay) {
   }
   lines.push('');
   lines.push(['Zeit', 'Ereignis', 'Cue', 'Detail'].join(';'));
-  for (const e of relay.log) {
+  for (const e of relay.runLog()) {
     if (e.type === 'cue') continue;
     lines.push([t(e.at), eventLabel(e), e.cueNumber != null ? `${e.cueNumber} ${e.cueTitle}` : '', eventDetail(e)].map(csvCell).join(';'));
   }
@@ -97,7 +97,7 @@ export function markersEdl(relay, { fps = 25, start = '', mode = 'rec' } = {}) {
   fps = [24, 25, 30, 50, 60].includes(Number(fps)) ? Number(fps) : 25;
   const tz = relay.cfg.timeZone;
   const rd = relay.rundown;
-  const events = relay.log
+  const events = relay.runLog()
     .filter((e) => ['cue', 'marker', 'signal', 'stretch', 'scenario', 'message'].includes(e.type) && (!['signal', 'message'].includes(e.type) || e.on))
     .sort((a, b) => a.at - b.at);
   let ref = null;
