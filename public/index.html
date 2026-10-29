@@ -306,25 +306,31 @@
     <dialog id="stretch-sheet" class="sheet stretch-sheet" aria-labelledby="stretch-title">
       <form method="dialog" class="sheet-inner">
         <header class="stretch-head">
-          <h2 id="stretch-title">Strecken um</h2>
+          <h2 id="stretch-title">Zeit</h2>
           <p class="t-subheadline secondary" id="stretch-info"></p>
         </header>
-        <div class="stretch-grid">
-          <button class="btn tint-blue" type="submit" value="30000">+30 s</button>
-          <button class="btn tint-blue" type="submit" value="60000">+1 Min</button>
-          <button class="btn tint-blue" type="submit" value="120000">+2 Min</button>
-          <button class="btn tint-blue" type="submit" value="300000">+5 Min</button>
+        <div class="stretch-grid" id="stretch-presets" role="group" aria-label="Schnellwahl">
+          <button class="btn tint-blue" type="button" data-ms="30000">0:30</button>
+          <button class="btn tint-blue" type="button" data-ms="60000">1:00</button>
+          <button class="btn tint-blue" type="button" data-ms="120000">2:00</button>
+          <button class="btn tint-blue" type="button" data-ms="300000">5:00</button>
         </div>
         <div class="stretch-custom">
-          <h3 class="group-header">Eigene Zeit</h3>
-          <div class="picker" aria-label="Eigene Zeit, Minuten und Sekunden">
+          <div class="picker" aria-label="Zeit, Minuten und Sekunden">
             <div class="picker-band" aria-hidden="true"></div>
             <div id="wheel-min"></div>
             <span class="picker-colon" aria-hidden="true">:</span>
             <div id="wheel-sec"></div>
           </div>
           <div class="picker-units t-footnote secondary" aria-hidden="true"><span>Min</span><span>Sek</span></div>
-          <button class="btn btn-prominent tint-blue" type="submit" id="stretch-custom-btn" value="custom" disabled>+00:00 übernehmen</button>
+          <div class="stretch-confirm">
+            <button class="btn btn-prominent tint-blue" type="submit" id="stretch-add-btn" value="add" disabled>
+              <span class="btn-label"><span id="stretch-add-text">Um 00:00 erweitern</span><small>Zeit hinzufügen</small></span>
+            </button>
+            <button class="btn tint-orange" type="submit" id="stretch-set-btn" value="set" disabled>
+              <span class="btn-label"><span id="stretch-set-text">Auf 00:00 setzen</span><small>Restzeit setzen</small></span>
+            </button>
+          </div>
         </div>
         <button class="btn btn-gray stretch-cancel" type="submit" value="cancel">Abbrechen</button>
       </form>

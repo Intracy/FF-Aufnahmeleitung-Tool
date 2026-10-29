@@ -135,3 +135,24 @@ test('Rundown-Steuerung: Aktionen werden übersetzt, Doppeltipp zählt einmal', 
   assert.deepEqual(calls, ['next', 'toggle', 'prev', 'finish']);
   assert.equal(bad.ok, false);
 });
+
+test('Zeit erweitern/setzen: lokal sofort, Backend-Fehler lässt lokale Streckung stehen', async () => {
+  const { relay, cues, current, advance } = setup();
+  const calls = [];
+  relay.source.control = async (a, p) => {
+    calls.push(`${a} ${p?.time}`);
+    return { ok: false, error: 'offline' };
+  };
+  current(cues[0]);
+  advance(10_000);
+  relay.handle({ type: 'stretch', mode: 'add', ms: 90_000 });
+  await new Promise((r) => setImmediate(r));
+  assert.equal(relay.snapshot().cue.stretchMs, 90_000);
+  relay.handle({ type: 'stretch', mode: 'set', ms: 125_000 });
+  await new Promise((r) => setImmediate(r));
+  const s = relay.snapshot();
+  assert.equal(s.cue.effectiveMs - (s.serverTime - s.cue.startedAt), 125_000);
+  assert.deepEqual(calls, ['add 01:30', 'set 02:05']);
+  assert.equal(relay.lastEvent.type, 'timeSync');
+  assert.equal(relay.lastEvent.ok, false);
+});

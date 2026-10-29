@@ -80,11 +80,13 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | 0,6 s halten |
 | PAUSE ⏸ / WEITER ▶ | Pausiert die Show im Backend bzw. setzt sie fort | 0,6 s halten |
 | ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | 0,6 s halten |
-| ZEIT + | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min, darunter zwei Drehräder (Min : Sek, je 00–99) für eine eigene Zeit. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
+| ZEIT + | Öffnet die Zeit-Auswahl: Schnellwahl 0:30 / 1:00 / 2:00 / 5:00 stellt die Drehräder (Min : Sek, je 00–99). Dann **„Um MM:SS erweitern“** (Zeit hinzufügen) oder **„Auf MM:SS setzen“** (Restzeit setzen). Beides gilt sofort auf iPad und Schild und wird an das Rundown-Backend übertragen (`action=add` bzw. `action=set`, `time=MM:SS`) | Tippen, dann bestätigen |
 | MARKER | Eintrag für Nachbericht und Resolve (ganz rechts in der unteren Reihe) | Tippen |
 | MANUELL ◀ ▶ | Erscheint erst, wenn die Quelle oder der Relay 10 s ausfällt | 0,6 s halten |
 
 **Rundown steuern:** Die untere Reihe schaltet den Rundown auf rundown.ffverwaltung.de über dessen Companion-Schnittstelle (`/api/public/companion?action=next|toggle|prev|finish`). Der Relay ruft sie mit dem `RUNDOWN_TOKEN` auf, das iPad sieht den Token nie. Dieselbe Aktion innerhalb von 0,8 s zählt nur einmal, damit ein Doppeltipp nicht zwei Cues weiterschaltet. Im Replay werden die Aktionen nachgespielt.
+
+**Zeit im Backend:** Erweitern und Setzen wirken sofort lokal. Übernimmt das Backend die Änderung (neue Dauer oder neuer Startpunkt des Cues), nimmt der Relay die lokale Streckung in den folgenden 20 s um genau diesen Betrag zurück, damit nichts doppelt zählt. Scheitert die Übertragung, bleibt die lokale Änderung bestehen und die App meldet „Zeit nicht übertragen – gilt nur hier“.
 
 **Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
 

@@ -48,8 +48,10 @@ export class LiveSource extends EventEmitter {
    * Steuert den Rundown im Backend über die Companion-Schnittstelle
    * (next | toggle | prev | finish). Der Token bleibt auf dem Server.
    */
-  async control(action) {
-    const url = `${this.cfg.rundownBaseUrl}/api/public/companion?token=${encodeURIComponent(this.cfg.rundownToken)}&action=${encodeURIComponent(action)}`;
+  async control(action, params = {}) {
+    let url = `${this.cfg.rundownBaseUrl}/api/public/companion?token=${encodeURIComponent(this.cfg.rundownToken)}&action=${encodeURIComponent(action)}`;
+    // Zeitwerte im Format MM:SS (z. B. add/set), Doppelpunkt wie in der Backend-Doku unkodiert
+    if (params.time && /^\d{2}:\d{2}$/.test(params.time)) url += `&time=${params.time}`;
     const send = async (method) => {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), this.cfg.requestTimeoutMs);

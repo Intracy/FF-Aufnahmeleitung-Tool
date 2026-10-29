@@ -9,7 +9,7 @@ import { SignView } from './views/sign.js';
 import { LocalFallback } from './local.js';
 import { initWakeLock } from './ui/wakelock.js';
 import { bindHold, bindTap } from './ui/hold.js';
-import { formatTimeOfDay, formatSigned } from './shared/timing.js';
+import { formatTimeOfDay, formatSigned, formatClock } from './shared/timing.js';
 import { createWheel } from './ui/wheel.js';
 import { sanitize, plainText, safeGifUrl, gifFromGiphyLink } from './ui/richtext.js';
 
@@ -113,6 +113,7 @@ conn.addEventListener('state', (e) => {
   const le = data.state.lastEvent;
   if (le && le.id !== lastEventId) {
     if (lastEventId !== null && le.type === 'marker') toast(`Marker gesetzt · ${formatTimeOfDay(le.at, data.state.timeZone, true)}`);
+    if (lastEventId !== null && le.type === 'timeSync' && !le.ok) toast(`Rundown: Zeit nicht übertragen (${le.error || 'Fehler'}) – gilt nur hier`);
     lastEventId = le.id;
   }
   frame();
@@ -231,6 +232,10 @@ function openStretch() {
   const cue = st?.cue;
   if (!cue) return;
   const parts = [`${cue.emoji ? cue.emoji + ' ' : ''}${cue.title}`];
+  if (cue.startedAt != null && cue.kind !== 'open') {
+    const left = cue.effectiveMs - (conn.showNow() - cue.startedAt);
+    parts.push(left >= 0 ? `Restzeit ${formatClock(left)}` : `überzogen ${formatClock(-left, true)}`);
+  }
   if (cue.stretchMs) parts.push(`bisher ${formatSigned(cue.stretchMs)}`);
   $('#stretch-info').textContent = parts.join(' · ');
   stretchDlg.returnValue = '';
@@ -240,22 +245,39 @@ function openStretch() {
     wheelSec.sync();
   });
 }
-// Eigene Zeit: zwei Scrollräder MM:SS, je 00–99
+// Zeit: zwei Scrollräder MM:SS (je 00–99), Schnellwahl stellt die Räder.
+// Bestätigen: um die Zeit erweitern (add) oder die Restzeit darauf setzen (set).
 const customTime = { m: 0, s: 0 };
 const pad2 = (n) => String(n).padStart(2, '0');
-const customBtn = $('#stretch-custom-btn');
 const customMs = () => (customTime.m * 60 + customTime.s) * 1000;
 function updateCustom() {
-  customBtn.disabled = customMs() <= 0;
-  customBtn.textContent = `+${pad2(customTime.m)}:${pad2(customTime.s)} übernehmen`;
+  const t = `${pad2(customTime.m)}:${pad2(customTime.s)}`;
+  $('#stretch-add-btn').disabled = customMs() <= 0;
+  $('#stretch-set-btn').disabled = customMs() <= 0;
+  $('#stretch-add-text').textContent = `Um ${t} erweitern`;
+  $('#stretch-set-text').textContent = `Auf ${t} setzen`;
+  document.querySelectorAll('#stretch-presets [data-ms]').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.ms) === customMs())));
 }
 const wheelMin = createWheel($('#wheel-min'), { label: 'Minuten', onChange: (v) => ((customTime.m = v), updateCustom()) });
 const wheelSec = createWheel($('#wheel-sec'), { label: 'Sekunden', onChange: (v) => ((customTime.s = v), updateCustom()) });
 updateCustom();
+document.querySelectorAll('#stretch-presets [data-ms]').forEach((b) =>
+  b.addEventListener('click', () => {
+    const sec = Number(b.dataset.ms) / 1000;
+    customTime.m = Math.floor(sec / 60);
+    customTime.s = sec % 60;
+    wheelMin.set(customTime.m, true);
+    wheelSec.set(customTime.s, true);
+    updateCustom();
+  }),
+);
 stretchDlg.addEventListener('close', () => {
   const rv = stretchDlg.returnValue;
-  const ms = rv === 'custom' ? customMs() : Number(rv);
-  if (ms > 0) act({ type: 'stretch', ms });
+  const ms = customMs();
+  if ((rv !== 'add' && rv !== 'set') || ms <= 0) return;
+  act({ type: 'stretch', mode: rv, ms });
+  const t = `${pad2(customTime.m)}:${pad2(customTime.s)}`;
+  toast(rv === 'add' ? `Um ${t} erweitert` : `Restzeit auf ${t} gesetzt`);
 });
 // Tippen neben das Sheet schließt es (wie in iPadOS)
 stretchDlg.addEventListener('click', (e) => {

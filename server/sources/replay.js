@@ -33,7 +33,7 @@ export class ReplaySource extends EventEmitter {
   }
 
   /** Steuerung wie die Companion-Schnittstelle des Backends (für Tests und Proben). */
-  async control(action) {
+  async control(action, params = {}) {
     this.tick();
     const now = this.now();
     const cur = this.rd.cues[this.idx];
@@ -64,6 +64,18 @@ export class ReplaySource extends EventEmitter {
       this.idx -= 1;
       this.cueStartV = now;
       this.paused = false;
+    } else if (action === 'add' || action === 'set') {
+      if (!cur) return { ok: false, error: 'Show läuft nicht' };
+      const m = /^(\d{2}):(\d{2})$/.exec(params.time || '');
+      if (!m) return { ok: false, error: 'Zeit fehlt' };
+      const ms = (Number(m[1]) * 60 + Number(m[2])) * 1000;
+      const raw = this.rawById.get(cur.id);
+      const newMs = action === 'add' ? cur.durationMs + ms : Math.max(0, now - this.cueStartV) + ms;
+      cur.durationMs = newMs;
+      this.jitterOff ||= new Set();
+      this.jitterOff.add(cur.id);
+      this.rawById.set(cur.id, { ...raw, durationSeconds: Math.round(newMs / 1000) });
+      this.fixture = { ...this.fixture, elements: this.fixture.elements.map((e) => (e.id === cur.id ? { ...e, durationSeconds: Math.round(newMs / 1000) } : e)) };
     } else if (action === 'finish') {
       closeCur();
       this.idx = -1;
@@ -81,7 +93,7 @@ export class ReplaySource extends EventEmitter {
   /** Deterministische Streuung je Cue, damit Überzug und Puffer sichtbar werden. */
   durationOf(c) {
     if (c.kind === 'anchor' && c.anchorAt != null) return null;
-    if (c.kind === 'fixed' || this.jitter <= 0) return c.durationMs;
+    if (c.kind === 'fixed' || this.jitter <= 0 || this.jitterOff?.has(c.id)) return c.durationMs;
     let h = 2166136261;
     for (const ch of String(c.number * 7919)) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
     const r = ((h >>> 0) % 1000) / 1000;

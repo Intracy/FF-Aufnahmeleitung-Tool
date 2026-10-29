@@ -170,6 +170,7 @@ export class Relay extends EventEmitter {
     }
     this.fullCurrentId = json.currentItemId ?? (json.elements || []).find((e) => e.isActive)?.id ?? null;
     if (this.raw.current) this.applyCurrent(this.raw.current, this.raw.currentAt);
+    this.compensateTimeSync();
     this.changed();
   }
 
@@ -194,6 +195,7 @@ export class Relay extends EventEmitter {
     }
     this.detectRestart(json, fetchedAt);
     this.applyCurrent(json, fetchedAt);
+    this.compensateTimeSync();
     this.changed();
   }
 
@@ -251,6 +253,51 @@ export class Relay extends EventEmitter {
     this.addLog('control', { action, ok: !!result.ok, error: result.ok ? undefined : result.error });
     this.changed();
     return result;
+  }
+
+  /**
+   * Zeit im Rundown-Backend hinzufügen bzw. Restzeit setzen. Lokal ist die Streckung schon
+   * eingetragen; übernimmt das Backend die Änderung (längere Dauer oder neuer Startpunkt),
+   * wird die lokale Streckung in den folgenden 20 s um genau diesen Betrag zurückgenommen,
+   * damit nichts doppelt zählt.
+   */
+  async syncTime(cue, mode, ms) {
+    if (typeof this.source.control !== 'function') return;
+    const total = Math.max(0, Math.round(ms / 1000));
+    const time = `${String(Math.min(99, Math.floor(total / 60))).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+    this.timeSync = {
+      cueId: cue.id,
+      durationMs: cue.durationMs,
+      startAt: this.st.cueStarts[cue.id] ?? null,
+      until: this.now() + 20_000,
+    };
+    const result = await this.source.control(mode, { time });
+    this.addLog('control', { action: mode, time, ok: !!result.ok, error: result.ok ? undefined : result.error });
+    this.lastEvent = { type: 'timeSync', ok: !!result.ok, error: result.ok ? null : result.error, mode, time, at: this.now(), id: `ts-${Date.now()}` };
+    if (!result.ok) this.timeSync = null;
+    this.changed();
+  }
+
+  /** Vom Backend übernommene Zeitänderung von der lokalen Streckung abziehen. */
+  compensateTimeSync() {
+    const ts = this.timeSync;
+    if (!ts || !this.rundown) return;
+    if (this.now() > ts.until || this.st.currentId !== ts.cueId) {
+      this.timeSync = null;
+      return;
+    }
+    const c = this.rundown.byId.get(ts.cueId);
+    if (!c) return;
+    const dDur = c.durationMs - ts.durationMs;
+    const start = this.st.cueStarts[ts.cueId] ?? null;
+    const dStart = start != null && ts.startAt != null ? start - ts.startAt : 0;
+    const d = dDur + dStart;
+    if (!d) return;
+    this.st.stretch[ts.cueId] = (this.st.stretch[ts.cueId] || 0) - d;
+    ts.durationMs = c.durationMs;
+    ts.startAt = start;
+    this.addLog('stretchSync', { backendMs: d, totalMs: this.st.stretch[ts.cueId] });
+    this.persist();
   }
 
   /** Neuer Showlauf: alles, was zum alten Lauf gehört, verwerfen. */
@@ -390,10 +437,22 @@ export class Relay extends EventEmitter {
       }
       case 'stretch': {
         if (!cue) return;
-        const step = Number.isFinite(msg.ms) ? Math.max(-600_000, Math.min(600_000, msg.ms)) : STRETCH_STEP_MS;
-        this.st.stretch[cue.id] = Math.max(0, (this.st.stretch[cue.id] || 0) + step);
-        this.st.signals.stretchAt = this.now();
-        this.addLog('stretch', { ms: step, totalMs: this.st.stretch[cue.id] });
+        const now = this.now();
+        const before = this.st.stretch[cue.id] || 0;
+        if (msg.mode === 'set') {
+          // Restzeit auf einen Wert setzen: Streckung so wählen, dass genau so viel übrig bleibt
+          const target = Math.max(0, Math.min(99 * 60_000 + 59_000, Number(msg.ms) || 0));
+          const elapsed = elapsedFor({ startedAt: this.st.cueStarts[cue.id] }, now, this.st.pausedAt);
+          this.st.stretch[cue.id] = Math.max(-cue.durationMs, Math.round(elapsed + target - cue.durationMs));
+        } else {
+          const step = Number.isFinite(msg.ms) ? Math.max(-600_000, Math.min(99 * 60_000 + 59_000, msg.ms)) : STRETCH_STEP_MS;
+          this.st.stretch[cue.id] = Math.max(0, before + step);
+        }
+        const delta = this.st.stretch[cue.id] - before;
+        this.st.signals.stretchAt = now;
+        this.addLog('stretch', { ms: delta, totalMs: this.st.stretch[cue.id], mode: msg.mode === 'set' ? 'set' : 'add', valueMs: Number(msg.ms) || 0 });
+        // Auch im Rundown-Backend eintragen (Companion: add/set mit time=MM:SS)
+        if (msg.sync !== false && (msg.mode === 'set' || msg.mode === 'add')) this.syncTime(cue, msg.mode, Number(msg.ms) || 0);
         break;
       }
       case 'marker': {

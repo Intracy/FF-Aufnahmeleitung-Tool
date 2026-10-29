@@ -705,13 +705,36 @@ dialog.stretch-sheet {
 }
 .stretch-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gap);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
 }
 .stretch-grid .btn {
-  min-height: 96px;
-  font-size: 26px;
+  min-height: 64px;
+  font-size: 22px;
   font-variant-numeric: tabular-nums;
+}
+.stretch-grid .btn[aria-pressed='true'] {
+  background: var(--blue);
+  color: #fff;
+}
+.stretch-confirm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  margin-top: 6px;
+}
+.stretch-confirm .btn {
+  min-height: 84px;
+  font-size: 19px;
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+}
+.stretch-confirm .btn small {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.stretch-confirm .btn:disabled {
+  opacity: 0.4;
 }
 .stretch-cancel {
   min-height: 60px;
