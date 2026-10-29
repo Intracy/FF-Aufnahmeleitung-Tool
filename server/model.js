@@ -96,6 +96,18 @@ export function parseTimestamp(v) {
 
 // ---------- Rundown ----------
 
+/** Eigene Spalten des Rundowns (z. B. GFX, Ort, Ton): nur befüllte Textwerte. */
+function cleanColumns(cols) {
+  const out = {};
+  if (!cols || typeof cols !== 'object') return out;
+  for (const [k, v] of Object.entries(cols)) {
+    if (v == null) continue;
+    const t = String(v).trim();
+    if (t) out[String(k).slice(0, 60)] = t.slice(0, 500);
+  }
+  return out;
+}
+
 /** Baut aus der /full-Antwort das interne Modell. */
 export function buildRundown(full, kc, timeZone) {
   const r = full.rundown || {};
@@ -136,6 +148,8 @@ export function buildRundown(full, kc, timeZone) {
       plannedStartAt,
       anchorAt,
       block: block?.title ?? null,
+      blockId: block?.id ?? null,
+      columns: cleanColumns(el.columns),
       isActive: !!el.isActive,
     };
     cues.push(cue);
@@ -148,6 +162,7 @@ export function buildRundown(full, kc, timeZone) {
     startTime: r.startTime ?? null,
     status: r.status ?? null,
     currentItemId: full.currentItemId ?? null,
+    columns: (full.columns || []).map((c) => String(c?.name ?? '')).filter(Boolean),
     cues,
     byId: new Map(cues.map((c) => [c.id, c])),
     byNumber: new Map(cues.map((c) => [c.number, c])),
@@ -170,6 +185,7 @@ export function publicCue(c) {
     plannedStartAt: c.plannedStartAt,
     anchorAt: c.anchorAt,
     block: c.block,
+    columns: c.columns,
   };
 }
 

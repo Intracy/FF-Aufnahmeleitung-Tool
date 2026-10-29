@@ -92,6 +92,12 @@ export class OperatorView {
   bind() {
     const e = this.el;
     bindTap(e.bSign, () => this.onSign());
+    bindTap(e.now, () => this.onRundown?.());
+    e.now.addEventListener('keydown', (ev) => {
+      if (ev.key !== 'Enter' && ev.key !== ' ') return;
+      ev.preventDefault();
+      this.onRundown?.();
+    });
     bindTap($(this.root, '#op-settings'), () => this.onSettings());
     bindTap(e.bText, () => this.onText());
     bindTap(e.bStandby, () => this.act({ type: 'signal', kind: 'standby', on: !this.signals.standby }));

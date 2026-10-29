@@ -139,6 +139,16 @@ await withServer({ REPLAY_START_CUE: '119', REPLAY_START_OFFSET: '40' }, async (
   await shot(sg, 'schild-quer-schluss');
 });
 
+// Kompletter Rundown (Tipp auf den Cue-Kasten)
+await withServer({ REPLAY_START_CUE: '108', REPLAY_START_OFFSET: '0', REPLAY_SPEED: '40', REPLAY_HOLD: '0' }, async (base) => {
+  const pg = await page(browser, PORTRAIT, portraitOp);
+  await pg.goto(`${base}/al`);
+  await pg.waitForTimeout(6000);
+  await pg.click('#now');
+  await pg.waitForTimeout(1200);
+  await shot(pg, 'rundown-hoch');
+});
+
 // Zuspieler vor moderiertem Cue → GLEICH DU
 await withServer({ REPLAY_START_CUE: '118', REPLAY_START_OFFSET: '1' }, async (base) => {
   const pg = await page(browser, LANDSCAPE);

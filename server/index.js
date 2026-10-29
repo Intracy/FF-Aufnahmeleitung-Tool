@@ -110,6 +110,7 @@ async function handleApi(req, res, url) {
   const p = url.pathname;
   if (p === '/api/state') return send(res, 200, relay.snapshot());
   if (p === '/api/rundown') return send(res, 200, relay.rundownMessage());
+  if (p === '/api/runview') return send(res, 200, relay.runView());
   if (p === '/api/log') return send(res, 200, relay.log);
   if (p === '/api/export/report.csv') {
     const name = `nachbericht-${relay.rundown?.eventDate || 'show'}.csv`;

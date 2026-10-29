@@ -11,7 +11,7 @@ Web-App (PWA) für die Aufnahmeleitung auf dem **iPad mini (6./7. Gen.)**. Die A
 | ![Bedienung](docs/screenshots/bedienung-hoch-laeuft.png) | ![Schild läuft](docs/screenshots/schild-quer-laeuft.png) |
 | ![Überzug](docs/screenshots/bedienung-hoch-ueber.png) | ![Schild Überzug](docs/screenshots/schild-quer-ueber.png) |
 
-Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): NOCH 2, FERTIG WERDEN, STRECKEN-Drehrad, CUSTOM TEXT, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
+Weitere Zustände liegen in [`docs/screenshots`](docs/screenshots): Rundown-Tabelle, NOCH 2, FERTIG WERDEN, STRECKEN-Drehrad, CUSTOM TEXT, SCHLUSS, GLEICH DU, Spiel, Anker-Pause, Querformat, helles Erscheinungsbild und Einstellungen.
 
 ---
 
@@ -71,6 +71,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 | Button | Wirkung | Auslösen |
 | --- | --- | --- |
+| Cue-Kasten oben | Öffnet den kompletten Rundown als Tabelle: vergangene Cues mit Ist-Start, Ist-Dauer und Abweichung, der aktuelle Cue hervorgehoben mit Restzeit, kommende Cues mit erwarteter Startzeit entlang der gewählten Szenarien. Dazu Plan-Start, Dauer, Streckung, Art, Notizen und die eigenen Spalten des Rundowns (z. B. GFX, Ort, Ton). *Zu JETZT* springt zurück zum aktuellen Cue | Tippen |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
 | CUSTOM TEXT | Öffnet einen Editor für einen eigenen Text auf dem Schild: fett, kursiv, unterstrichen, sechs Farben, GROSSBUCHSTABEN, Schnelltexte und ein GIF von Giphy. Solange der Text steht, ist der Button gefüllt und die Bedienansicht zeigt ihn mit AUSBLENDEN | Tippen, dann *Anzeigen* |
 | STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min. Darunter stellen zwei Drehräder (Min : Sek, je 00–99) eine eigene Zeit ein. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |

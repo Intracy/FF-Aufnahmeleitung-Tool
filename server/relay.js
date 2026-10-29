@@ -145,7 +145,8 @@ export class Relay extends EventEmitter {
       json.rundown?.id,
       json.rundown?.title,
       json.rundown?.eventDate,
-      (json.elements || []).map((e) => [e.id, e.type, e.number, e.title, e.notes, e.durationSeconds, e.color, e.plannedStart]),
+      (json.elements || []).map((e) => [e.id, e.type, e.number, e.title, e.notes, e.durationSeconds, e.color, e.plannedStart, e.columns]),
+      (json.columns || []).map((c) => c?.name),
     ]);
     if (key !== this.rundownKey) {
       this.rundownKey = key;
@@ -583,12 +584,60 @@ export class Relay extends EventEmitter {
     const rd = this.rundown;
     return {
       type: 'rundown',
-      rundown: rd ? { id: rd.id, title: rd.title, eventDate: rd.eventDate, cues: rd.cues.map(publicCue) } : null,
+      rundown: rd ? { id: rd.id, title: rd.title, eventDate: rd.eventDate, columns: rd.columns, cues: rd.cues.map(publicCue) } : null,
       groups: this.groups,
     };
   }
 
   /** Daten für den Nachbericht: gespielte Cues in Reihenfolge. */
+  /**
+   * Ablauf für die Rundown-Tabelle: je Cue Ist-Start/-Ende/-Dauer und Streckung aus dem
+   * aktuellen Lauf, für kommende Cues die erwartete Startzeit entlang der gewählten
+   * Szenarien. Cues, die der aktuelle Weg überspringt, fehlen in `eta`.
+   */
+  runView() {
+    const rd = this.rundown;
+    if (!rd) return { rundownId: null, cues: {}, eta: {}, currentId: null };
+    const now = this.now();
+    const cues = {};
+    for (const id of new Set(this.st.visited)) {
+      const c = rd.byId.get(id);
+      if (!c) continue;
+      const s = this.st.cueStarts[id] ?? null;
+      const e = id === this.st.currentId ? null : this.st.cueEnds[id] ?? null;
+      const stretch = this.st.stretch[id] || 0;
+      const actual = e != null ? (c.actualDurationMs ?? (s != null ? e - s : null)) : null;
+      cues[id] = { startAt: s, endAt: e, actualMs: actual, stretchMs: stretch, deltaMs: actual == null ? null : actual - c.durationMs - stretch };
+    }
+    for (const c of rd.cues) {
+      if (cues[c.id] || c.actualDurationMs == null) continue;
+      cues[c.id] = { startAt: null, endAt: null, actualMs: c.actualDurationMs, stretchMs: 0, deltaMs: c.actualDurationMs - c.durationMs };
+    }
+    const eta = {};
+    const cur = this.currentCue();
+    const jumps = this.jumps();
+    let idx;
+    let t;
+    if (cur) {
+      const start = this.st.cueStarts[cur.id] ?? now;
+      const effective = cur.durationMs + (this.st.stretch[cur.id] || 0);
+      const pausedFor = this.st.pausedAt != null ? now - this.st.pausedAt : 0;
+      t = Math.max(now, start + effective + pausedFor);
+      idx = nextIndex(rd, cur.index, jumps);
+    } else {
+      idx = this.st.visited.length ? -1 : 0;
+      t = Math.max(now, rd.cues[0]?.plannedStartAt ?? now);
+    }
+    let guard = rd.cues.length + 2;
+    while (idx >= 0 && guard-- > 0) {
+      const c = rd.cues[idx];
+      eta[c.id] = t;
+      t = c.kind === 'anchor' && c.anchorAt != null ? Math.max(t, c.anchorAt) : t + c.durationMs;
+      idx = nextIndex(rd, idx, jumps);
+    }
+    return { rundownId: rd.id, currentId: this.st.currentId, now, cues, eta };
+  }
+
   report() {
     const rd = this.rundown;
     if (!rd) return [];

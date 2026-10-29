@@ -4,6 +4,7 @@ import { Connection } from './connection.js';
 import { settings, storeGet, storeSet } from './settings.js';
 import { buildVM } from './viewmodel.js';
 import { OperatorView } from './views/operator.js';
+import { RundownSheet } from './views/rundown.js';
 import { SignView } from './views/sign.js';
 import { LocalFallback } from './local.js';
 import { initWakeLock } from './ui/wakelock.js';
@@ -199,6 +200,7 @@ if (role === 'home') {
     onSettings: openSettings,
     onStretch: openStretch,
     onText: openText,
+    onRundown: () => rundownSheet.open(),
     onManual,
     undo,
     readonly: role === 'regie',
@@ -256,6 +258,19 @@ stretchDlg.addEventListener('close', () => {
 // Tippen neben das Sheet schließt es (wie in iPadOS)
 stretchDlg.addEventListener('click', (e) => {
   if (e.target === stretchDlg) stretchDlg.close('cancel');
+});
+
+// ---------- Kompletter Rundown (Tipp auf den Cue-Kasten) ----------
+const rundownSheet = new RundownSheet({
+  dialog: $('#rundown-sheet'),
+  getRundown: () => data.rundown,
+  getState: () => (local.active ? local.state() : data.state),
+  now: () => conn.showNow(),
+  fetchRun: async () => {
+    const r = await fetch(withKey('/api/runview'), { cache: 'no-store' });
+    if (!r.ok) throw new Error(String(r.status));
+    return r.json();
+  },
 });
 
 // ---------- Custom Text fürs Schild ----------
