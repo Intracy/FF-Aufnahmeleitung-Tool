@@ -156,3 +156,31 @@ test('Zeit erweitern/setzen: lokal sofort, Backend-Fehler lässt lokale Streckun
   assert.equal(relay.lastEvent.type, 'timeSync');
   assert.equal(relay.lastEvent.ok, false);
 });
+
+test('Pause: Start/Next/Zurück gesperrt, nur PAUSE setzt fort; Pause mit isRunning=false ist kein Neustart', async () => {
+  const { relay, cues, current, advance } = setup();
+  const calls = [];
+  relay.source.control = async (a) => {
+    calls.push(a);
+    return { ok: true };
+  };
+  current(cues[0]);
+  advance(3000);
+  current(cues[1]);
+  relay.handle({ type: 'stretch', ms: 30_000 });
+  // Backend meldet während der Pause isRunning=false
+  current(cues[1], { isRunning: false, isPaused: true });
+  advance(5000);
+  current(cues[1], { isRunning: false, isPaused: true });
+  assert.equal(relay.snapshot().show.isPaused, true);
+  assert.equal(relay.snapshot().show.isRunning, true);
+  assert.equal((await relay.control('start')).ok, false);
+  assert.equal((await relay.control('next')).ok, false);
+  assert.equal((await relay.control('prev')).ok, false);
+  assert.equal((await relay.control('toggle')).ok, true);
+  current(cues[1]);
+  assert.deepEqual(calls, ['toggle']);
+  assert.equal(relay.snapshot().cue.id, cues[1].id);
+  assert.equal(relay.snapshot().cue.stretchMs, 30_000);
+  assert.ok(!relay.log.some((e) => e.type === 'reset'));
+});

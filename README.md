@@ -78,7 +78,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
 | START ▶ / BEENDEN ⏹ | Ein Button für beides: grün START, solange der Rundown nicht läuft; nach dem Start rot BEENDEN; nach dem Beenden wieder grün START | 0,6 s halten |
 | NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | 0,6 s halten |
-| PAUSE ⏸ / PAUSIERT ⏹ | Toggle (`action=toggle`): Halten pausiert den Rundown, der Button wird orange mit Stop-Symbol und „PAUSIERT“; erneut halten setzt die Show fort | 0,6 s halten |
+| PAUSE ⏸ / PAUSIERT ⏹ | Toggle (`action=toggle`): Halten pausiert den Rundown, der Button wird orange mit Stop-Symbol und „PAUSIERT“; fortgesetzt wird **nur** durch erneutes Halten von PAUSE. Während der Pause sind NEXT und ZURÜCK gesperrt, der linke Button bleibt BEENDEN | 0,6 s halten |
 | ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | 0,6 s halten |
 | ZEIT + | Öffnet die Zeit-Auswahl: Schnellwahl 0:30 / 1:00 / 2:00 / 5:00 stellt die Drehräder (Min : Sek, je 00–99). Dann **„Um MM:SS erweitern“** (Zeit hinzufügen) oder **„Auf MM:SS setzen“** (Restzeit setzen). Beides gilt sofort auf iPad und Schild und wird an das Rundown-Backend übertragen (`action=add` bzw. `action=set`, `time=MM:SS`) | Tippen, dann bestätigen |
 | MARKER | Eintrag für Nachbericht und Resolve (ganz rechts in der unteren Reihe) | Tippen |

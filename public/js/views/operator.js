@@ -410,8 +410,9 @@ export class OperatorView {
     setText(e.bCutText, sig.cut ? 'AUFHEBEN' : 'SCHLUSS');
 
     // Rundown-Steuerung: Start nur, wenn die Show nicht läuft; der Rest nur, wenn sie läuft.
-    const running = !!st?.show?.isRunning;
     const paused = !!st?.show?.isPaused;
+    // Pausiert zählt als laufend: der linke Button bleibt BEENDEN, fortgesetzt wird nur über PAUSE
+    const running = !!st?.show?.isRunning || paused;
     const ctlOff = meta.local || !st;
     this.running = running;
     e.tStart.disabled = ctlOff;
@@ -423,9 +424,9 @@ export class OperatorView {
     }
     e.tStart.classList.toggle('tint-green', !running);
     e.tStart.classList.toggle('tint-red', running);
-    e.tNext.disabled = ctlOff || !running;
+    e.tNext.disabled = ctlOff || !running || paused;
     e.tPause.disabled = ctlOff || !running;
-    e.tPrev.disabled = ctlOff || !running;
+    e.tPrev.disabled = ctlOff || !running || paused;
     // Toggle: läuft → PAUSE (Pause-Symbol); pausiert → PAUSIERT (Stop-Symbol), erneut halten setzt fort
     setText(e.tPauseText, paused ? 'PAUSIERT' : 'PAUSE');
     const pauseIcon = paused ? '#i-stop' : '#i-pause';

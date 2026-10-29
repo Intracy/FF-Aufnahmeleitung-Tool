@@ -179,7 +179,8 @@ export class Relay extends EventEmitter {
     this.raw.current = json;
     this.raw.currentAt = fetchedAt;
     this.show = {
-      isRunning: !!json.isRunning,
+      // Eine pausierte Show gilt als laufend (manche Backends melden isRunning=false während der Pause)
+      isRunning: !!json.isRunning || !!json.isPaused,
       isPaused: !!json.isPaused,
       showStartedAt: parseTimestamp(json.showStartedAt),
     };
@@ -209,7 +210,7 @@ export class Relay extends EventEmitter {
    */
   detectRestart(json, fetchedAt) {
     const showStart = parseTimestamp(json.showStartedAt);
-    const running = !!json.isRunning;
+    const running = !!json.isRunning || !!json.isPaused;
     let reason = null;
 
     // Nur ein frischer Showstart zählt (≤ 15 min alt). So löst ein Backend, das den Startwert
@@ -246,6 +247,10 @@ export class Relay extends EventEmitter {
     const api = map[action];
     if (!api) return { ok: false, error: 'Unbekannte Aktion' };
     if (typeof this.source.control !== 'function') return { ok: false, error: 'Quelle kann nicht steuern' };
+    // Pausiert: fortsetzen nur über PAUSE (toggle) – Start/Next/Zurück würden die Show sonst weiterschalten
+    if (this.st.pausedAt != null && (action === 'start' || action === 'next' || action === 'prev')) {
+      return { ok: false, error: 'Rundown ist pausiert – mit PAUSE fortsetzen' };
+    }
     const t = Date.now();
     if (this.lastControl && this.lastControl.api === api && t - this.lastControl.t < 800) return { ok: true, ignored: true };
     this.lastControl = { api, t };
@@ -332,7 +337,8 @@ export class Relay extends EventEmitter {
 
     let id = resolveCurrentId(json);
     this.currentHasId = id !== undefined;
-    if (id === undefined || (id === null && json.isRunning)) id = json.isRunning ? this.fullCurrentId : null;
+    const live = !!json.isRunning || !!json.isPaused;
+    if (id === undefined || (id === null && live)) id = live ? this.fullCurrentId ?? this.st.currentId : null;
     if (id && !this.rundown.byId.has(id)) {
       this.emit('needFull');
       return;
