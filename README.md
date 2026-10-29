@@ -94,7 +94,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 ### Regieansicht (`/regie`)
 
-Wie in der Bedienansicht ist der aktuelle Cue das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es die Reihe START/BEENDEN · NEXT · PAUSE · ZURÜCK (jeweils halten) · ZEIT + · MARKER. Im Querformat steht links der Cue-Stapel, rechts lückenlos untereinander Status, Steuerung und Hinweise. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
+Wie in der Bedienansicht ist der aktuelle Cue das Hauptelement. Darüber liegt halbtransparent der vorherige Cue (Start, Ist-Dauer, Abweichung), darunter der nächste (Dauer, ggf. SPRUNG). Unten gibt es die Reihe START/BEENDEN · NEXT · PAUSE · ZURÜCK (jeweils halten) · ZEIT + · MARKER. Im Querformat bleibt es eine Spalte: oben der Cue-Stapel in derselben Größe, darunter die Buttons, dann Status und Hinweise. Schild, Custom Text, GLEICH DU, SCHLUSS und die Szenario-Wahl bleiben der AL vorbehalten.
 
 ![Regie](docs/screenshots/regie-hoch.png)
 

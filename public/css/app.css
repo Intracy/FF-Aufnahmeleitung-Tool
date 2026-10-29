@@ -2206,65 +2206,30 @@ dialog.rundown-sheet {
 .regie-col {
   display: contents;
 }
-/* Regie quer: links der Cue-Stapel, rechts Status, Steuerung und Kontext – lückenlos untereinander */
+/* Regie quer: eine Spalte – Cue-Stapel in normaler Größe, darunter die Buttons, dann Status und Hinweise */
 @media (orientation: landscape) {
   .op[data-readonly] {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: auto;
     grid-template-areas:
-      'nav nav'
-      'left right';
+      'nav'
+      'peekprev'
+      'now'
+      'peeknext'
+      'controls'
+      'status'
+      'context';
+    height: 100%;
+    align-content: start;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
-  .op[data-readonly] .regie-col {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-    min-height: 0;
-    min-width: 0;
-  }
-  .op[data-readonly] .regie-left {
-    grid-area: left;
-  }
-  .op[data-readonly] .regie-right {
-    grid-area: right;
-  }
-  .op[data-readonly] .regie-left .now {
-    flex: 1 1 auto;
-    justify-content: space-between;
-  }
-  .op[data-readonly] .regie-left .peek {
-    flex: none;
-  }
-  .op[data-readonly] .regie-right .context {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
-  }
-  .op[data-readonly] .regie-right .controls {
-    flex: none;
-    order: 2;
-  }
-  .op[data-readonly] .regie-right .status {
-    order: 1;
-  }
-  .op[data-readonly] .regie-right .context {
-    order: 3;
-  }
-  .op[data-readonly] .regie-right .controls {
+  .op[data-readonly] .controls {
     align-self: stretch;
   }
-  .op[data-readonly] .regie-right .stat {
-    padding: 8px 12px;
-  }
-  .op[data-readonly] .regie-right .stat-value {
-    font-size: 20px;
-  }
-  .op[data-readonly] .now-digits {
-    font-size: clamp(96px, 17vh, 132px);
-  }
-  .op[data-readonly] .regie-left .now .now-time {
-    flex: 1 1 auto;
-    align-items: center;
-    flex-wrap: wrap;
+  .op[data-readonly] .context {
+    overflow: visible;
   }
 }
+
