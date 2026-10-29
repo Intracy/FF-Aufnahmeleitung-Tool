@@ -77,10 +77,10 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min. Darunter stellen zwei Drehräder (Min : Sek, je 00–99) eine eigene Zeit ein. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
-| START ▶ | Startet die Show im Rundown-Backend (nur aktiv, solange sie nicht läuft) | Tippen |
-| NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | Tippen |
-| PAUSE ⏸ / WEITER ▶ | Pausiert die Show im Backend bzw. setzt sie fort | Tippen |
-| ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | Tippen |
+| START ▶ | Startet die Show im Rundown-Backend (nur aktiv, solange sie nicht läuft) | 0,6 s halten |
+| NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | 0,6 s halten |
+| PAUSE ⏸ / WEITER ▶ | Pausiert die Show im Backend bzw. setzt sie fort | 0,6 s halten |
+| ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | 0,6 s halten |
 | BEENDEN ⏹ | Beendet die Show im Backend | 0,6 s halten |
 | MARKER | Eintrag für Nachbericht und Resolve (ganz rechts in der unteren Reihe) | Tippen |
 | MANUELL ◀ ▶ | Erscheint erst, wenn die Quelle oder der Relay 10 s ausfällt | 0,6 s halten |

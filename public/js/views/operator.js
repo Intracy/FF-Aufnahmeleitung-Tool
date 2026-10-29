@@ -110,11 +110,11 @@ export class OperatorView {
     bindTap(e.bStandby, () => this.act({ type: 'signal', kind: 'standby', on: !this.signals.standby }));
     bindTap(e.bStretch, () => this.onStretch());
     bindTap(e.bMarker, () => this.act({ type: 'marker' }));
-    // Rundown im Backend steuern
-    bindTap(e.tStart, () => this.onControl?.('start'));
-    bindTap(e.tNext, () => this.onControl?.('next'));
-    bindTap(e.tPause, () => this.onControl?.('toggle'));
-    bindTap(e.tPrev, () => this.onControl?.('prev'));
+    // Rundown im Backend steuern – alle Aktionen 0,6 s halten, damit nichts aus Versehen passiert
+    bindHold(e.tStart, () => this.onControl?.('start'));
+    bindHold(e.tNext, () => this.onControl?.('next'));
+    bindHold(e.tPause, () => this.onControl?.('toggle'));
+    bindHold(e.tPrev, () => this.onControl?.('prev'));
     bindHold(e.tFinish, () => this.onControl?.('finish'));
     bindHold(e.bCut, () => this.act({ type: 'signal', kind: 'cut', on: !this.signals.cut }));
     bindHold(e.bManual, () => this.onManual('enter'));
@@ -373,7 +373,7 @@ export class OperatorView {
     if (e.tPauseUse.getAttribute('href') !== pauseIcon) {
       e.tPauseUse.setAttribute('href', pauseIcon);
       e.tPauseUse.parentElement.classList.toggle('solid', paused);
-      e.tPause.setAttribute('aria-label', paused ? 'Weiter: Show fortsetzen' : 'Pause');
+      e.tPause.setAttribute('aria-label', paused ? 'Weiter: Show fortsetzen (halten)' : 'Pause (halten)');
     }
     e.tPause.classList.toggle('tint-orange', paused);
     e.tPause.classList.toggle('btn-gray', !paused);
