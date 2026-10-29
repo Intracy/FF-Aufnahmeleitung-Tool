@@ -270,7 +270,7 @@ export class OperatorView {
         card.className = 'card ctx-card';
         const head = document.createElement('div');
         head.className = 'ctx-title';
-        head.textContent = 'Auf dem Schild';
+        head.textContent = m.only ? 'Auf dem Schild · nur Text' : 'Auf dem Schild';
         const row = document.createElement('div');
         row.className = 'msg-preview';
         const gif = safeGifUrl(m.gif?.url);

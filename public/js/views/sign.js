@@ -40,10 +40,11 @@ export class SignView {
 
   /** Custom Text: nur bereinigtes HTML (fett/kursiv/unterstrichen/Farbe) und GIFs von Giphy. */
   renderMessage(m) {
-    const key = m ? `${m.at}` : null;
+    const key = m ? `${m.at}|${m.only ? 1 : 0}` : null;
     if (key === this.msgKey) return;
     this.msgKey = key;
     this.root.classList.toggle('has-msg', !!m);
+    this.root.classList.toggle('msg-only', !!m?.only);
     this.msg.hidden = !m;
     delete this.digits.dataset.fitKey;
     if (!m) {

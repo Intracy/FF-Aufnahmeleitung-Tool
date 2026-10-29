@@ -1672,6 +1672,29 @@ svg.i.solid {
 .sign.has-msg .sign-inner {
   grid-template-rows: 11fr 55fr 28fr auto 4fr;
 }
+/* Nur Text: Schild zeigt ausschließlich den Custom Text, neutral auf Schwarz */
+.sign.msg-only .sign-inner {
+  grid-template-rows: minmax(0, 1fr);
+}
+.sign.msg-only .sign-top,
+.sign.msg-only .sign-box,
+.sign.msg-only .sign-cue,
+.sign.msg-only .sign-bar,
+.sign.msg-only .sign-fill,
+.sign.msg-only .sign-frame {
+  display: none;
+}
+.msg-mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 4px;
+}
+.msg-mode .segmented {
+  flex: 0 1 340px;
+}
+
 /* Aktueller Cue klein unter den Ziffern, damit der Moderator sieht, wo die Show steht */
 .sign-cue {
   min-width: 0;

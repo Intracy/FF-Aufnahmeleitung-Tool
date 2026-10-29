@@ -295,7 +295,7 @@ const rundownSheet = new RundownSheet({
 // ---------- Custom Text fürs Schild ----------
 const textDlg = $('#text-sheet');
 const editor = $('#text-editor');
-const draft = { gif: null, upper: false };
+const draft = { gif: null, upper: false, only: false };
 let giphyEnabled = false;
 conn.addEventListener('hello', (e) => (giphyEnabled = !!e.detail.giphy));
 
@@ -305,6 +305,7 @@ function currentState() {
 function syncTextUi() {
   editor.classList.toggle('upper', draft.upper);
   $('#fmt-upper').setAttribute('aria-pressed', String(draft.upper));
+  syncSegmented('msg-mode', draft.only ? 'only' : 'with');
   const sel = $('#gif-selected');
   sel.hidden = !draft.gif;
   if (draft.gif) $('#gif-selected-img').src = draft.gif.url;
@@ -317,6 +318,7 @@ function openText() {
     editor.innerHTML = sanitize(m.html);
     draft.gif = m.gif && safeGifUrl(m.gif.url) ? m.gif : null;
     draft.upper = !!m.upper;
+    draft.only = !!m.only;
   }
   $('#text-hide').hidden = !m;
   $('#text-show').textContent = m ? 'Aktualisieren' : 'Anzeigen';
@@ -327,6 +329,14 @@ function openText() {
   if (giphyEnabled) requestAnimationFrame(() => renderGifGrid());
   else $('#gif-hint').textContent = 'Für die GIF-Suche fehlt auf dem Server ein Giphy-Schlüssel. Einen Giphy-Link einfügen funktioniert trotzdem.';
 }
+
+// Nur Text: Schild zeigt ausschließlich den Custom Text (ohne Restzeit, Cue und Zustandsfarben)
+document.querySelectorAll('#msg-mode [data-value]').forEach((b) =>
+  b.addEventListener('click', () => {
+    draft.only = b.dataset.value === 'only';
+    syncTextUi();
+  }),
+);
 
 // Formatierung: Knöpfe nehmen dem Editor den Fokus nicht weg, damit die Auswahl bleibt.
 document.querySelectorAll('#text-sheet .fmt-bar button').forEach((b) => {
@@ -487,7 +497,7 @@ textDlg.addEventListener('close', () => {
   const html = sanitize(editor.innerHTML);
   const text = plainText(html);
   if (!text && !draft.gif) return;
-  act({ type: 'message', html, text, gif: draft.gif, upper: draft.upper });
+  act({ type: 'message', html, text, gif: draft.gif, upper: draft.upper, only: draft.only });
   toast('Text auf dem Schild');
 });
 

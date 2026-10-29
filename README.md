@@ -110,6 +110,8 @@ Jeder Zustand ist dreifach erkennbar: über Farbe, Form und Wort. Damit bleibt e
 
 ### Eigener Text und GIFs
 
+Unter dem Editor wählt *Auf dem Schild* zwischen **Text + Restzeit** (Standard) und **Nur Text**. Bei *Nur Text* zeigt das Schild ausschließlich den Custom Text auf Schwarz, ohne Restzeit, Cue-Zeile, Balken und Zustandsfarbe; die Bedienansicht markiert das mit „nur Text“.
+
 Der Text erscheint im Schild über der Restzeit und wird automatisch so groß gesetzt, wie der Platz erlaubt. Formatierungen werden auf dem Gerät und noch einmal auf dem Schild auf eine feste Liste (fett, kursiv, unterstrichen, Farben) reduziert; fremdes HTML kommt nicht durch.
 
 GIFs kommen ausschließlich von Giphy und laufen über das offizielle [Giphy-SDK für JavaScript](https://developers.giphy.com/docs/sdk/):

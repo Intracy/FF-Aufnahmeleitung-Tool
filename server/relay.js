@@ -434,7 +434,7 @@ export class Relay extends EventEmitter {
           /* kein GIF */
         }
         if (!text.trim() && !gif) return;
-        this.st.message = { html, text, gif, upper: !!msg.upper, at: this.now() };
+        this.st.message = { html, text, gif, upper: !!msg.upper, only: !!msg.only, at: this.now() };
         this.addLog('message', { on: true, label: text || 'GIF' });
         break;
       }

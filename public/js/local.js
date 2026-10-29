@@ -75,7 +75,7 @@ export class LocalFallback {
         this.selections[msg.group] = msg.option;
         break;
       case 'message':
-        this.message = msg.clear ? null : { html: msg.html, text: msg.text, gif: msg.gif || null, upper: !!msg.upper, at: now };
+        this.message = msg.clear ? null : { html: msg.html, text: msg.text, gif: msg.gif || null, upper: !!msg.upper, only: !!msg.only, at: now };
         break;
       default:
         break;

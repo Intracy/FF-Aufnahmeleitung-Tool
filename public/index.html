@@ -355,6 +355,13 @@
             <button type="button" class="fmt-btn" data-cmd="removeFormat" aria-label="Formatierung entfernen">⌫</button>
           </div>
           <div class="editor" id="text-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Text für das Schild" data-placeholder="Text für den Moderator …"></div>
+          <div class="msg-mode">
+            <span class="t-subheadline secondary">Auf dem Schild</span>
+            <div class="segmented compact" role="radiogroup" aria-label="Anzeige auf dem Schild" id="msg-mode">
+              <button type="button" role="radio" data-value="with" aria-checked="true">Text + Restzeit</button>
+              <button type="button" role="radio" data-value="only" aria-checked="false">Nur Text</button>
+            </div>
+          </div>
           <div class="quick-texts" id="quick-texts" aria-label="Schnelltexte">
             <button type="button">LAUTER</button>
             <button type="button">LANGSAMER</button>
