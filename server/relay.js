@@ -235,6 +235,24 @@ export class Relay extends EventEmitter {
     }
   }
 
+  /**
+   * Rundown im Backend steuern. Gleiche Aktion innerhalb von 800 ms wird ignoriert,
+   * damit ein Doppeltipp (oder zwei iPads gleichzeitig) nicht zwei Cues weiterschaltet.
+   */
+  async control(action) {
+    const map = { start: 'next', next: 'next', toggle: 'toggle', pause: 'toggle', prev: 'prev', finish: 'finish' };
+    const api = map[action];
+    if (!api) return { ok: false, error: 'Unbekannte Aktion' };
+    if (typeof this.source.control !== 'function') return { ok: false, error: 'Quelle kann nicht steuern' };
+    const t = Date.now();
+    if (this.lastControl && this.lastControl.api === api && t - this.lastControl.t < 800) return { ok: true, ignored: true };
+    this.lastControl = { api, t };
+    const result = await this.source.control(api);
+    this.addLog('control', { action, ok: !!result.ok, error: result.ok ? undefined : result.error });
+    this.changed();
+    return result;
+  }
+
   /** Neuer Showlauf: alles, was zum alten Lauf gehört, verwerfen. */
   resetRun(reason, at = this.now()) {
     const rundownId = this.st.rundownId;

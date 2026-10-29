@@ -44,6 +44,45 @@ export class LiveSource extends EventEmitter {
     }
   }
 
+  /**
+   * Steuert den Rundown im Backend über die Companion-Schnittstelle
+   * (next | toggle | prev | finish). Der Token bleibt auf dem Server.
+   */
+  async control(action) {
+    const url = `${this.cfg.rundownBaseUrl}/api/public/companion?token=${encodeURIComponent(this.cfg.rundownToken)}&action=${encodeURIComponent(action)}`;
+    const send = async (method) => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), this.cfg.requestTimeoutMs);
+      try {
+        return await fetch(url, { method, signal: ctrl.signal, headers: { accept: 'application/json' }, cache: 'no-store' });
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+    try {
+      let res = await send('GET');
+      if (res.status === 404 || res.status === 405) res = await send('POST');
+      const text = await res.text().catch(() => '');
+      let body = null;
+      try {
+        body = text ? JSON.parse(text) : null;
+      } catch {
+        /* keine JSON-Antwort */
+      }
+      if (!res.ok || body?.success === false || body?.ok === false) {
+        const msg = body?.error || body?.message || `HTTP ${res.status}`;
+        return { ok: false, error: String(msg).slice(0, 200) };
+      }
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err.name === 'AbortError' ? 'Rundown antwortet nicht' : 'Rundown nicht erreichbar' };
+    } finally {
+      // Sofort neu abfragen, damit alle iPads den Wechsel ohne Verzögerung sehen
+      this.poll('current');
+      this.requestFull?.();
+    }
+  }
+
   async poll(kind) {
     if (this.stopped) return;
     if (this.inflight[kind]) {

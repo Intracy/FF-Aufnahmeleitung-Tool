@@ -68,6 +68,13 @@ export class OperatorView {
       bCut: $(r, '#b-cut'),
       bCutText: $(r, '#b-cut-text'),
       bMarker: $(r, '#b-marker'),
+      tStart: $(r, '#t-start'),
+      tNext: $(r, '#t-next'),
+      tPause: $(r, '#t-pause'),
+      tPauseText: $(r, '#t-pause-text'),
+      tPauseUse: $(r, '#t-pause use'),
+      tPrev: $(r, '#t-prev'),
+      tFinish: $(r, '#t-finish'),
       bManual: $(r, '#b-manual'),
       bPrev: $(r, '#b-prev'),
       bNext: $(r, '#b-next'),
@@ -103,6 +110,12 @@ export class OperatorView {
     bindTap(e.bStandby, () => this.act({ type: 'signal', kind: 'standby', on: !this.signals.standby }));
     bindTap(e.bStretch, () => this.onStretch());
     bindTap(e.bMarker, () => this.act({ type: 'marker' }));
+    // Rundown im Backend steuern
+    bindTap(e.tStart, () => this.onControl?.('start'));
+    bindTap(e.tNext, () => this.onControl?.('next'));
+    bindTap(e.tPause, () => this.onControl?.('toggle'));
+    bindTap(e.tPrev, () => this.onControl?.('prev'));
+    bindHold(e.tFinish, () => this.onControl?.('finish'));
     bindHold(e.bCut, () => this.act({ type: 'signal', kind: 'cut', on: !this.signals.cut }));
     bindHold(e.bManual, () => this.onManual('enter'));
     bindHold(e.bPrev, () => this.onManual('prev'));
@@ -345,6 +358,25 @@ export class OperatorView {
     e.bStandby.setAttribute('aria-pressed', String(!!sig.standby));
     e.bCut.setAttribute('aria-pressed', String(!!sig.cut));
     setText(e.bCutText, sig.cut ? 'AUFHEBEN' : 'SCHLUSS');
+
+    // Rundown-Steuerung: Start nur, wenn die Show nicht läuft; der Rest nur, wenn sie läuft.
+    const running = !!st?.show?.isRunning;
+    const paused = !!st?.show?.isPaused;
+    const ctlOff = meta.local || !st;
+    e.tStart.disabled = ctlOff || running;
+    e.tNext.disabled = ctlOff || !running;
+    e.tPause.disabled = ctlOff || !running;
+    e.tPrev.disabled = ctlOff || !running;
+    e.tFinish.disabled = ctlOff || !running;
+    setText(e.tPauseText, paused ? 'WEITER' : 'PAUSE');
+    const pauseIcon = paused ? '#i-play' : '#i-pause';
+    if (e.tPauseUse.getAttribute('href') !== pauseIcon) {
+      e.tPauseUse.setAttribute('href', pauseIcon);
+      e.tPauseUse.parentElement.classList.toggle('solid', paused);
+      e.tPause.setAttribute('aria-label', paused ? 'Weiter: Show fortsetzen' : 'Pause');
+    }
+    e.tPause.classList.toggle('tint-orange', paused);
+    e.tPause.classList.toggle('btn-gray', !paused);
 
     // Manuell-Bereich: nur bei Ausfall der Quelle bzw. des Relays
     const manualActive = meta.local || !!st?.manual?.active;

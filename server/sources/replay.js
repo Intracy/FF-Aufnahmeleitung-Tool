@@ -28,6 +28,50 @@ export class ReplaySource extends EventEmitter {
     this.cueStartV = planned;
     this.showStartV = this.rd.cues[0]?.plannedStartAt ?? planned;
     this.hold = !!cfg.replayHold;
+    this.paused = false;
+    this.pausedAtV = null;
+  }
+
+  /** Steuerung wie die Companion-Schnittstelle des Backends (für Tests und Proben). */
+  async control(action) {
+    this.tick();
+    const now = this.now();
+    const cur = this.rd.cues[this.idx];
+    const closeCur = () => {
+      if (cur) this.actual.set(cur.id, now - this.cueStartV);
+    };
+    if (action === 'toggle') {
+      if (!cur) return { ok: false, error: 'Show läuft nicht' };
+      if (this.paused) {
+        this.cueStartV += now - this.pausedAtV;
+        this.paused = false;
+        this.pausedAtV = null;
+      } else {
+        this.paused = true;
+        this.pausedAtV = now;
+      }
+    } else if (action === 'next') {
+      if (this.paused) return { ok: false, error: 'Pausiert – erst fortsetzen' };
+      closeCur();
+      if (!cur) {
+        this.idx = 0;
+        this.actual.clear();
+        this.showStartV = now;
+      } else this.idx = nextIndex(this.rd, this.idx, this.getJumps());
+      this.cueStartV = now;
+    } else if (action === 'prev') {
+      if (!cur || this.idx <= 0) return { ok: false, error: 'Kein vorheriger Cue' };
+      this.idx -= 1;
+      this.cueStartV = now;
+      this.paused = false;
+    } else if (action === 'finish') {
+      closeCur();
+      this.idx = -1;
+      this.paused = false;
+    } else return { ok: false, error: 'Unbekannte Aktion' };
+    this.emitCurrent();
+    this.emitFull();
+    return { ok: true };
   }
 
   now() {
@@ -46,7 +90,7 @@ export class ReplaySource extends EventEmitter {
   }
 
   tick() {
-    if (this.hold) return;
+    if (this.hold || this.paused) return;
     const now = this.now();
     let guard = this.rd.cues.length + 2;
     while (this.idx >= 0 && guard-- > 0) {
@@ -83,7 +127,7 @@ export class ReplaySource extends EventEmitter {
     return {
       rundown: { id: this.rd.id, title: this.rd.title, status: running ? 'live' : 'done' },
       isRunning: running,
-      isPaused: false,
+      isPaused: this.paused,
       showStartedAt: iso(this.showStartV),
       liveSinceSeconds: cue ? Math.floor((this.now() - this.cueStartV) / 1000) : null,
       current: cue ? { ...this.rawById.get(cue.id), isActive: true, startedAt: iso(this.cueStartV) } : null,

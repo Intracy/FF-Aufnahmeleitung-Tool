@@ -118,3 +118,20 @@ test('Streckung eines Cues gilt nur für diesen Durchlauf des Cues', () => {
   current(cues[2]); // im Backend zurückgesprungen
   assert.equal(relay.snapshot().cue.stretchMs, 0);
 });
+
+test('Rundown-Steuerung: Aktionen werden übersetzt, Doppeltipp zählt einmal', async () => {
+  const { relay } = setup();
+  const calls = [];
+  relay.source.control = async (a) => {
+    calls.push(a);
+    return { ok: true };
+  };
+  await relay.control('start');
+  await relay.control('toggle');
+  await relay.control('toggle'); // innerhalb von 800 ms: ignoriert
+  await relay.control('prev');
+  await relay.control('finish');
+  const bad = await relay.control('löschen');
+  assert.deepEqual(calls, ['next', 'toggle', 'prev', 'finish']);
+  assert.equal(bad.ok, false);
+});

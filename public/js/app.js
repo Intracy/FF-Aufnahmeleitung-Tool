@@ -201,6 +201,7 @@ if (role === 'home') {
     onStretch: openStretch,
     onText: openText,
     onRundown: () => rundownSheet.open(),
+    onControl: control,
     onManual,
     undo,
     readonly: role === 'regie',
@@ -259,6 +260,24 @@ stretchDlg.addEventListener('close', () => {
 stretchDlg.addEventListener('click', (e) => {
   if (e.target === stretchDlg) stretchDlg.close('cancel');
 });
+
+// ---------- Rundown im Backend steuern (Start, Next, Pause, Zurück, Beenden) ----------
+const CONTROL_TOAST = { start: 'Show gestartet', next: 'Nächster Cue', toggle: 'Pause / Weiter', prev: 'Zurück', finish: 'Show beendet' };
+async function control(action) {
+  try {
+    const r = await fetch(withKey('/api/control'), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ action }),
+      cache: 'no-store',
+    });
+    const j = await r.json().catch(() => ({}));
+    if (j.ignored) return;
+    toast(r.ok ? CONTROL_TOAST[action] : `Rundown: ${j.error || 'Fehler'}`);
+  } catch {
+    toast('Rundown: keine Verbindung zum Relay');
+  }
+}
 
 // ---------- Kompletter Rundown (Tipp auf den Cue-Kasten) ----------
 const rundownSheet = new RundownSheet({

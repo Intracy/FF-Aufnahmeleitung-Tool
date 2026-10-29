@@ -36,6 +36,11 @@
       <symbol id="i-display" viewBox="0 0 24 24"><rect x="3.5" y="3" width="17" height="18" rx="2.5" /><path d="M8 8h8M8 12h8M8 16h5" /></symbol>
       <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 4.5h16v11.5H10l-6 4.5z" /><path d="M8 8.5h8M8 12h5" /></symbol>
       <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 20 20" /></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12.5-7.5z" /></symbol>
+      <symbol id="i-skip-next" viewBox="0 0 24 24"><path d="M4.5 5v14l10-7z" /><path d="M18.5 5v14" /></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></symbol>
+      <symbol id="i-skip-prev" viewBox="0 0 24 24"><path d="M19.5 5v14l-10-7z" /><path d="M5.5 5v14" /></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5.5" y="5.5" width="13" height="13" rx="2" /></symbol>
       <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4.5" cy="6" r="1" /><circle cx="4.5" cy="12" r="1" /><circle cx="4.5" cy="18" r="1" /></symbol>
       <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="3" /></symbol>
     </svg>
@@ -129,9 +134,26 @@
         <button class="btn tint-red ctl-cut" id="b-cut" type="button" aria-pressed="false">
           <svg class="i"><use href="#i-cut" /></svg><span class="btn-label"><span id="b-cut-text">SCHLUSS</span><small>halten</small></span>
         </button>
-        <button class="btn btn-gray ctl-marker" id="b-marker" type="button">
-          <svg class="i"><use href="#i-marker" /></svg><span>MARKER</span>
-        </button>
+        <div class="ctl-transport" id="transport" role="group" aria-label="Rundown steuern">
+          <button class="btn tint-green tbtn" id="t-start" type="button" aria-label="Start: Show starten">
+            <svg class="i solid"><use href="#i-play" /></svg><span>START</span>
+          </button>
+          <button class="btn tint-blue tbtn" id="t-next" type="button" aria-label="Next: nächster Cue">
+            <svg class="i solid"><use href="#i-skip-next" /></svg><span>NEXT</span>
+          </button>
+          <button class="btn btn-gray tbtn" id="t-pause" type="button" aria-label="Pause">
+            <svg class="i"><use href="#i-pause" /></svg><span id="t-pause-text">PAUSE</span>
+          </button>
+          <button class="btn btn-gray tbtn" id="t-prev" type="button" aria-label="Zurück: vorheriger Cue">
+            <svg class="i solid"><use href="#i-skip-prev" /></svg><span>ZURÜCK</span>
+          </button>
+          <button class="btn tint-red tbtn" id="t-finish" type="button" aria-label="Show beenden (halten)">
+            <svg class="i solid"><use href="#i-stop" /></svg><span class="btn-label"><span>BEENDEN</span><small>halten</small></span>
+          </button>
+          <button class="btn btn-gray ctl-marker" id="b-marker" type="button">
+            <svg class="i"><use href="#i-marker" /></svg><span>MARKER</span>
+          </button>
+        </div>
         <div class="ctl-manual" id="manual-slot">
           <button class="btn tint-orange" id="b-manual" type="button" hidden>
             <span class="btn-label"><span>MANUELL</span><small>halten</small></span>

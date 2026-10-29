@@ -77,8 +77,15 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 | STRECKEN | Öffnet die Auswahl +30 s, +1 Min, +2 Min oder +5 Min. Darunter stellen zwei Drehräder (Min : Sek, je 00–99) eine eigene Zeit ein. Verlängert den laufenden Cue und zählt als gewollt, nicht als Überzug | Tippen, dann Zeit wählen |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
 | SCHLUSS | Schild rot mit „SCHLUSS“; erneut halten hebt auf | 0,6 s halten |
-| MARKER | Eintrag für Nachbericht und Resolve | Tippen |
+| START ▶ | Startet die Show im Rundown-Backend (nur aktiv, solange sie nicht läuft) | Tippen |
+| NEXT ⏭ | Schaltet im Backend auf den nächsten Cue | Tippen |
+| PAUSE ⏸ / WEITER ▶ | Pausiert die Show im Backend bzw. setzt sie fort | Tippen |
+| ZURÜCK ⏮ | Schaltet im Backend auf den vorherigen Cue | Tippen |
+| BEENDEN ⏹ | Beendet die Show im Backend | 0,6 s halten |
+| MARKER | Eintrag für Nachbericht und Resolve (ganz rechts in der unteren Reihe) | Tippen |
 | MANUELL ◀ ▶ | Erscheint erst, wenn die Quelle oder der Relay 10 s ausfällt | 0,6 s halten |
+
+**Rundown steuern:** Die untere Reihe schaltet den Rundown auf rundown.ffverwaltung.de über dessen Companion-Schnittstelle (`/api/public/companion?action=next|toggle|prev|finish`). Der Relay ruft sie mit dem `RUNDOWN_TOKEN` auf, das iPad sieht den Token nie. Dieselbe Aktion innerhalb von 0,8 s zählt nur einmal, damit ein Doppeltipp nicht zwei Cues weiterschaltet. Im Replay werden die Aktionen nachgespielt.
 
 **Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
 

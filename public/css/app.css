@@ -1452,12 +1452,13 @@ dialog.text-sheet {
   grid-area: controls;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: 120px 120px 96px 72px;
+  grid-template-rows: 120px 120px 96px 84px 72px;
   grid-template-areas:
     'sign sign'
     'stretch wrap'
     'standby cut'
-    'marker manual';
+    'transport transport'
+    'manual manual';
   gap: var(--gap);
   align-content: end;
 }
@@ -1466,28 +1467,57 @@ dialog.text-sheet {
     'sign sign'
     'wrap stretch'
     'cut standby'
-    'manual marker';
+    'transport transport'
+    'manual manual';
 }
 .controls.no-manual {
-  grid-template-areas:
-    'sign sign'
-    'stretch wrap'
-    'standby cut'
-    'marker marker';
-}
-.controls.no-manual[data-grip='left'] {
-  grid-template-areas:
-    'sign sign'
-    'wrap stretch'
-    'cut standby'
-    'marker marker';
+  grid-template-rows: 120px 120px 96px 84px;
 }
 .ctl-sign { grid-area: sign; font-size: 22px; }
 .ctl-text { grid-area: wrap; font-size: 22px; }
 .ctl-stretch { grid-area: stretch; font-size: 22px; }
 .ctl-standby { grid-area: standby; }
 .ctl-cut { grid-area: cut; }
-.ctl-marker { grid-area: marker; }
+/* Rundown-Steuerung: Start, Next, Pause, Zurück, Beenden – Marker ganz rechts */
+.ctl-transport {
+  grid-area: transport;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+.ctl-transport > .btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  padding: 6px 4px;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.ctl-transport > .btn svg.i {
+  width: 26px;
+  height: 26px;
+}
+.ctl-transport > .btn .btn-label small {
+  font-size: 10px;
+}
+.ctl-transport > .ctl-marker {
+  flex: 1.4 1 0;
+  margin-left: 8px;
+  flex-direction: row;
+  font-size: 17px;
+  gap: 8px;
+}
+.ctl-transport > .btn:disabled {
+  opacity: 0.35;
+  filter: saturate(0.3);
+  pointer-events: none;
+}
+svg.i.solid {
+  fill: currentColor;
+  stroke-width: 1.6;
+}
 .ctl-manual {
   grid-area: manual;
   display: grid;
@@ -1550,6 +1580,17 @@ dialog.text-sheet {
   }
   .now-digits {
     font-size: 88px;
+  }
+  .ctl-transport > .ctl-marker {
+    flex: 1.1 1 0;
+    margin-left: 4px;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+  }
+  .ctl-transport > .ctl-marker svg.i {
+    width: 26px;
+    height: 26px;
   }
 }
 
