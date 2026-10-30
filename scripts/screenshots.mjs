@@ -157,6 +157,24 @@ await withServer({ REPLAY_START_CUE: '118', REPLAY_START_OFFSET: '0', REPLAY_SPE
   await shot(pg, 'regie-hoch');
 });
 
+// Vollbild-Stapel (iPad quer) und iPhone-Ansichten
+await withServer({ REPLAY_START_CUE: '119', REPLAY_START_OFFSET: '190' }, async (base) => {
+  let pg = await page(browser, LANDSCAPE);
+  await pg.goto(`${base}/stapel`);
+  await shot(pg, 'stapel-quer');
+  const ctx = await browser.newContext({ viewport: { width: 393, height: 852 }, deviceScaleFactor: 3, hasTouch: true, isMobile: true, locale: 'de-DE', timezoneId: 'Europe/Berlin' });
+  await ctx.addInitScript(() => localStorage.setItem('al.settings', JSON.stringify({ rotateToSign: false })));
+  pg = await ctx.newPage();
+  await pg.goto(`${base}/al`);
+  await shot(pg, 'iphone-bedienung');
+  await pg.click('#now');
+  await pg.waitForTimeout(1200);
+  await shot(pg, 'iphone-rundown');
+  pg = await ctx.newPage();
+  await pg.goto(`${base}/stapel`);
+  await shot(pg, 'iphone-stapel');
+});
+
 // Zuspieler vor moderiertem Cue → GLEICH DU
 await withServer({ REPLAY_START_CUE: '118', REPLAY_START_OFFSET: '1' }, async (base) => {
   const pg = await page(browser, LANDSCAPE);

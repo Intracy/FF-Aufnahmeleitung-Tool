@@ -71,7 +71,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 | Button | Wirkung | Auslösen |
 | --- | --- | --- |
-| Cue-Kasten oben | Öffnet den kompletten Rundown als Tabelle: vergangene Cues mit Ist-Start, Ist-Dauer und Abweichung, der aktuelle Cue hervorgehoben mit Restzeit, kommende Cues mit erwarteter Startzeit entlang der gewählten Szenarien. Dazu Plan-Start, Dauer, Streckung, Art, Notizen und die eigenen Spalten des Rundowns (z. B. GFX, Ort, Ton). *Zu JETZT* springt zurück zum aktuellen Cue | Tippen |
+| Cue-Kasten oben | Öffnet den kompletten Rundown als Zeitleiste: links die Zeit (Ist bzw. ~erwartet, darunter Plan), in der Mitte eine Linie mit Punkten (gelaufen · jetzt · kommt), rechts Ist-Dauer und Abweichung bzw. Restzeit. Gelaufene Cues und vom Szenario übersprungene Cues sind zugeklappt, Block-Köpfe zeigen Zeitraum und Dauer, oben bleibt die Jetzt-Karte stehen. Filter: Alle · Ab jetzt · Moderiert · Mit Notizen · Blöcke zu. Tipp auf eine Zeile zeigt Notizen, eigene Spalten, Ist-Start/-Ende und Streckung | Tippen |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
 | CUSTOM TEXT | Öffnet einen Editor für einen eigenen Text auf dem Schild: fett, kursiv, unterstrichen, sechs Farben, GROSSBUCHSTABEN, Schnelltexte und ein GIF von Giphy. Solange der Text steht, ist der Button gefüllt und die Bedienansicht zeigt ihn mit AUSBLENDEN | Tippen, dann *Anzeigen* |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
@@ -93,6 +93,24 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 **LEA MODE:** Der Button oben rechts neben den Einstellungen schaltet alle Farben auf Pastell um (rosé, lila, orange, pink), auch auf dem Schild. Erneut tippen stellt die normalen Farben wieder her. Die Einstellung gilt pro Gerät; Wort und Form der Schild-Zustände bleiben gleich.
 
 **Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit CUSTOM TEXT und SCHLUSS auf der Daumenseite liegen.
+
+### Vollbild-Stapel (`/stapel`)
+
+Vorheriger, aktueller und nächster Cue als drei Bänder, ohne Bedienelemente und aus mehreren Metern lesbar: oben abgedunkelt der vorherige Cue (Ist-Dauer, Abweichung, Uhrzeit), in der Mitte groß der aktuelle Cue mit Zustandswort, Restzeit, Plan, Start und erwartetem Ende, unten der nächste Cue mit erwarteter Startzeit. Farben und Zustände wie auf dem Schild; bei einem Cue-Wechsel rutschen die Bänder nach oben. Custom Text erscheint als Banner, „Nur Text“ ersetzt die Zeit.
+
+- **Eigenes Gerät:** `/stapel` öffnen (Startseite › Vollbild-Stapel).
+- **Aus AL und Regie:** Einstellungen › „Vollbild-Stapel zeigen“; 1 s halten schließt ihn.
+- **Regie auf dem iPhone:** quer gedreht erscheint der Stapel automatisch.
+
+![Vollbild-Stapel](docs/screenshots/stapel-quer.png)
+
+### iPhone
+
+Unter 600 pt Breite (hochkant) gibt es eine Kompaktansicht: Cue-Stapel oben, Status als wischbare Chips, Szenario-Wahl und Hinweise dazwischen, die Steuerung fest unten in der Daumenzone (SCHILD ZEIGEN · GLEICH DU | SCHLUSS · CUSTOM TEXT | ZEIT + · START/BEENDEN, NEXT, PAUSE, ZURÜCK, MARKER). „halten“ zeigt dort der Füllring beim Drücken. Die Rundown-Zeitleiste öffnet sich als Vollbild-Sheet.
+
+| Bedienung | Rundown | Stapel |
+| --- | --- | --- |
+| ![iPhone Bedienung](docs/screenshots/iphone-bedienung.png) | ![iPhone Rundown](docs/screenshots/iphone-rundown.png) | ![iPhone Stapel](docs/screenshots/iphone-stapel.png) |
 
 ### Regieansicht (`/regie`)
 

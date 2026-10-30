@@ -56,7 +56,7 @@ const TYPES = {
   '.ico': 'image/x-icon',
   '.txt': 'text/plain; charset=utf-8',
 };
-const APP_ROUTES = new Set(['/', '/al', '/schild', '/regie']);
+const APP_ROUTES = new Set(['/', '/al', '/schild', '/regie', '/stapel']);
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'no-referrer',

@@ -61,7 +61,10 @@
               <span class="row-text"><span class="t-headline">Schild</span><span class="t-subheadline secondary">Zweites Gerät, nur Restzeit für die Moderation</span></span>
             </a>
             <a class="row row-link" href="/regie" data-keep-key>
-              <span class="row-text"><span class="t-headline">Regie</span><span class="t-subheadline secondary">Mitlesen ohne Bedienung</span></span>
+              <span class="row-text"><span class="t-headline">Regie</span><span class="t-subheadline secondary">Cue-Stapel, Zeit +, Rundown-Steuerung und Marker</span></span>
+            </a>
+            <a class="row row-link" href="/stapel" data-keep-key>
+              <span class="row-text"><span class="t-headline">Vollbild-Stapel</span><span class="t-subheadline secondary">Vorher · jetzt · danach, groß und ohne Bedienung</span></span>
             </a>
           </nav>
           <p class="group-footer">Auf dem iPad: Teilen › Zum Home-Bildschirm. Die App startet dann ohne Safari-Leisten direkt in der Bedienung.</p>
@@ -191,6 +194,22 @@
       <div class="sign-hint" id="sign-hint" hidden>1 s halten zum Verlassen</div>
     </main>
 
+    <!-- Vollbild-Stapel: vorher · jetzt · danach -->
+    <main id="stack" class="stack force-dark" data-state="idle" hidden aria-label="Vollbild-Stapel">
+      <div class="stk-band stk-prev" id="stk-prev"></div>
+      <section class="stk-now" id="stk-now">
+        <div class="stk-head"><div class="stk-head-l" id="stk-head"></div><span class="stk-word" id="stk-word" hidden></span></div>
+        <div class="stk-msg" id="stk-msg" hidden><img class="stk-msg-gif" id="stk-msg-gif" alt="" hidden /><div class="stk-msg-text" id="stk-msg-text"></div></div>
+        <div class="stk-time">
+          <div class="stk-box" id="stk-box"><span class="stk-digits" id="stk-digits" role="timer" aria-live="off"></span></div>
+          <div class="stk-side" id="stk-side"></div>
+        </div>
+        <div class="stk-bar"><div class="stk-bar-fill" id="stk-bar"></div></div>
+      </section>
+      <div class="stk-band stk-next" id="stk-next"></div>
+      <div class="sign-hint stk-hint" id="stk-hint" hidden>1 s halten zum Verlassen</div>
+    </main>
+
     <!-- Einstellungen (Sheet) -->
     <dialog id="settings" class="sheet" aria-labelledby="settings-title">
       <form method="dialog" class="sheet-inner">
@@ -263,6 +282,8 @@
           <section class="group">
             <h3 class="group-header">Weitere Ansichten</h3>
             <div class="group-body">
+              <button class="row row-link row-btn" type="button" id="set-stack">Vollbild-Stapel zeigen</button>
+              <a class="row row-link" href="/stapel" data-keep-key>Vollbild-Stapel auf zweitem Gerät</a>
               <a class="row row-link" href="/schild" data-keep-key>Schild auf zweitem Gerät</a>
               <a class="row row-link" href="/regie" data-keep-key>Regie (nur lesen)</a>
               <a class="row row-link" href="/" data-keep-key>Startseite</a>
@@ -284,21 +305,11 @@
           </div>
           <button class="nav-done" value="close" type="submit">Fertig</button>
         </header>
+        <div class="rd-filters" id="rd-filters" role="toolbar" aria-label="Filter"></div>
         <p class="t-footnote rd-hint" id="rd-hint" hidden></p>
         <div class="rd-scroll">
-          <table class="rd-table">
-            <thead>
-              <tr>
-                <th scope="col" class="rd-num">Nr.</th>
-                <th scope="col">Cue</th>
-                <th scope="col" class="rd-plan">Plan</th>
-                <th scope="col" class="rd-dur">Dauer</th>
-                <th scope="col" class="rd-when">Ist / ETA</th>
-                <th scope="col" class="rd-delta-cell">Ist-Dauer</th>
-              </tr>
-            </thead>
-            <tbody id="rd-body"></tbody>
-          </table>
+          <button type="button" class="rd-now" id="rd-now" aria-label="Zum aktuellen Cue" hidden></button>
+          <div class="tl" id="rd-list"></div>
         </div>
       </form>
     </dialog>

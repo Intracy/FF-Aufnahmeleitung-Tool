@@ -6,6 +6,7 @@ import { buildVM } from './viewmodel.js';
 import { OperatorView } from './views/operator.js';
 import { RundownSheet } from './views/rundown.js';
 import { SignView } from './views/sign.js';
+import { StackView } from './views/stack.js';
 import { LocalFallback } from './local.js';
 import { initWakeLock } from './ui/wakelock.js';
 import { bindHold, bindTap } from './ui/hold.js';
@@ -13,7 +14,7 @@ import { formatTimeOfDay, formatSigned, formatClock } from './shared/timing.js';
 import { createWheel } from './ui/wheel.js';
 import { sanitize, plainText, safeGifUrl, gifFromGiphyLink } from './ui/richtext.js';
 
-const ROUTES = { '/': 'home', '/al': 'al', '/schild': 'schild', '/regie': 'regie' };
+const ROUTES = { '/': 'home', '/al': 'al', '/schild': 'schild', '/regie': 'regie', '/stapel': 'stapel' };
 const path = location.pathname.replace(/\/+$/, '') || '/';
 const role = ROUTES[path] || 'home';
 const $ = (s) => document.querySelector(s);
@@ -85,7 +86,8 @@ bindTap($('#undo-btn'), () => {
 });
 
 // ---------- Verbindung und Daten ----------
-const conn = new Connection({ role: role === 'home' ? 'regie' : role, key });
+// Der Stapel liest nur mit (wie das Schild)
+const conn = new Connection({ role: role === 'home' ? 'regie' : role === 'stapel' ? 'schild' : role, key });
 const data = { rundown: null, state: null };
 const local = new LocalFallback();
 let wake = null;
@@ -174,6 +176,24 @@ const opEl = $('#operator');
 const signView = new SignView(signEl);
 let opView = null;
 let signShown = false;
+const stackEl = $('#stack');
+const stackView = new StackView(stackEl);
+let stackShown = false;
+
+/** Vollbild-Stapel ein-/ausblenden (überlagert Bedienung und Schild). */
+function showStack(show) {
+  stackShown = show;
+  stackEl.hidden = !show;
+  if (show && signShown) {
+    signShown = false;
+    signEl.hidden = true;
+  }
+  const hint = $('#stk-hint');
+  hint.hidden = !show || role === 'stapel';
+  hint.classList.remove('fade');
+  if (show) setTimeout(() => hint.classList.add('fade'), 2500);
+  frame();
+}
 
 function showSign(show) {
   signShown = show;
@@ -192,6 +212,9 @@ if (role === 'home') {
   document.querySelectorAll('[data-keep-key]').forEach((a) => (a.href = withKey(a.getAttribute('href'))));
 } else if (role === 'schild') {
   showSign(true);
+  wake = initWakeLock(() => {});
+} else if (role === 'stapel') {
+  showStack(true);
   wake = initWakeLock(() => {});
 } else {
   opEl.hidden = false;
@@ -222,6 +245,19 @@ if (role === 'home') {
     if (landscape.matches && settings.get('rotateToSign')) showSign(true);
     // Schild verlassen: 1 s irgendwo halten.
     bindHold(signEl, () => showSign(false), 1000);
+  }
+  // Vollbild-Stapel verlassen: ebenfalls 1 s halten
+  bindHold(stackEl, () => showStack(false), 1000);
+  $('#set-stack').addEventListener('click', () => {
+    dlg.close();
+    showStack(true);
+  });
+  if (role === 'regie') {
+    // Regie auf dem iPhone: quer = Vollbild-Stapel, hoch = Regieansicht
+    const phoneLandscape = matchMedia('(orientation: landscape) and (max-height: 500px)');
+    const onPhone = () => showStack(phoneLandscape.matches);
+    phoneLandscape.addEventListener('change', onPhone);
+    if (phoneLandscape.matches) showStack(true);
   }
 }
 
@@ -605,8 +641,9 @@ function frame() {
     $('#home-rundown').textContent = t ? `${t} · ${data.state.mode === 'replay' ? 'Replay' : 'Live'}` : conn.open ? 'Verbunden' : 'Verbinde mit dem Relay …';
     return;
   }
-  if (signShown) signView.render(vm, meta);
-  if (opView && !signShown) opView.render(vm, meta);
+  if (stackShown) stackView.render(vm, meta);
+  else if (signShown) signView.render(vm, meta);
+  if (opView && !signShown && !stackShown) opView.render(vm, meta);
   renderSettingsInfo();
 }
 setInterval(frame, 100);

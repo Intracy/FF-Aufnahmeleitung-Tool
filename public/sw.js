@@ -1,5 +1,5 @@
 // Service Worker: App-Hülle offline verfügbar, API und WebSocket nie aus dem Cache.
-const VERSION = 'al-1.9.2';
+const VERSION = 'al-2.0.0';
 const SHELL = [
   '/',
   '/index.html',
@@ -19,12 +19,13 @@ const SHELL = [
   '/js/ui/wheel.js',
   '/vendor/giphy.js',
   '/js/views/rundown.js',
+  '/js/views/stack.js',
   '/js/ui/richtext.js',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/apple-touch-icon.png',
 ];
-const APP_ROUTES = new Set(['/', '/al', '/schild', '/regie']);
+const APP_ROUTES = new Set(['/', '/al', '/schild', '/regie', '/stapel']);
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
