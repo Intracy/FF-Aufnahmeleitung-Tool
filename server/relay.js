@@ -147,10 +147,12 @@ export class Relay extends EventEmitter {
       json.rundown?.eventDate,
       (json.elements || []).map((e) => [e.id, e.type, e.number, e.title, e.notes, e.durationSeconds, e.color, e.plannedStart, e.columns]),
       (json.columns || []).map((c) => c?.name),
+      this.cfg.hosts || [],
+      this.cfg.guests || [],
     ]);
     if (key !== this.rundownKey) {
       this.rundownKey = key;
-      this.rundown = buildRundown(json, this.kc, this.cfg.timeZone);
+      this.rundown = buildRundown(json, this.kc, this.cfg.timeZone, { hosts: this.cfg.hosts, guests: this.cfg.guests });
       if (this.st.rundownId !== this.rundown.id) {
         if (this.pending && this.pending.rundownId === this.rundown.id) {
           this.st = { ...this.emptyState(), ...this.pending, signals: { ...emptySignals(), ...this.pending.signals } };

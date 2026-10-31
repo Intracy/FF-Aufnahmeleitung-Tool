@@ -10,12 +10,23 @@ import { Relay } from './relay.js';
 import { LiveSource } from './sources/live.js';
 import { ReplaySource } from './sources/replay.js';
 import { reportCsv, markersEdl } from './exports.js';
+import { loadSourceSettings, saveSourceSettings, cleanHosts, tokenHint, tokenLooksValid } from './source-settings.js';
 
 const cfg = loadConfig();
 const pkg = readJson(path.join(cfg.root, 'package.json'));
 
+// Auf der Startseite gesetzter Token / Moderationsliste haben Vorrang vor .env
+const stored = loadSourceSettings(cfg.dataDir);
+if (stored.token) {
+  cfg.rundownToken = stored.token;
+  cfg.tokenFrom = 'ui';
+  cfg.mode = 'live';
+}
+if (stored.hosts) cfg.hosts = stored.hosts;
+if (stored.guests) cfg.guests = stored.guests;
+
 if (cfg.mode === 'live' && !cfg.rundownToken) {
-  console.error('MODE=live braucht RUNDOWN_TOKEN (siehe .env.example). Für einen Test ohne Show: MODE=replay.');
+  console.error('MODE=live braucht RUNDOWN_TOKEN (siehe .env.example) oder einen Token von der Startseite. Für einen Test ohne Show: MODE=replay.');
   process.exit(1);
 }
 
@@ -23,14 +34,74 @@ const kindConfig = compileKindConfig(readJson(cfg.cueKindsFile));
 const groups = readJson(cfg.scenariosFile).groups || [];
 
 let relay;
-const source =
+let source =
   cfg.mode === 'replay' ? new ReplaySource(cfg, { kindConfig, getJumps: () => relay.jumps() }) : new LiveSource(cfg);
 relay = new Relay({ cfg, source, kindConfig, groups });
 
-source.on('current', (e) => relay.onCurrent(e));
-source.on('full', (e) => relay.onFull(e));
-source.on('error', (e) => relay.onSourceError(e));
+function wireSource(src) {
+  src.on('current', (e) => relay.onCurrent(e));
+  src.on('full', (e) => relay.onFull(e));
+  src.on('error', (e) => relay.onSourceError(e));
+}
+wireSource(source);
 relay.on('needFull', () => source.requestFull());
+
+/** Auf einen (neuen) Token umschalten: alte Quelle stoppen, Live-Quelle neu starten. */
+function restartLiveSource() {
+  source.stop();
+  source.removeAllListeners();
+  cfg.mode = 'live';
+  source = new LiveSource(cfg);
+  wireSource(source);
+  relay.source = source;
+  relay.sourceStatus = { ok: false, lastOkAt: null, latencyMs: null, error: null, errorAt: null };
+  source.start();
+}
+
+/** Token gegen die Rundown-API prüfen, ohne ihn zu übernehmen. */
+async function testToken(token) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(`${cfg.rundownBaseUrl}/api/public/rundown/full?token=${encodeURIComponent(token)}`, {
+      signal: ctrl.signal,
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+    });
+    if (res.status === 401 || res.status === 403 || res.status === 404) return { ok: false, error: 'Token ungültig oder Rundown nicht gefunden' };
+    if (!res.ok) return { ok: false, error: `Rundown-API antwortet mit HTTP ${res.status}` };
+    const json = await res.json().catch(() => null);
+    if (!json || !Array.isArray(json.elements)) return { ok: false, error: 'Unerwartete Antwort der Rundown-API' };
+    return { ok: true, title: json.rundown?.title || '', cues: json.elements.filter((e) => e?.type === 'cue').length };
+  } catch (err) {
+    return { ok: false, error: err.name === 'AbortError' ? 'Rundown-API antwortet nicht' : 'Rundown-API nicht erreichbar' };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Personen neu erkennen (nach geänderter Moderationsliste). */
+function rebuildPeople() {
+  if (relay.raw.full) {
+    relay.rundownKey = '';
+    relay.onFull({ json: relay.raw.full, fetchedAt: relay.raw.fullAt });
+  }
+}
+
+function sourceInfo() {
+  return {
+    mode: cfg.mode,
+    tokenSet: !!cfg.rundownToken,
+    tokenHint: tokenHint(cfg.rundownToken),
+    tokenFrom: cfg.tokenFrom,
+    envTokenSet: !!cfg.envToken,
+    hosts: cfg.hosts || [],
+    guests: cfg.guests || [],
+    rundownTitle: relay.rundown?.title || '',
+    status: { ok: relay.sourceStatus.ok, error: relay.sourceStatus.error },
+  };
+}
+let tokenBusy = false;
 
 // ---------- Zugang ----------
 
@@ -140,6 +211,53 @@ async function handleApi(req, res, url) {
       currentFetchedAt: relay.raw.currentAt,
       full: full ? { rundown: full.rundown, currentItemId: full.currentItemId, isRunning: full.isRunning, elementCount: full.elements?.length } : null,
     });
+  }
+  if (p === '/api/source' && req.method === 'GET') return send(res, 200, sourceInfo());
+  if (p === '/api/source' && req.method === 'POST') {
+    const body = await readBody(req);
+    const st = loadSourceSettings(cfg.dataDir);
+    const peopleChanged = Array.isArray(body.hosts) || Array.isArray(body.guests);
+    if (Array.isArray(body.hosts)) {
+      cfg.hosts = cleanHosts(body.hosts);
+      st.hosts = cfg.hosts;
+    }
+    if (Array.isArray(body.guests)) {
+      cfg.guests = cleanHosts(body.guests);
+      st.guests = cfg.guests;
+    }
+    if (body.reset === true) {
+      // zurück zum Token aus .env
+      if (!cfg.envToken) return send(res, 400, { error: 'In .env ist kein RUNDOWN_TOKEN gesetzt', ...sourceInfo() });
+      st.token = null;
+      cfg.rundownToken = cfg.envToken;
+      cfg.tokenFrom = 'env';
+      saveSourceSettings(cfg.dataDir, st);
+      relay.addLog('source', { token: 'env' });
+      restartLiveSource();
+      return send(res, 200, { ok: true, ...sourceInfo() });
+    }
+    if (typeof body.token === 'string' && body.token.trim()) {
+      const token = body.token.trim();
+      if (!tokenLooksValid(token)) return send(res, 400, { error: 'Das sieht nicht nach einem Token aus' });
+      if (tokenBusy) return send(res, 429, { error: 'Prüfung läuft schon' });
+      tokenBusy = true;
+      try {
+        const t = await testToken(token);
+        if (!t.ok) return send(res, 400, { error: t.error, ...sourceInfo() });
+        st.token = token;
+        cfg.rundownToken = token;
+        cfg.tokenFrom = 'ui';
+        saveSourceSettings(cfg.dataDir, st);
+        relay.addLog('source', { token: tokenHint(token), title: t.title });
+        restartLiveSource();
+        return send(res, 200, { ok: true, loaded: { title: t.title, cues: t.cues }, ...sourceInfo() });
+      } finally {
+        tokenBusy = false;
+      }
+    }
+    saveSourceSettings(cfg.dataDir, st);
+    if (peopleChanged) rebuildPeople();
+    return send(res, 200, { ok: true, ...sourceInfo() });
   }
   if (p === '/api/giphy') return giphy(res, url);
   if (p === '/api/replay' && req.method === 'POST') {

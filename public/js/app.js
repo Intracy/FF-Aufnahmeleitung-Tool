@@ -664,6 +664,178 @@ function frame() {
   if (opView && !signShown && !stackShown) opView.render(vm, meta);
   renderSettingsInfo();
 }
+// ---------- Startseite: Rundown-Token und Personen ----------
+let srcInfo = null;
+async function api(path, body) {
+  const r = await fetch(withKey(path), {
+    method: body ? 'POST' : 'GET',
+    headers: body ? { 'content-type': 'application/json' } : {},
+    body: body ? JSON.stringify(body) : undefined,
+    cache: 'no-store',
+  });
+  const j = await r.json().catch(() => ({}));
+  return { ok: r.ok, status: r.status, ...j };
+}
+/** Alle erkannten Personen über den ganzen Rundown: Name, Rolle, Anzahl Cues. */
+function rundownPeople() {
+  const m = new Map();
+  for (const c of data.rundown?.cues || []) {
+    for (const p of c.people || []) {
+      const k = p.name.toLowerCase();
+      const e = m.get(k) || { name: p.name, host: 0, guest: 0, count: 0 };
+      e.count++;
+      e[p.role === 'host' ? 'host' : 'guest']++;
+      m.set(k, e);
+    }
+  }
+  return [...m.values()].map((e) => ({ ...e, role: e.host >= e.guest ? 'host' : 'guest' })).sort((a, b) => (a.role === b.role ? b.count - a.count : a.role === 'host' ? -1 : 1));
+}
+function renderSource() {
+  const i = srcInfo;
+  const sub = $('#src-sub');
+  if (!i) {
+    sub.textContent = 'Nicht verfügbar';
+    return;
+  }
+  const from = i.tokenFrom === 'ui' ? 'von der Startseite' : i.tokenFrom === 'env' ? 'aus .env' : '';
+  const parts = [];
+  if (i.mode === 'replay') parts.push('Replay (Testdaten)');
+  if (i.tokenSet) parts.push(`Token ${i.tokenHint}${from ? ` ${from}` : ''}`);
+  else parts.push('Kein Token gesetzt');
+  if (i.mode === 'live' && i.status?.error && !i.status.ok) parts.push('API-Fehler');
+  sub.textContent = parts.join(' · ');
+  $('#src-token-btn').textContent = i.tokenSet ? 'Token ändern' : 'Token eingeben';
+}
+function renderPeopleSummary() {
+  const list = rundownPeople();
+  const h = list.filter((p) => p.role === 'host').length;
+  const g = list.length - h;
+  $('#src-people').textContent = list.length ? `${h} Moderation · ${g} ${g === 1 ? 'Gast' : 'Gäste'} erkannt` : 'Keine Namen in der GFX-Spalte erkannt';
+}
+async function refreshSource() {
+  try {
+    const r = await api('/api/source');
+    srcInfo = r.ok ? r : null;
+  } catch {
+    srcInfo = null;
+  }
+  renderSource();
+}
+function initHomeSource() {
+  refreshSource();
+  setInterval(refreshSource, 10000);
+  renderPeopleSummary();
+  conn.addEventListener('rundown', () => setTimeout(renderPeopleSummary, 0));
+
+  const tokenDlg = $('#token-sheet');
+  const tInput = $('#token-input');
+  const tStatus = $('#token-status');
+  document.querySelectorAll('.form-sheet [data-close]').forEach((b) => b.addEventListener('click', () => b.closest('dialog').close()));
+  $('#src-token-btn').addEventListener('click', () => {
+    tInput.value = '';
+    tInput.type = 'password';
+    $('#token-eye').setAttribute('aria-pressed', 'false');
+    $('#token-eye').textContent = 'Zeigen';
+    tStatus.textContent = srcInfo?.tokenSet ? `Aktuell: Token ${srcInfo.tokenHint}${srcInfo.rundownTitle ? ` · ${srcInfo.rundownTitle}` : ''}` : '';
+    tStatus.dataset.kind = '';
+    $('#token-reset-grp').hidden = !(srcInfo?.tokenFrom === 'ui' && srcInfo?.envTokenSet);
+    tokenDlg.showModal();
+    setTimeout(() => tInput.focus(), 50);
+  });
+  $('#token-eye').addEventListener('click', (e) => {
+    const show = tInput.type === 'password';
+    tInput.type = show ? 'text' : 'password';
+    e.currentTarget.setAttribute('aria-pressed', String(show));
+    e.currentTarget.textContent = show ? 'Verbergen' : 'Zeigen';
+  });
+  const busy = (on) => {
+    $('#token-save').disabled = on;
+    $('#token-save').textContent = on ? 'Prüfe …' : 'Laden';
+  };
+  $('#token-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const token = tInput.value.trim();
+    if (!token) {
+      tStatus.textContent = 'Bitte einen Token einfügen.';
+      tStatus.dataset.kind = 'error';
+      return;
+    }
+    busy(true);
+    tStatus.textContent = 'Prüfe Token bei der Rundown-API …';
+    tStatus.dataset.kind = '';
+    try {
+      const r = await api('/api/source', { token });
+      if (!r.ok) {
+        tStatus.textContent = r.error || 'Token wurde nicht übernommen.';
+        tStatus.dataset.kind = 'error';
+        return;
+      }
+      srcInfo = r;
+      renderSource();
+      tInput.value = '';
+      tokenDlg.close();
+      toast(`Rundown geladen${r.loaded?.title ? `: ${r.loaded.title}` : ''}${r.loaded?.cues ? ` · ${r.loaded.cues} Cues` : ''}`);
+    } catch {
+      tStatus.textContent = 'Keine Verbindung zum Server.';
+      tStatus.dataset.kind = 'error';
+    } finally {
+      busy(false);
+    }
+  });
+  $('#token-reset').addEventListener('click', async () => {
+    const r = await api('/api/source', { reset: true }).catch(() => ({ ok: false }));
+    if (r.ok) {
+      srcInfo = r;
+      renderSource();
+      tokenDlg.close();
+      toast('Token aus .env wird verwendet');
+    } else {
+      tStatus.textContent = r.error || 'Zurücksetzen fehlgeschlagen.';
+      tStatus.dataset.kind = 'error';
+    }
+  });
+
+  // Personen: Moderation per Schalter markieren
+  const peopleDlg = $('#people-sheet');
+  $('#src-people-btn').addEventListener('click', () => {
+    const list = rundownPeople();
+    const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    $('#people-list').innerHTML = list.length
+      ? list
+          .map(
+            (p) =>
+              `<label class="row person-row"><span class="person-name"><svg class="head ${p.role}" viewBox="0 0 20 22" aria-hidden="true"><circle cx="10" cy="6.3" r="4.6"/><path d="M1.4 22c0-5.4 3.9-8.9 8.6-8.9s8.6 3.5 8.6 8.9z"/></svg><span>${esc(p.name)}</span><em>${p.count} ${p.count === 1 ? 'Cue' : 'Cues'}</em></span><input type="checkbox" class="switch" data-name="${esc(p.name)}"${p.role === 'host' ? ' checked' : ''} aria-label="${esc(p.name)} ist Moderation" /></label>`,
+          )
+          .join('')
+      : '<div class="row"><span class="secondary">In der GFX-Spalte des Rundowns wurden keine Namen erkannt.</span></div>';
+    $('#people-list').querySelectorAll('.switch').forEach((sw) =>
+      sw.addEventListener('change', () => {
+        const h = sw.closest('.person-row').querySelector('.head');
+        h.classList.toggle('host', sw.checked);
+        h.classList.toggle('guest', !sw.checked);
+      }),
+    );
+    $('#people-status').textContent = '';
+    peopleDlg.showModal();
+  });
+  $('#people-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const sws = [...$('#people-list').querySelectorAll('.switch')];
+    if (!sws.length) return peopleDlg.close();
+    const hosts = sws.filter((x) => x.checked).map((x) => x.dataset.name);
+    const guests = sws.filter((x) => !x.checked).map((x) => x.dataset.name);
+    const r = await api('/api/source', { hosts, guests }).catch(() => ({ ok: false }));
+    if (!r.ok) {
+      $('#people-status').textContent = r.error || 'Speichern fehlgeschlagen.';
+      return;
+    }
+    peopleDlg.close();
+    toast('Personen gesichert');
+    setTimeout(renderPeopleSummary, 800);
+  });
+}
+if (role === 'home') initHomeSource();
+
 // ---------- Startseite: Show, Verbindung und aktueller Cue ----------
 const homeKeys = {};
 const setText = (id, t) => {

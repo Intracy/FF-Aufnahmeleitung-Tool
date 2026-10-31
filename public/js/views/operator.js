@@ -3,6 +3,7 @@
 import { formatClock, formatSigned, formatTimeOfDay, formatDuration, KINDS } from '../shared/timing.js';
 import { bindHold, bindTap } from '../ui/hold.js';
 import { safeGifUrl } from '../ui/richtext.js';
+import { headsHtml } from '../ui/people.js';
 
 const $ = (root, sel) => root.querySelector(sel);
 
@@ -52,6 +53,8 @@ export class OperatorView {
       bar: $(r, '#now-bar'),
       nextNum: $(r, '#next-num'),
       nextTitle: $(r, '#next-title'),
+      people: $(r, '#now-people'),
+      nextPeople: $(r, '#next-people'),
       nextJump: $(r, '#next-jump'),
       nextDur: $(r, '#next-dur'),
       stMod: $(r, '#st-mod'),
@@ -190,6 +193,7 @@ export class OperatorView {
     e.kind.hidden = !cue;
     setText(e.kind, cue ? KINDS[cue.kind] || cue.kind : '');
     setText(e.sub, cue ? [cue.subtitle, cue.block].filter(Boolean).join(' · ') : '');
+    setHtml(e.people, cue ? headsHtml(cue.people, { max: 8 }) : '');
     const badge = ev.state === 'dark' ? 'LÄUFT SEIT' : ev.state === 'neutral' ? ev.word : ev.word;
     setText(e.word, ev.state === 'run' ? '' : badge);
 
@@ -221,6 +225,7 @@ export class OperatorView {
     const nx = vm.next;
     setText(e.nextNum, nx ? nx.number : '');
     setText(e.nextTitle, nx ? [nx.emoji, nx.title].filter(Boolean).join(' ') : '–');
+    setHtml(e.nextPeople, nx ? headsHtml(nx.people, { max: 5, cls: 'sm' }) : '');
     e.nextJump.hidden = st?.nextReason !== 'jump';
     setText(e.nextDur, nx ? (nx.kind === 'anchor' && nx.anchorAt ? `bis ${formatTimeOfDay(nx.anchorAt, meta.timeZone)}` : formatDuration(nx.durationMs)) : '');
 
@@ -372,7 +377,7 @@ export class OperatorView {
       if (!c) return `<div class="peek-label">${label}</div><div class="peek-title peek-empty">–</div>`;
       const kind = c.kind && KINDS[c.kind] ? `<span class="kind-badge">${KINDS[c.kind]}</span>` : '';
       return `<div class="peek-label">${label}</div>
-<div class="peek-main"><span class="cat-stripe" style="${c.color ? `background:${esc(c.color)}` : ''}"></span><span class="cue-num">${esc(c.number ?? '')}</span><span class="peek-title">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.title)}</span>${kind}</div>
+<div class="peek-main"><span class="cat-stripe" style="${c.color ? `background:${esc(c.color)}` : ''}"></span><span class="cue-num">${esc(c.number ?? '')}</span><span class="peek-title">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.title)}</span>${kind}${headsHtml(c.people, { max: 5, cls: 'sm' })}</div>
 <div class="peek-aside">${aside}</div>`;
     };
     const p = st?.prev;

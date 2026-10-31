@@ -5,6 +5,7 @@
 // Daten: /api/rundown (Plan) + /api/runview (Lauf: Ist-Zeiten, ETA entlang der Szenarien).
 
 import { KINDS, formatDuration, formatSigned, formatTimeOfDay, formatClock } from '../shared/timing.js';
+import { headsHtml, peopleNamesHtml } from '../ui/people.js';
 
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -212,10 +213,11 @@ export class RundownSheet {
       const anchor = c.kind === 'anchor' && c.anchorAt != null ? `<span class="tl-anchor">bis ${tShort(c.anchorAt)}</span>` : '';
       const stretch = r?.stretchMs ? `<span class="tl-stretch">${formatSigned(r.stretchMs)}</span>` : '';
       const chips = Object.entries(c.columns || {})
-        .map(([k, v]) => `<span class="tl-chip"><b>${esc(k)}</b> ${esc(v)}</span>`)
+        .map(([k, v]) => `<span class="tl-chip"><b>${esc(k)}</b> ${esc(String(v).replace(/\s*\n+\s*/g, ' · '))}</span>`)
         .join('');
       const jump = jumps.get(c.number) ? `<span class="tl-jump">bei ${jumps.get(c.number).map(esc).join(' · ')}</span>` : '';
       const sub = c.subtitle ? `<span class="tl-sub">${esc(c.subtitle)}</span>` : '';
+      const heads = headsHtml(c.people, { max: 6, cls: 'sm' });
       let right = '';
       if (s === 'current') {
         right = `<span class="tl-live" data-start="${r?.startAt ?? ''}" data-eff="${c.durationMs + (r?.stretchMs || 0)}" data-open="${c.kind === 'open' ? 1 : 0}"></span><span class="tl-rl">${c.kind === 'open' ? 'läuft' : 'Rest'}</span>`;
@@ -234,6 +236,7 @@ export class RundownSheet {
           ${r?.endAt != null ? `<dt>Ist-Ende</dt><dd>${t(r.endAt)}</dd>` : ''}
           ${r?.stretchMs ? `<dt>Streckung</dt><dd>${formatSigned(r.stretchMs)}</dd>` : ''}
           ${s === 'next' && run.eta?.[c.id] != null ? `<dt>Erwartet</dt><dd>${t(run.eta[c.id])}</dd>` : ''}
+          ${c.people?.length ? `<dt>Personen</dt><dd class="tl-people">${peopleNamesHtml(c.people)}</dd>` : ''}
           ${c.block ? `<dt>Block</dt><dd>${esc(c.block)}</dd>` : ''}
         </dl>`,
       ].join('');
@@ -243,7 +246,7 @@ export class RundownSheet {
   <div class="tl-rail" style="${c.color ? `--cue:${esc(c.color)}` : ''}"><i></i></div>
   <div class="tl-body">
     <div class="tl-t1"><span class="tl-num">${esc(c.number ?? '')}</span>${c.emoji ? `<span class="tl-emoji">${esc(c.emoji)}</span>` : ''}<span class="tl-title">${esc(c.title)}</span>${s === 'current' ? '<span class="tl-now">JETZT</span>' : ''}${s === 'skipped' ? '<span class="tl-skip">entfällt</span>' : ''}</div>
-    <div class="tl-t2">${kind}${anchor}${stretch}${jump}${sub}${chips}</div>
+    <div class="tl-t2">${kind}${heads}${anchor}${stretch}${jump}${sub}${chips}</div>
     <div class="tl-details">${details}</div>
   </div>
   <div class="tl-right">${right}</div>
@@ -362,7 +365,7 @@ export class RundownSheet {
       const nx = nextIdx >= 0 ? rd.cues[nextIdx] : null;
       const r = run.cues?.[curCue.id];
       this.nowCard.innerHTML = `<span class="tl-live big" data-start="${r?.startAt ?? this.getState()?.cue?.startedAt ?? ''}" data-eff="${curCue.durationMs + (r?.stretchMs ?? this.getState()?.cue?.stretchMs ?? 0)}" data-open="${curCue.kind === 'open' ? 1 : 0}"></span>
-<span class="rd-now-x"><b>${esc(curCue.number)} ${curCue.emoji ? esc(curCue.emoji) + ' ' : ''}${esc(curCue.title)}</b><span>JETZT${nx ? ` · danach ${esc(nx.number)} ${nx.emoji ? esc(nx.emoji) + ' ' : ''}${esc(nx.title)}` : ''}</span></span>`;
+<span class="rd-now-x"><b>${esc(curCue.number)} ${curCue.emoji ? esc(curCue.emoji) + ' ' : ''}${esc(curCue.title)}${headsHtml(curCue.people, { max: 6, cls: 'sm' })}</b><span>JETZT${nx ? ` · danach ${esc(nx.number)} ${nx.emoji ? esc(nx.emoji) + ' ' : ''}${esc(nx.title)}` : ''}</span></span>`;
     }
     // Block-Köpfe kleben unter der Jetzt-Karte
     this.scroll.style.setProperty('--now-h', this.nowCard.hidden ? '0px' : `${this.nowCard.offsetHeight + 14}px`);

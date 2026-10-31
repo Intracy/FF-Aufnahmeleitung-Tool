@@ -25,6 +25,8 @@
       <symbol id="i-mode-regie" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13.5" rx="2.2" /><path d="M12 3v13.5M2 9.75h20M8 21h8M12 16.5V21" /></symbol>
       <symbol id="i-mode-stack" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="3.6" rx="1.3" /><rect x="2" y="8" width="20" height="8" rx="2.2" /><rect x="5" y="18.4" width="14" height="3.6" rx="1.3" /></symbol>
       <symbol id="i-house" viewBox="0 0 24 24"><path d="M3.2 11.2 12 3.6l8.8 7.6" /><path d="M5.6 9.4V20.4h4.6v-5.6h3.6v5.6h4.6V9.4" /></symbol>
+      <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5" /><path d="M11.3 11.7 20 3M16.5 6.5l2.5 2.5M14 9l2 2" /></symbol>
+      <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4" /><path d="M2.5 20c.6-3.8 3.2-5.9 6.5-5.9s5.9 2.1 6.5 5.9" /><circle cx="17" cy="9" r="2.6" /><path d="M16.5 14.2c2.9.1 4.6 2 5 4.8" /></symbol>
       <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5" /><circle cx="12" cy="12" r="6.6" /></symbol>
       <symbol id="i-wrap" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" /><path d="M19.6 3.6v4.2h-4.2" /></symbol>
       <symbol id="i-cut" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
@@ -101,6 +103,20 @@
             <span class="mode-tags"><span class="mode-tag">Monitor oder Tablet</span></span>
           </a>
         </nav>
+        <h2 class="home-section">Rundown</h2>
+        <section class="src-card" aria-label="Rundown-Quelle">
+          <div class="src-row">
+            <span class="src-icon"><svg class="i"><use href="#i-key" /></svg></span>
+            <span class="src-text"><span class="src-title" id="src-title">API-Token</span><span class="src-sub" id="src-sub">–</span></span>
+            <button class="src-btn" id="src-token-btn" type="button">Token ändern</button>
+          </div>
+          <div class="src-row">
+            <span class="src-icon people"><svg class="i"><use href="#i-people" /></svg></span>
+            <span class="src-text"><span class="src-title">Personen aus GFX</span><span class="src-sub" id="src-people">–</span></span>
+            <button class="src-btn" id="src-people-btn" type="button">Bearbeiten</button>
+          </div>
+        </section>
+
         <p class="home-foot">Zurück zu dieser Auswahl geht es in jedem Modus über das Häuschen oben rechts. Auf dem iPad: Teilen › Zum Home-Bildschirm, dann startet die App ohne Safari-Leisten.</p>
       </div>
     </main>
@@ -130,7 +146,7 @@
           <span class="cat-stripe" id="now-cat"></span>
           <div class="now-titles">
             <div class="now-title t-title3"><span class="cue-num" id="now-num"></span><span id="now-title">Kein Cue aktiv</span></div>
-            <div class="now-meta t-subheadline"><span class="kind-badge" id="now-kind" hidden></span><span id="now-sub"></span></div>
+            <div class="now-meta t-subheadline"><span class="kind-badge" id="now-kind" hidden></span><span class="now-people" id="now-people"></span><span id="now-sub"></span></div>
           </div>
           <span class="state-badge" id="now-word"></span>
           <span class="now-open" aria-hidden="true"><svg class="i"><use href="#i-list" /></svg></span>
@@ -144,6 +160,7 @@
           <span class="foot-label">Danach</span>
           <span class="cue-num" id="next-num"></span>
           <span id="next-title">–</span>
+          <span class="next-people" id="next-people"></span>
           <span class="jump-tag" id="next-jump" hidden>SPRUNG</span>
           <span class="foot-dur" id="next-dur"></span>
         </div>
@@ -251,6 +268,53 @@
     <a class="icon-btn mode-gear mode-gear-float" id="mode-gear-float" href="/" data-keep-key aria-label="Startseite" title="Startseite" hidden>
       <svg class="i"><use href="#i-house" /></svg>
     </a>
+
+    <!-- Rundown-Token (Startseite) -->
+    <dialog id="token-sheet" class="sheet form-sheet" aria-labelledby="token-title">
+      <form class="sheet-inner" id="token-form" autocomplete="off">
+        <header class="sheet-nav">
+          <button class="nav-plain" type="button" data-close>Abbrechen</button>
+          <h2 id="token-title">Rundown-Token</h2>
+          <button class="nav-done" type="submit" id="token-save">Laden</button>
+        </header>
+        <div class="sheet-scroll">
+          <section class="group">
+            <div class="group-body">
+              <div class="row field-row">
+                <input id="token-input" class="field" type="password" name="rundown-token" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Neuen API-Token einfügen" aria-label="Neuer API-Token" />
+                <button class="eye-btn" type="button" id="token-eye" aria-pressed="false">Zeigen</button>
+              </div>
+            </div>
+            <p class="group-footer">Der Server prüft den Token bei der Rundown-API und lädt dann den neuen Rundown für alle Geräte. Der Token bleibt auf dem Server; hier erscheinen nur die letzten vier Zeichen. Laufzeiten, Streckungen und Marker beginnen für den neuen Rundown neu.</p>
+          </section>
+          <p class="form-status" id="token-status" role="status" aria-live="polite"></p>
+          <section class="group" id="token-reset-grp" hidden>
+            <div class="group-body">
+              <button type="button" class="row row-btn row-link" id="token-reset">Token aus .env verwenden</button>
+            </div>
+          </section>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Personen aus der GFX-Spalte -->
+    <dialog id="people-sheet" class="sheet form-sheet" aria-labelledby="people-title">
+      <form class="sheet-inner" id="people-form">
+        <header class="sheet-nav">
+          <button class="nav-plain" type="button" data-close>Abbrechen</button>
+          <h2 id="people-title">Personen</h2>
+          <button class="nav-done" type="submit">Sichern</button>
+        </header>
+        <div class="sheet-scroll">
+          <section class="group">
+            <h3 class="group-header">Moderation markieren</h3>
+            <div class="group-body" id="people-list"></div>
+            <p class="group-footer">Erkannt aus der GFX-Spalte. Moderation erscheint farbig, Gäste hellgrau. Ohne Auswahl entscheidet der Server: „Moderation:“ oder „(Mod)“ im Text, sonst wer in mindestens einem Viertel der Cues mit Personen vorkommt.</p>
+          </section>
+          <p class="form-status" id="people-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </dialog>
 
     <dialog id="settings" class="sheet" aria-labelledby="settings-title">
       <form method="dialog" class="sheet-inner">

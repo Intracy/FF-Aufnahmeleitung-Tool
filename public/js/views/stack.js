@@ -5,6 +5,7 @@
 import { formatClock, formatDuration, formatSigned, formatTimeOfDay } from '../shared/timing.js';
 import { fitText, fitBlock } from '../ui/fit.js';
 import { sanitize, safeGifUrl } from '../ui/richtext.js';
+import { headsHtml } from '../ui/people.js';
 
 const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -40,7 +41,7 @@ export class StackView {
 
   band(label, c, right) {
     if (!c) return `<span class="stk-lbl">${label}</span><span class="stk-ttl stk-none">–</span>`;
-    return `<span class="stk-lbl">${label}</span><span class="stk-num">${esc(c.number ?? '')}</span><span class="stk-ttl">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.title)}</span><span class="stk-r">${right}</span>`;
+    return `<span class="stk-lbl">${label}</span><span class="stk-num">${esc(c.number ?? '')}</span><span class="stk-ttl">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.title)}</span>${headsHtml(c.people, { max: 6, cls: 'stk-heads' })}<span class="stk-r">${right}</span>`;
   }
 
   render(vm, meta) {
@@ -88,7 +89,7 @@ export class StackView {
 
     // Jetzt: Kopf mit Nummer, Titel, Zustandswort
     const head = cue
-      ? `<span class="stk-stripe" style="${cue.color ? `background:${esc(cue.color)}` : ''}"></span><span class="stk-num">${esc(cue.number ?? '')}</span><span class="stk-ttl">${cue.emoji ? esc(cue.emoji) + ' ' : ''}${esc(cue.title)}</span>`
+      ? `<span class="stk-stripe" style="${cue.color ? `background:${esc(cue.color)}` : ''}"></span><span class="stk-num">${esc(cue.number ?? '')}</span><span class="stk-ttl">${cue.emoji ? esc(cue.emoji) + ' ' : ''}${esc(cue.title)}</span>${headsHtml(cue.people, { max: 8, cls: 'stk-heads' })}`
       : `<span class="stk-ttl stk-none">${st?.show?.isRunning === false ? 'Show läuft nicht' : 'Kein Cue aktiv'}</span>`;
     this.set(this.head, 'head', head);
     const word = state === 'idle' ? '' : state === 'dark' ? 'LÄUFT' : ev.word || '';

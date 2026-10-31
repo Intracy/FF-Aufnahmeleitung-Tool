@@ -1,6 +1,8 @@
 // Rundown-Modell: Cue-Arten, Zeitzonen, Szenarien, Back-Time.
 // Reine Funktionen, damit sie ohne Server testbar sind.
 
+import { derivePeople } from './people.js';
+
 const DAY = 24 * 3600 * 1000;
 
 export function firstLine(s) {
@@ -109,7 +111,10 @@ function cleanColumns(cols) {
 }
 
 /** Baut aus der /full-Antwort das interne Modell. */
-export function buildRundown(full, kc, timeZone) {
+/**
+ * @param {{hosts?: string[]}} [opts]  Moderationsnamen für die Personen-Erkennung
+ */
+export function buildRundown(full, kc, timeZone, opts = {}) {
   const r = full.rundown || {};
   const cues = [];
   let block = null;
@@ -155,6 +160,8 @@ export function buildRundown(full, kc, timeZone) {
     cues.push(cue);
     prev = cue;
   }
+  // Personen aus GFX- und Personen-Spalten (Moderation / Gäste)
+  derivePeople(cues, opts).forEach((list, i) => (cues[i].people = list));
   return {
     id: r.id ?? null,
     title: r.title ?? '',
@@ -186,6 +193,7 @@ export function publicCue(c) {
     anchorAt: c.anchorAt,
     block: c.block,
     columns: c.columns,
+    people: c.people || [],
   };
 }
 
