@@ -19,6 +19,11 @@
   <body>
     <!-- Eigene Symbole (SF Symbols sind außerhalb von Apple-Apps nicht lizenziert) -->
     <svg width="0" height="0" class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3.5 7H13M18.5 7h2M3.5 17h2M10.5 17h10" /><circle cx="15.8" cy="7" r="2.4" /><circle cx="8" cy="17" r="2.4" /></symbol>
+      <symbol id="i-mode-al" viewBox="0 0 24 24"><path d="M4.5 13.5V12a7.5 7.5 0 0 1 15 0v1.5" /><rect x="2.8" y="12.5" width="4.4" height="7" rx="1.8" /><rect x="16.8" y="12.5" width="4.4" height="7" rx="1.8" /><path d="M19 19.5c0 1.6-2.2 2.3-5.5 2.3H12" /></symbol>
+      <symbol id="i-mode-sign" viewBox="0 0 24 24"><rect x="1.8" y="4.5" width="20.4" height="15" rx="2.8" /><rect x="5.2" y="8.3" width="4.6" height="7.4" rx="1.5" /><rect x="14.2" y="8.3" width="4.6" height="7.4" rx="1.5" /><path d="M12 10.2v.2M12 13.6v.2" /></symbol>
+      <symbol id="i-mode-regie" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13.5" rx="2.2" /><path d="M12 3v13.5M2 9.75h20M8 21h8M12 16.5V21" /></symbol>
+      <symbol id="i-mode-stack" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="3.6" rx="1.3" /><rect x="2" y="8" width="20" height="8" rx="2.2" /><rect x="5" y="18.4" width="14" height="3.6" rx="1.3" /></symbol>
       <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5" /><circle cx="12" cy="12" r="6.6" /></symbol>
       <symbol id="i-wrap" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" /><path d="M19.6 3.6v4.2h-4.2" /></symbol>
       <symbol id="i-cut" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
@@ -49,26 +54,48 @@
     <!-- Startseite -->
     <main id="home" class="home" hidden>
       <div class="home-inner">
-        <h1 class="t-large-title">Aufnahmeleitung</h1>
-        <p class="lead t-subheadline secondary" id="home-rundown">Verbinde mit dem Relay …</p>
-        <section class="group">
-          <h2 class="group-header">Ansicht wählen</h2>
-          <nav class="group-body" aria-label="Ansichten">
-            <a class="row row-link" href="/al" data-keep-key>
-              <span class="row-text"><span class="t-headline">Bedienung</span><span class="t-subheadline secondary">AL neben der Kamera · hochkant bedienen, quer als Schild</span></span>
-            </a>
-            <a class="row row-link" href="/schild" data-keep-key>
-              <span class="row-text"><span class="t-headline">Schild</span><span class="t-subheadline secondary">Zweites Gerät, nur Restzeit für die Moderation</span></span>
-            </a>
-            <a class="row row-link" href="/regie" data-keep-key>
-              <span class="row-text"><span class="t-headline">Regie</span><span class="t-subheadline secondary">Cue-Stapel, Zeit +, Rundown-Steuerung und Marker</span></span>
-            </a>
-            <a class="row row-link" href="/stapel" data-keep-key>
-              <span class="row-text"><span class="t-headline">Vollbild-Stapel</span><span class="t-subheadline secondary">Vorher · jetzt · danach, groß und ohne Bedienung</span></span>
-            </a>
-          </nav>
-          <p class="group-footer">Auf dem iPad: Teilen › Zum Home-Bildschirm. Die App startet dann ohne Safari-Leisten direkt in der Bedienung.</p>
-        </section>
+        <header class="home-head">
+          <p class="home-kicker">FF · Aufnahmeleitung</p>
+          <h1 class="home-title" id="home-title">Modus wählen</h1>
+          <div class="home-status">
+            <span class="home-pill" id="home-pill" data-mode="off"><span class="dot"></span><span id="home-pill-text">Verbinde …</span></span>
+            <span class="home-clock" id="home-clock"></span>
+          </div>
+          <div class="home-now" id="home-now" hidden>
+            <span class="home-now-lbl">Jetzt</span>
+            <span class="home-now-cue" id="home-now-cue"></span>
+            <span class="home-now-time" id="home-now-time"></span>
+          </div>
+        </header>
+
+        <h2 class="home-section">Modus wählen</h2>
+        <nav class="mode-grid" aria-label="Modus wählen">
+          <a class="mode-card" href="/al" data-keep-key data-mode="al" style="--accent: var(--blue)">
+            <span class="mode-icon"><svg class="i"><use href="#i-mode-al" /></svg></span>
+            <span class="mode-title">Aufnahmeleitung</span>
+            <span class="mode-desc">Neben der Kamera bedienen: Restzeit, Zeit +, Custom Text, Schluss und Rundown-Steuerung. Quer gedreht wird das Gerät zum Schild.</span>
+            <span class="mode-tags"><span class="mode-tag">iPad · hochkant</span></span>
+          </a>
+          <a class="mode-card" href="/schild" data-keep-key data-mode="schild" style="--accent: var(--green)">
+            <span class="mode-icon"><svg class="i"><use href="#i-mode-sign" /></svg></span>
+            <span class="mode-title">Schild</span>
+            <span class="mode-desc">Riesige Restzeit für die Moderation, mit Farben für Warnstufe, Fertig werden und Überzug.</span>
+            <span class="mode-tags"><span class="mode-tag">Zweites Gerät · quer</span></span>
+          </a>
+          <a class="mode-card" href="/regie" data-keep-key data-mode="regie" style="--accent: var(--orange)">
+            <span class="mode-icon"><svg class="i"><use href="#i-mode-regie" /></svg></span>
+            <span class="mode-title">Regie</span>
+            <span class="mode-desc">Cue-Stapel mit vorher, jetzt und danach, dazu Zeit +, Rundown-Steuerung und Marker.</span>
+            <span class="mode-tags"><span class="mode-tag">iPad oder iPhone · Regieplatz</span></span>
+          </a>
+          <a class="mode-card" href="/stapel" data-keep-key data-mode="stapel" style="--accent: var(--purple)">
+            <span class="mode-icon"><svg class="i"><use href="#i-mode-stack" /></svg></span>
+            <span class="mode-title">Vollbild-Stapel</span>
+            <span class="mode-desc">Vorheriger, aktueller und nächster Cue groß und ohne Bedienung, lesbar aus mehreren Metern.</span>
+            <span class="mode-tags"><span class="mode-tag">Monitor oder Tablet</span></span>
+          </a>
+        </nav>
+        <p class="home-foot">Zurück zu dieser Auswahl geht es in jedem Modus über das Zahnrad oben rechts. Auf dem iPad: Teilen › Zum Home-Bildschirm, dann startet die App ohne Safari-Leisten.</p>
       </div>
     </main>
 
@@ -83,8 +110,11 @@
         <div class="nav-trailing">
           <button class="lea-btn" id="op-lea" type="button" aria-pressed="false" title="Pastellfarben ein/aus">LEA MODE</button>
           <button class="icon-btn" id="op-settings" type="button" aria-label="Einstellungen">
-            <svg class="i"><use href="#i-gear" /></svg>
+            <svg class="i"><use href="#i-sliders" /></svg>
           </button>
+          <a class="icon-btn mode-gear" href="/" data-keep-key aria-label="Modus wählen" title="Modus wählen">
+            <svg class="i"><use href="#i-gear" /></svg>
+          </a>
         </div>
       </header>
 
@@ -211,6 +241,11 @@
     </main>
 
     <!-- Einstellungen (Sheet) -->
+    <!-- Zahnrad über Schild und Stapel: zurück zur Modusauswahl -->
+    <a class="icon-btn mode-gear mode-gear-float" id="mode-gear-float" href="/" data-keep-key aria-label="Modus wählen" title="Modus wählen" hidden>
+      <svg class="i"><use href="#i-gear" /></svg>
+    </a>
+
     <dialog id="settings" class="sheet" aria-labelledby="settings-title">
       <form method="dialog" class="sheet-inner">
         <header class="sheet-nav">
@@ -286,7 +321,7 @@
               <a class="row row-link" href="/stapel" data-keep-key>Vollbild-Stapel auf zweitem Gerät</a>
               <a class="row row-link" href="/schild" data-keep-key>Schild auf zweitem Gerät</a>
               <a class="row row-link" href="/regie" data-keep-key>Regie (nur lesen)</a>
-              <a class="row row-link" href="/" data-keep-key>Startseite</a>
+              <a class="row row-link" href="/" data-keep-key>Modus wählen</a>
             </div>
             <p class="group-footer" id="set-version"></p>
           </section>

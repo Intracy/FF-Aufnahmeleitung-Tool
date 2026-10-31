@@ -69,6 +69,8 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 ## Bedienung
 
+**Startseite (`/`):** Die Modusauswahl zeigt oben Show, Verbindung (Live/Replay), Uhrzeit und den laufenden Cue mit Restzeit. Darunter die vier Modi als Kacheln: Aufnahmeleitung, Schild, Regie und Vollbild-Stapel; der zuletzt genutzte Modus ist markiert. In jedem Modus führt das halb transparente Zahnrad oben rechts zurück zu dieser Auswahl. Die Einstellungen öffnet in Aufnahmeleitung und Regie der Regler-Button daneben.
+
 | Button | Wirkung | Auslösen |
 | --- | --- | --- |
 | Cue-Kasten oben | Öffnet den kompletten Rundown als Zeitleiste: links die Zeit (Ist bzw. ~erwartet, darunter Plan), in der Mitte eine Linie mit Punkten (gelaufen · jetzt · kommt), rechts Ist-Dauer und Abweichung bzw. Restzeit. Gelaufene Cues und vom Szenario übersprungene Cues sind zugeklappt, Block-Köpfe zeigen Zeitraum und Dauer, oben bleibt die Jetzt-Karte stehen. Filter: Alle · Ab jetzt · Moderiert · Mit Notizen · Blöcke zu. Tipp auf eine Zeile zeigt Notizen, eigene Spalten, Ist-Start/-Ende und Streckung | Tippen |
@@ -90,7 +92,7 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 **Szenarien:** In den Verzweigungsblöcken (SuP3 ab Cue 27, Finale ab Cue 88) erscheint eine Auswahl wie *Offen | 3:0 | 3:1 | 3:2*. Solange „Offen“ gewählt ist, zeigt die Back-Time alle möglichen Enden. Die Wahl gilt sofort und lässt sich 5 s lang über „Widerrufen“ zurücknehmen.
 
-**LEA MODE:** Der Button oben rechts neben den Einstellungen schaltet alle Farben auf Pastell um (rosé, lila, orange, pink), auch auf dem Schild. Erneut tippen stellt die normalen Farben wieder her. Die Einstellung gilt pro Gerät; Wort und Form der Schild-Zustände bleiben gleich.
+**LEA MODE:** Der Button oben rechts links neben den Einstellungen schaltet alle Farben auf Pastell um (rosé, lila, orange, pink), auch auf dem Schild. Erneut tippen stellt die normalen Farben wieder her. Die Einstellung gilt pro Gerät; Wort und Form der Schild-Zustände bleiben gleich.
 
 **Griffhand:** In den Einstellungen lassen sich die Spalten spiegeln, damit CUSTOM TEXT und SCHLUSS auf der Daumenseite liegen.
 

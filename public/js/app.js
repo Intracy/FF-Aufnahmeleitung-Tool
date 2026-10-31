@@ -192,6 +192,7 @@ function showStack(show) {
   hint.hidden = !show || role === 'stapel';
   hint.classList.remove('fade');
   if (show) setTimeout(() => hint.classList.add('fade'), 2500);
+  syncGear();
   frame();
 }
 
@@ -204,12 +205,30 @@ function showSign(show) {
     hint.classList.remove('fade');
     if (show) setTimeout(() => hint.classList.add('fade'), 2500);
   }
+  syncGear();
   frame();
 }
 
+// Alle Links zur Auswahl und zu den Modi tragen den Zugangsschlüssel mit
+document.querySelectorAll('[data-keep-key]').forEach((a) => (a.href = withKey(a.getAttribute('href'))));
+const gearFloat = $('#mode-gear-float');
+/** Zahnrad über Schild/Stapel nur zeigen, wenn die Bedienleiste nicht sichtbar ist. */
+function syncGear() {
+  gearFloat.hidden = role === 'home' || !(signShown || stackShown);
+}
+if (role !== 'home') storeSet('al.lastMode', role);
+
 if (role === 'home') {
   $('#home').hidden = false;
-  document.querySelectorAll('[data-keep-key]').forEach((a) => (a.href = withKey(a.getAttribute('href'))));
+  const last = storeGet('al.lastMode');
+  const card = last && document.querySelector(`.mode-card[data-mode="${last}"]`);
+  if (card) {
+    card.dataset.last = 'true';
+    const tag = document.createElement('span');
+    tag.className = 'mode-tag mode-last';
+    tag.textContent = 'Zuletzt';
+    card.querySelector('.mode-tags').append(tag);
+  }
 } else if (role === 'schild') {
   showSign(true);
   wake = initWakeLock(() => {});
@@ -637,8 +656,7 @@ function frame() {
     wakeBad: !!wake && /blockiert|freigegeben|HTTPS/.test(wake.status || ''),
   };
   if (role === 'home') {
-    const t = data.state?.rundown?.title;
-    $('#home-rundown').textContent = t ? `${t} · ${data.state.mode === 'replay' ? 'Replay' : 'Live'}` : conn.open ? 'Verbunden' : 'Verbinde mit dem Relay …';
+    renderHome(vm, meta);
     return;
   }
   if (stackShown) stackView.render(vm, meta);
@@ -646,5 +664,35 @@ function frame() {
   if (opView && !signShown && !stackShown) opView.render(vm, meta);
   renderSettingsInfo();
 }
+// ---------- Startseite: Show, Verbindung und aktueller Cue ----------
+const homeKeys = {};
+const setText = (id, t) => {
+  if (homeKeys[id] === t) return;
+  homeKeys[id] = t;
+  document.getElementById(id).textContent = t;
+};
+function renderHome(vm, meta) {
+  const st = data.state;
+  setText('home-title', st?.rundown?.title || 'Aufnahmeleitung');
+  const mode = !conn.open && !st ? 'off' : meta.offlineMs > 3000 ? 'off' : st?.mode === 'replay' ? 'replay' : 'live';
+  const pill = $('#home-pill');
+  if (pill.dataset.mode !== mode) pill.dataset.mode = mode;
+  const running = !!(st?.show?.isRunning || st?.show?.isPaused);
+  const pillText =
+    mode === 'off' ? (conn.open ? 'Verbunden' : 'Verbinde …') : `${mode === 'replay' ? 'Replay' : 'Live'} · ${st?.show?.isPaused ? 'pausiert' : running ? 'Show läuft' : 'Show steht'}`;
+  setText('home-pill-text', pillText);
+  setText('home-clock', formatTimeOfDay(vm.now, meta.timeZone, true));
+  const cue = vm.cue;
+  const nowEl = $('#home-now');
+  nowEl.hidden = !cue;
+  if (!cue) return;
+  setText('home-now-cue', `${cue.number ?? ''} ${cue.emoji ? cue.emoji + ' ' : ''}${cue.title}`.trim());
+  const ev = vm.ev;
+  let t = '';
+  if (ev.digitsMs != null) t = ev.over ? `+${formatClock(ev.digitsMs, true)}` : formatClock(ev.digitsMs, !!ev.countUp);
+  setText('home-now-time', t);
+  if (nowEl.dataset.state !== ev.state) nowEl.dataset.state = ev.state;
+}
+
 setInterval(frame, 100);
 frame();
