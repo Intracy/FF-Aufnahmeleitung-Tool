@@ -24,6 +24,7 @@
       <symbol id="i-mode-sign" viewBox="0 0 24 24"><rect x="1.8" y="4.5" width="20.4" height="15" rx="2.8" /><rect x="5.2" y="8.3" width="4.6" height="7.4" rx="1.5" /><rect x="14.2" y="8.3" width="4.6" height="7.4" rx="1.5" /><path d="M12 10.2v.2M12 13.6v.2" /></symbol>
       <symbol id="i-mode-regie" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="13.5" rx="2.2" /><path d="M12 3v13.5M2 9.75h20M8 21h8M12 16.5V21" /></symbol>
       <symbol id="i-mode-stack" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="3.6" rx="1.3" /><rect x="2" y="8" width="20" height="8" rx="2.2" /><rect x="5" y="18.4" width="14" height="3.6" rx="1.3" /></symbol>
+      <symbol id="i-house" viewBox="0 0 24 24"><path d="M3.2 11.2 12 3.6l8.8 7.6" /><path d="M5.6 9.4V20.4h4.6v-5.6h3.6v5.6h4.6V9.4" /></symbol>
       <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5" /><circle cx="12" cy="12" r="6.6" /></symbol>
       <symbol id="i-wrap" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" /><path d="M19.6 3.6v4.2h-4.2" /></symbol>
       <symbol id="i-cut" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
@@ -55,8 +56,13 @@
     <main id="home" class="home" hidden>
       <div class="home-inner">
         <header class="home-head">
-          <p class="home-kicker">FF · Aufnahmeleitung</p>
-          <h1 class="home-title" id="home-title">Modus wählen</h1>
+          <div class="home-brand">
+            <img class="home-logo" src="/img/ff-logo.png" width="203" height="240" alt="FrankenFinals" />
+            <div class="home-brand-text">
+              <p class="home-kicker">FrankenFinals · Aufnahmeleitung</p>
+              <h1 class="home-title" id="home-title">Modus wählen</h1>
+            </div>
+          </div>
           <div class="home-status">
             <span class="home-pill" id="home-pill" data-mode="off"><span class="dot"></span><span id="home-pill-text">Verbinde …</span></span>
             <span class="home-clock" id="home-clock"></span>
@@ -95,7 +101,7 @@
             <span class="mode-tags"><span class="mode-tag">Monitor oder Tablet</span></span>
           </a>
         </nav>
-        <p class="home-foot">Zurück zu dieser Auswahl geht es in jedem Modus über das Zahnrad oben rechts. Auf dem iPad: Teilen › Zum Home-Bildschirm, dann startet die App ohne Safari-Leisten.</p>
+        <p class="home-foot">Zurück zu dieser Auswahl geht es in jedem Modus über das Häuschen oben rechts. Auf dem iPad: Teilen › Zum Home-Bildschirm, dann startet die App ohne Safari-Leisten.</p>
       </div>
     </main>
 
@@ -112,8 +118,8 @@
           <button class="icon-btn" id="op-settings" type="button" aria-label="Einstellungen">
             <svg class="i"><use href="#i-sliders" /></svg>
           </button>
-          <a class="icon-btn mode-gear" href="/" data-keep-key aria-label="Modus wählen" title="Modus wählen">
-            <svg class="i"><use href="#i-gear" /></svg>
+          <a class="icon-btn mode-gear" href="/" data-keep-key aria-label="Startseite" title="Startseite">
+            <svg class="i"><use href="#i-house" /></svg>
           </a>
         </div>
       </header>
@@ -242,8 +248,8 @@
 
     <!-- Einstellungen (Sheet) -->
     <!-- Zahnrad über Schild und Stapel: zurück zur Modusauswahl -->
-    <a class="icon-btn mode-gear mode-gear-float" id="mode-gear-float" href="/" data-keep-key aria-label="Modus wählen" title="Modus wählen" hidden>
-      <svg class="i"><use href="#i-gear" /></svg>
+    <a class="icon-btn mode-gear mode-gear-float" id="mode-gear-float" href="/" data-keep-key aria-label="Startseite" title="Startseite" hidden>
+      <svg class="i"><use href="#i-house" /></svg>
     </a>
 
     <dialog id="settings" class="sheet" aria-labelledby="settings-title">

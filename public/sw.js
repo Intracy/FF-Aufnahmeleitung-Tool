@@ -1,5 +1,5 @@
 // Service Worker: App-Hülle offline verfügbar, API und WebSocket nie aus dem Cache.
-const VERSION = 'al-2.1.0';
+const VERSION = 'al-2.2.0';
 const SHELL = [
   '/',
   '/index.html',
@@ -24,6 +24,7 @@ const SHELL = [
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/apple-touch-icon.png',
+  '/img/ff-logo.png',
 ];
 const APP_ROUTES = new Set(['/', '/al', '/schild', '/regie', '/stapel']);
 

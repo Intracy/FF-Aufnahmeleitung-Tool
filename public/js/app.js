@@ -212,7 +212,7 @@ function showSign(show) {
 // Alle Links zur Auswahl und zu den Modi tragen den Zugangsschlüssel mit
 document.querySelectorAll('[data-keep-key]').forEach((a) => (a.href = withKey(a.getAttribute('href'))));
 const gearFloat = $('#mode-gear-float');
-/** Zahnrad über Schild/Stapel nur zeigen, wenn die Bedienleiste nicht sichtbar ist. */
+/** Häuschen über Schild/Stapel nur zeigen, wenn die Bedienleiste nicht sichtbar ist. */
 function syncGear() {
   gearFloat.hidden = role === 'home' || !(signShown || stackShown);
 }

@@ -15,7 +15,6 @@ const FILTERS = [
   ['ahead', 'Ab jetzt'],
   ['moderated', 'Moderiert'],
   ['notes', 'Mit Notizen'],
-  ['blocks', 'Blöcke zu'],
 ];
 
 export class RundownSheet {
@@ -42,9 +41,25 @@ export class RundownSheet {
     this.filter = 'all';
     this.expanded = new Set(); // aufgeklappte Gruppen ('past', 'skip:<idx>', 'block:<name>')
     this.openRows = new Set(); // aufgeklappte Zeilen (Cue-Ids)
+    this.folded = new Set(); // eingeklappte Blöcke (Blockname)
+    this.blockNames = [];
 
-    this.filtersEl.innerHTML = FILTERS.map(([v, l]) => `<button type="button" data-filter="${v}" aria-pressed="${v === 'all'}">${l}</button>`).join('');
+    this.filtersEl.innerHTML =
+      FILTERS.map(([v, l]) => `<button type="button" data-filter="${v}" aria-pressed="${v === 'all'}">${l}</button>`).join('') +
+      '<button type="button" class="rd-foldall" data-foldall>Alle Blöcke zu</button>';
+    this.foldAllBtn = this.filtersEl.querySelector('[data-foldall]');
     this.filtersEl.addEventListener('click', (e) => {
+      if (e.target.closest('[data-foldall]')) {
+        // Alle Blöcke ein- bzw. wieder ausklappen
+        const allFolded = this.blockNames.length > 0 && this.blockNames.every((k) => this.folded.has(k));
+        if (allFolded) this.folded.clear();
+        else this.blockNames.forEach((k) => this.folded.add(k));
+        this.renderedKey = '';
+        this.render();
+        if (allFolded) this.scrollToCurrent(false);
+        else this.scroll.scrollTo({ top: 0 });
+        return;
+      }
       const b = e.target.closest('[data-filter]');
       if (!b) return;
       this.filter = b.dataset.filter;
@@ -55,6 +70,20 @@ export class RundownSheet {
       else this.scroll.scrollTo({ top: 0 });
     });
     this.list.addEventListener('click', (e) => {
+      const f = e.target.closest('[data-fold]');
+      if (f) {
+        // Block-Überschrift: alle Cues dieses Blocks ein- oder ausklappen
+        const k = f.dataset.fold;
+        if (this.folded.has(k)) this.folded.delete(k);
+        else this.folded.add(k);
+        const y = f.getBoundingClientRect().top;
+        this.renderedKey = '';
+        this.render();
+        // Überschrift bleibt unter dem Finger stehen
+        const again = [...this.list.querySelectorAll('[data-fold]')].find((x) => x.dataset.fold === k);
+        if (again) this.scroll.scrollTop += again.getBoundingClientRect().top - y;
+        return;
+      }
       const g = e.target.closest('[data-toggle]');
       if (g) {
         const k = g.dataset.toggle;
@@ -156,7 +185,7 @@ export class RundownSheet {
       this.pendingRefresh = true;
       this.refresh().finally(() => (this.pendingRefresh = false));
     }
-    const key = JSON.stringify([rd.id, rd.cues.length, cur, this.run?.now ? Math.floor(this.run.now / 5000) : 0, this.filter, [...this.expanded]]);
+    const key = JSON.stringify([rd.id, rd.cues.length, cur, this.run?.now ? Math.floor(this.run.now / 5000) : 0, this.filter, [...this.expanded], [...this.folded]]);
     if (key === this.renderedKey) return;
     this.renderedKey = key;
 
@@ -243,30 +272,34 @@ export class RundownSheet {
 
     const out = [];
     let lastBlock;
+    this.blockNames = [...blocks.keys()].filter(Boolean);
+    for (const k of this.folded) if (!blocks.has(k)) this.folded.delete(k);
+    const isFolded = (c) => !!c.block && this.folded.has(c.block);
+    // Block-Überschrift als Schalter: Tippen klappt alle Cues des Blocks ein/aus
     const headFor = (c) => {
       const k = c.block || '';
       if (k === lastBlock) return;
       lastBlock = k;
       if (!k) return;
-      const h = blockHead(k, blocks.get(k));
-      out.push(`<div class="tl-block"><span>${esc(k)}</span><em>${h.range}</em></div>`);
+      const idxs = blocks.get(k);
+      const h = blockHead(k, idxs);
+      const folded = this.folded.has(k);
+      const hasNow = idxs.some((i) => st[i] === 'current');
+      const count = folded ? ` · ${idxs.length} ${idxs.length === 1 ? 'Cue' : 'Cues'}` : '';
+      out.push(
+        `<button type="button" class="tl-block${folded ? ' folded' : ''}${hasNow ? ' has-now' : ''}" data-fold="${esc(k)}" aria-expanded="${!folded}"><span><svg class="tl-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 10l4 4 4-4" /></svg>${esc(k)}</span><em>${h.range}${count}</em></button>`,
+      );
+    };
+    const pushRow = (c, i) => {
+      if (!isFolded(c)) out.push(row(c, i));
     };
 
-    if (this.filter === 'blocks') {
-      for (const [k, idxs] of blocks) {
-        const h = blockHead(k, idxs);
-        const hasNow = idxs.some((i) => st[i] === 'current');
-        const tk = `block:${k}`;
-        const isOpen = this.expanded.has(tk) || hasNow;
-        out.push(`<button type="button" class="tl-block tl-block-btn${hasNow ? ' has-now' : ''}" data-toggle="${esc(tk)}" aria-expanded="${isOpen}"><span>${isOpen ? '▾' : '▸'} ${esc(k || 'Ohne Block')}</span><em>${idxs.length} Cues · ${h.range}</em></button>`);
-        if (isOpen) idxs.forEach((i) => out.push(row(rd.cues[i], i)));
-      }
-    } else if (this.filter === 'moderated' || this.filter === 'notes') {
+    if (this.filter === 'moderated' || this.filter === 'notes') {
       rd.cues.forEach((c, i) => {
         const ok = this.filter === 'moderated' ? c.kind === 'moderated' : !!c.notes;
         if (!ok) return;
         headFor(c);
-        out.push(row(c, i));
+        pushRow(c, i);
       });
       if (!out.length) out.push(`<div class="tl-empty">${this.filter === 'notes' ? 'Keine Cues mit Notizen.' : 'Keine moderierten Cues.'}</div>`);
     } else {
@@ -299,7 +332,7 @@ export class RundownSheet {
           if (isOpen) {
             idxs.forEach((n) => {
               headFor(rd.cues[n]);
-              out.push(row(rd.cues[n], n));
+              pushRow(rd.cues[n], n);
             });
             lastBlock = undefined;
           }
@@ -307,11 +340,15 @@ export class RundownSheet {
           continue;
         }
         headFor(rd.cues[i]);
-        out.push(row(rd.cues[i], i));
+        pushRow(rd.cues[i], i);
         i++;
       }
     }
     this.list.innerHTML = out.join('');
+    const allFolded = this.blockNames.length > 0 && this.blockNames.every((k) => this.folded.has(k));
+    this.foldAllBtn.textContent = allFolded ? 'Alle Blöcke auf' : 'Alle Blöcke zu';
+    this.foldAllBtn.setAttribute('aria-pressed', String(allFolded));
+    this.foldAllBtn.hidden = !this.blockNames.length;
 
     // Kopfzeile und Jetzt-Karte
     const curIndex = rd.cues.findIndex((c) => c.id === cur);
@@ -355,6 +392,13 @@ export class RundownSheet {
   }
 
   scrollToCurrent(smooth) {
+    const cur = this.currentId();
+    const c = cur != null ? this.getRundown()?.cues?.find((x) => x.id === cur) : null;
+    if (c?.block && this.folded.has(c.block)) {
+      this.folded.delete(c.block);
+      this.renderedKey = '';
+      this.render();
+    }
     const row = this.list.querySelector('.tl-row.current');
     if (!row) return;
     const offset = this.nowCard.hidden ? 0 : this.nowCard.offsetHeight;

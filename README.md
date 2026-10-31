@@ -69,11 +69,11 @@ Am Set braucht das iPad Internet. Fällt es aus, zählt das Schild weiter, und n
 
 ## Bedienung
 
-**Startseite (`/`):** Die Modusauswahl zeigt oben Show, Verbindung (Live/Replay), Uhrzeit und den laufenden Cue mit Restzeit. Darunter die vier Modi als Kacheln: Aufnahmeleitung, Schild, Regie und Vollbild-Stapel; der zuletzt genutzte Modus ist markiert. In jedem Modus führt das halb transparente Zahnrad oben rechts zurück zu dieser Auswahl. Die Einstellungen öffnet in Aufnahmeleitung und Regie der Regler-Button daneben.
+**Startseite (`/`):** Die Modusauswahl zeigt oben das FrankenFinals-Logo, Show, Verbindung (Live/Replay), Uhrzeit und den laufenden Cue mit Restzeit. Darunter die vier Modi als Kacheln: Aufnahmeleitung, Schild, Regie und Vollbild-Stapel; der zuletzt genutzte Modus ist markiert. In jedem Modus führt das halb transparente Häuschen oben rechts zurück zu dieser Auswahl. Die Einstellungen öffnet in Aufnahmeleitung und Regie der Regler-Button daneben.
 
 | Button | Wirkung | Auslösen |
 | --- | --- | --- |
-| Cue-Kasten oben | Öffnet den kompletten Rundown als Zeitleiste: links die Zeit (Ist bzw. ~erwartet, darunter Plan), in der Mitte eine Linie mit Punkten (gelaufen · jetzt · kommt), rechts Ist-Dauer und Abweichung bzw. Restzeit. Gelaufene Cues und vom Szenario übersprungene Cues sind zugeklappt, Block-Köpfe zeigen Zeitraum und Dauer, oben bleibt die Jetzt-Karte stehen. Filter: Alle · Ab jetzt · Moderiert · Mit Notizen · Blöcke zu. Tipp auf eine Zeile zeigt Notizen, eigene Spalten, Ist-Start/-Ende und Streckung | Tippen |
+| Cue-Kasten oben | Öffnet den kompletten Rundown als Zeitleiste: links die Zeit (Ist bzw. ~erwartet, darunter Plan), in der Mitte eine Linie mit Punkten (gelaufen · jetzt · kommt), rechts Ist-Dauer und Abweichung bzw. Restzeit. Gelaufene Cues und vom Szenario übersprungene Cues sind zugeklappt, Block-Köpfe zeigen Zeitraum und Dauer, oben bleibt die Jetzt-Karte stehen. Filter: Alle · Ab jetzt · Moderiert · Mit Notizen. Tipp auf eine Block-Überschrift klappt alle Cues des Blocks ein oder aus; „Alle Blöcke zu/auf“ klappt alle Blöcke auf einmal. Tipp auf eine Zeile zeigt Notizen, eigene Spalten, Ist-Start/-Ende und Streckung | Tippen |
 | SCHILD ZEIGEN | Schild auch im Hochformat. Verlassen: 1 s irgendwo halten | Tippen |
 | CUSTOM TEXT | Öffnet einen Editor für einen eigenen Text auf dem Schild: fett, kursiv, unterstrichen, sechs Farben, GROSSBUCHSTABEN, Schnelltexte und ein GIF von Giphy. Solange der Text steht, ist der Button gefüllt und die Bedienansicht zeigt ihn mit AUSBLENDEN | Tippen, dann *Anzeigen* |
 | GLEICH DU | Schild blau, z. B. kurz vor Ende eines Spiels | Tippen |
