@@ -63,12 +63,12 @@ if ('serviceWorker' in navigator && window.isSecureContext) {
 
 // ---------- Toast / Widerrufen ----------
 let toastTimer;
-function toast(text) {
+function toast(text, ms = 2500) {
   const el = $('#toast');
   el.textContent = text;
   el.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => (el.hidden = true), 2500);
+  toastTimer = setTimeout(() => (el.hidden = true), ms);
 }
 let undoTimer;
 let undoFn = null;
@@ -99,10 +99,17 @@ try {
   /* egal */
 }
 
+let seenEdit = undefined; // Version der zuletzt gemeldeten Website-Änderung
 conn.addEventListener('rundown', (e) => {
   const d = e.detail;
   data.rundown = d.rundown ? { ...d.rundown, groups: d.groups } : null;
   storeSet('al.rundown', JSON.stringify(data.rundown));
+  // Änderung auf der Website: kurz melden (nicht beim ersten Empfang nach dem Verbinden)
+  const ed = d.lastEdit;
+  if (seenEdit !== undefined && ed && ed.version !== seenEdit && (role === 'al' || role === 'regie' || role === 'home')) {
+    toast(`Rundown aktualisiert: ${ed.summary}`, 4500);
+  }
+  if (ed || seenEdit === undefined) seenEdit = ed ? ed.version : null;
 });
 let lastEventId = null;
 conn.addEventListener('state', (e) => {

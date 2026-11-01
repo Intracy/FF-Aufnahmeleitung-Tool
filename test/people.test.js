@@ -54,3 +54,12 @@ test('Gästeliste schlägt Häufigkeit und ausdrückliche Moderation', () => {
   const p = derivePeople(cues, { guests: ['Anna Beispiel', 'emil probe'] });
   assert.deepEqual(names(p[0]), ['Anna Beispiel:guest', 'Emil Probe:guest']);
 });
+
+test('GFX: Rolle mitten in der Zeile gilt für die folgenden Namen', () => {
+  assert.deepEqual(names(parsePeopleText('Anna Beispiel, Ben Muster, Gast: Carla Probe, Dana Test')), [
+    'Anna Beispiel:null',
+    'Ben Muster:null',
+    'Carla Probe:guest',
+    'Dana Test:guest',
+  ]);
+});

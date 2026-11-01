@@ -82,6 +82,13 @@ export function parsePeopleText(text, defaultRole = null) {
     for (let part of line.split(/\s*,\s*|\s+&\s+|\s+\+\s+|\s+und\s+|\s+\/\s+/)) {
       part = part.trim().replace(/^["„“'']+|["„“''.]+$/g, '');
       if (!part) continue;
+      // Rolle mitten in der Zeile („Anna, Ben, Gast: Carla, Dana“) gilt ab hier
+      const mid = part.match(/^([\p{L}-]{2,24}(?:\s[\p{L}-]{2,24})?)\s*:\s*(.+)$/u);
+      if (mid) {
+        const r0 = roleOfWord(mid[1]);
+        if (r0) role = r0;
+        if (r0 || NEUTRAL_WORDS.test(mid[1].trim())) part = mid[2].trim();
+      }
       let r = role;
       const p = part.match(ROLE_IN_PARENS);
       if (p) {

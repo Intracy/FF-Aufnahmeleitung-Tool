@@ -30,6 +30,8 @@ export class Relay extends EventEmitter {
     this.groups = groups;
     this.rundown = null;
     this.rundownKey = null;
+    this.rundownVersion = 0;
+    this.lastEdit = null; // letzte Änderung am Rundown über die Website (ohne Neustart)
     this.raw = { current: null, currentAt: null, full: null, fullAt: null };
     this.sourceStatus = { ok: false, lastOkAt: null, latencyMs: null, error: null, errorAt: null };
     this.show = { isRunning: false, isPaused: false, showStartedAt: null };
@@ -152,7 +154,18 @@ export class Relay extends EventEmitter {
     ]);
     if (key !== this.rundownKey) {
       this.rundownKey = key;
+      const before = this.rundown;
       this.rundown = buildRundown(json, this.kc, this.cfg.timeZone, { hosts: this.cfg.hosts, guests: this.cfg.guests });
+      this.rundownVersion++;
+      // Gleicher Rundown, neuer Inhalt: Änderung von der Website übernehmen, Lauf bleibt erhalten
+      if (before && before.id === this.rundown.id) {
+        const ts = this.timeSync && this.now() <= this.timeSync.until ? this.timeSync : null;
+        const diff = diffRundown(before, this.rundown, ts ? ts.cueId : null);
+        if (diff.count) {
+          this.lastEdit = { at: this.now(), version: this.rundownVersion, ...diff };
+          this.addLog('rundownEdit', { summary: diff.summary });
+        }
+      }
       if (this.st.rundownId !== this.rundown.id) {
         if (this.pending && this.pending.rundownId === this.rundown.id) {
           this.st = { ...this.emptyState(), ...this.pending, signals: { ...emptySignals(), ...this.pending.signals } };
@@ -692,8 +705,11 @@ export class Relay extends EventEmitter {
     const rd = this.rundown;
     return {
       type: 'rundown',
-      rundown: rd ? { id: rd.id, title: rd.title, eventDate: rd.eventDate, columns: rd.columns, cues: rd.cues.map(publicCue) } : null,
+      rundown: rd
+        ? { id: rd.id, title: rd.title, eventDate: rd.eventDate, columns: rd.columns, version: this.rundownVersion, cues: rd.cues.map(publicCue) }
+        : null,
       groups: this.groups,
+      lastEdit: this.lastEdit,
     };
   }
 
@@ -776,4 +792,52 @@ export class Relay extends EventEmitter {
     }
     return rows;
   }
+}
+
+/**
+ * Was hat sich zwischen zwei Ständen desselben Rundowns geändert?
+ * Die Dauer des Cues, dessen Zeit wir gerade selbst ans Backend geschickt haben, zählt nicht.
+ * @returns {{count:number, added:number[], removed:number[], changed:Array<{number:any, fields:string[]}>, summary:string}}
+ */
+export function diffRundown(a, b, ownSyncCueId = null) {
+  const FIELDS = [
+    ['title', 'Titel'],
+    ['subtitle', 'Titel'],
+    ['number', 'Nummer'],
+    ['durationMs', 'Dauer'],
+    ['plannedStartAt', 'Startzeit'],
+    ['notes', 'Notizen'],
+    ['color', 'Farbe'],
+    ['kind', 'Art'],
+    ['block', 'Block'],
+    ['columns', 'Spalten'],
+  ];
+  const oldById = new Map(a.cues.map((c) => [c.id, c]));
+  const newIds = new Set(b.cues.map((c) => c.id));
+  const added = [];
+  const changed = [];
+  b.cues.forEach((c, i) => {
+    const o = oldById.get(c.id);
+    if (!o) return added.push(c.number);
+    const fields = new Set();
+    for (const [k, label] of FIELDS) if (JSON.stringify(o[k] ?? null) !== JSON.stringify(c[k] ?? null)) fields.add(label);
+    if (o.index !== i && !fields.has('Nummer')) fields.add('Reihenfolge');
+    // eigene Zeit-Synchronisierung (Zeit + / Restzeit setzen) ist keine Änderung von außen
+    if (c.id === ownSyncCueId) fields.delete('Dauer');
+    if (fields.size) changed.push({ number: c.number, fields: [...fields] });
+  });
+  const removed = a.cues.filter((c) => !newIds.has(c.id)).map((c) => c.number);
+  // Reihenfolge allein (z. B. weil davor ein Cue eingefügt wurde) nicht einzeln melden
+  const real = changed.filter((c) => !(c.fields.length === 1 && c.fields[0] === 'Reihenfolge' && (added.length || removed.length)));
+  const parts = [];
+  if (real.length) {
+    const nums = real.slice(0, 4).map((c) => c.number).join(', ');
+    const fields = [...new Set(real.flatMap((c) => c.fields))].slice(0, 3).join(', ');
+    parts.push(`${real.length === 1 ? 'Cue' : 'Cues'} ${nums}${real.length > 4 ? ` +${real.length - 4}` : ''} geändert (${fields})`);
+  }
+  if (added.length) parts.push(`${added.length === 1 ? `Cue ${added[0]}` : `${added.length} Cues`} neu`);
+  if (removed.length) parts.push(`${removed.length === 1 ? `Cue ${removed[0]}` : `${removed.length} Cues`} entfernt`);
+  if (!parts.length && a.title !== b.title) parts.push('Titel geändert');
+  const count = real.length + added.length + removed.length + (a.title !== b.title ? 1 : 0);
+  return { count, added, removed, changed: real, summary: parts.join(' · ') };
 }

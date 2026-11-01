@@ -184,3 +184,41 @@ test('Pause: Start/Next/Zurück gesperrt, nur PAUSE setzt fort; Pause mit isRunn
   assert.equal(relay.snapshot().cue.stretchMs, 30_000);
   assert.ok(!relay.log.some((e) => e.type === 'reset'));
 });
+
+test('Änderung auf der Website: Rundown wird übernommen, Lauf bleibt erhalten', () => {
+  const { relay, cues, current, advance } = setup();
+  current(cues[0]);
+  advance(5000);
+  current(cues[1]);
+  relay.handle({ type: 'stretch', ms: 60000 });
+  relay.handle({ type: 'marker' });
+  const startedAt = relay.snapshot().cue.startedAt;
+  const v0 = relay.rundownVersion;
+  advance(2000);
+  // Titel, Dauer und GFX eines späteren Cues ändern, einen Cue entfernen
+  const edited = structuredClone(fixture);
+  const els = edited.elements.filter((e) => e.type === 'cue');
+  els[5].title = 'Neuer Titel';
+  els[5].durationSeconds = 999;
+  els[5].columns = { ...els[5].columns, GFX: 'Moderation: Anna Beispiel' };
+  edited.elements = edited.elements.filter((e) => e.id !== els[9].id);
+  relay.onFull({ json: { ...edited, currentItemId: cues[1].id, isRunning: true }, fetchedAt: advance(0) });
+  const snap = relay.snapshot();
+  assert.equal(snap.cue.id, cues[1].id, 'aktueller Cue bleibt');
+  assert.equal(snap.cue.startedAt, startedAt, 'Startzeit bleibt');
+  assert.equal(snap.cue.stretchMs, 60000, 'Streckung bleibt');
+  assert.ok(relay.log.some((e) => e.type === 'marker'), 'Marker bleibt');
+  assert.equal(relay.rundownVersion, v0 + 1);
+  const c5 = relay.rundown.byId.get(els[5].id);
+  assert.equal(c5.title, 'Neuer Titel');
+  assert.equal(c5.durationMs, 999000);
+  assert.deepEqual(c5.people, [{ name: 'Anna Beispiel', role: 'host' }]);
+  assert.equal(relay.rundown.byId.has(els[9].id), false);
+  const ed = relay.rundownMessage().lastEdit;
+  assert.deepEqual(ed.removed, [els[9].number]);
+  assert.match(ed.summary, new RegExp(`Cue ${els[5].number} geändert \\(Titel, Dauer, Spalten\\)`));
+  assert.match(ed.summary, /entfernt/);
+  // gleicher Stand noch einmal: keine neue Version
+  relay.onFull({ json: { ...edited, currentItemId: cues[1].id, isRunning: true }, fetchedAt: advance(1000) });
+  assert.equal(relay.rundownVersion, v0 + 1);
+});

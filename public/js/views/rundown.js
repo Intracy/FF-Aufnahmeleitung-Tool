@@ -186,7 +186,7 @@ export class RundownSheet {
       this.pendingRefresh = true;
       this.refresh().finally(() => (this.pendingRefresh = false));
     }
-    const key = JSON.stringify([rd.id, rd.cues.length, cur, this.run?.now ? Math.floor(this.run.now / 5000) : 0, this.filter, [...this.expanded], [...this.folded]]);
+    const key = JSON.stringify([rd.id, rd.version ?? rd.cues.length, rd.cues.length, cur, this.run?.now ? Math.floor(this.run.now / 5000) : 0, this.filter, [...this.expanded], [...this.folded]]);
     if (key === this.renderedKey) return;
     this.renderedKey = key;
 

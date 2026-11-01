@@ -67,6 +67,8 @@ function eventLabel(e) {
       return 'Replay-Sprung';
     case 'source':
       return 'Rundown-Quelle gewechselt';
+    case 'rundownEdit':
+      return 'Rundown geändert (Website)';
     case 'control':
       return `Rundown: ${{ start: 'Start', next: 'Next', toggle: 'Pause/Weiter', pause: 'Pause/Weiter', prev: 'Zurück', finish: 'Beenden' }[e.action] || e.action}`;
     default:
@@ -80,6 +82,7 @@ function eventDetail(e) {
   if (e.type === 'scenario') return e.label;
   if (e.type === 'resume') return `Pause ${formatDuration(e.pausedMs)}`;
   if (e.type === 'replay') return `Cue ${e.jumpTo}`;
+  if (e.type === 'rundownEdit') return e.summary || '';
   if (e.type === 'source') return e.title || (e.token === 'env' ? 'Token aus .env' : '');
   if (e.type === 'control') return e.ok ? '' : `Fehler: ${e.error || ''}`;
   return '';

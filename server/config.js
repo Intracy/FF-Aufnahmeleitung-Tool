@@ -39,7 +39,9 @@ export function loadConfig(env = process.env) {
     hosts: (env.HOSTS || '').split(',').map((h) => h.trim()).filter(Boolean),
     guests: [],
     pollCurrentMs: num(env.POLL_CURRENT_MS, 500),
-    pollFullMs: num(env.POLL_FULL_MS, 15000),
+    // Kompletter Rundown jede Sekunde: Änderungen auf der Website kommen ohne Neustart an.
+    // 15000 war der alte Standard (steht in vielen .env) und wird daher wie „nicht gesetzt“ behandelt.
+    pollFullMs: Math.max(500, env.POLL_FULL_MS === '15000' ? 1000 : num(env.POLL_FULL_MS, 1000)),
     requestTimeoutMs: num(env.REQUEST_TIMEOUT_MS, 2500),
     staleAfterMs: num(env.STALE_AFTER_MS, 3000),
     cueStartSource: env.CUE_START_SOURCE || 'auto',
